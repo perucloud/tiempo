@@ -21,7 +21,8 @@ Construir desde cero una plataforma integral de delivery con Laravel, MySQL, Liv
 - Landing publica en `/` creada y verificada.
 - Base de API interna bajo `/api` creada y verificada.
 - Diseno UX Mobile de `/app` definido antes del desarrollo.
-- La siguiente accion tecnica debe ser crear la base mobile-first en `/app`.
+- Base mobile-first de `/app` creada y verificada.
+- La siguiente accion tecnica debe ser implementar Gestion de Usuarios.
 
 ### Arquitectura
 
@@ -399,7 +400,7 @@ Resumen de trabajo realizado:
 
 ## FASE 08 - App movil / PWA
 
-Estado: ☐ Pendiente
+Estado: ☑ Finalizado
 
 Objetivo: Crear base mobile-first en `/app`.
 
@@ -426,6 +427,18 @@ Criterios de finalizacion:
 - Layout mobile-first funcional.
 - PWA preparada sin cachear datos sensibles.
 - Commit y push realizados.
+
+Resumen de trabajo realizado:
+
+- Archivo `routes/app.php` creado y registrado desde rutas web.
+- Controlador `App\HomeController` creado para la entrada `/app`.
+- Layout exclusivo `resources/views/layouts/app-mobile.blade.php` creado.
+- Vista inicial mobile-first `resources/views/app/home.blade.php` creada.
+- Navegacion inferior, buscador, categorias, negocios afiliados, productos, carrito, seguimiento y perfil definidos como base visual.
+- Assets propios creados en `public/css/app-mobile.css` y `public/js/app-mobile.js`.
+- Manifest, icono y service worker inicial creados bajo `public/app`.
+- Service worker preparado sin cachear datos sensibles.
+- Pruebas de `/app`, manifest y service worker agregadas y ejecutadas correctamente.
 
 ## FASE 09 - Gestion de Usuarios
 
@@ -951,6 +964,6 @@ Reglas adicionales:
 
 ## Estado de siguiente fase propuesta
 
-Siguiente fase sugerida: FASE 08 - App movil / PWA.
+Siguiente fase sugerida: FASE 09 - Gestion de Usuarios.
 
-Antes de iniciar FASE 08, el agente debe proponer plan de archivos para crear rutas `/app`, layout mobile-first, vistas base, navegacion inferior, estilos iniciales, manifest PWA y pruebas sin mezclar dashboard ni landing.
+Antes de iniciar FASE 09, el agente debe proponer plan de archivos para CRUD de usuarios, roles y permisos, respetando SuperAdmin, Admin, Operador, Negocio Afiliado, Repartidor y Cliente.

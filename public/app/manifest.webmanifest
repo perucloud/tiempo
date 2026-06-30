@@ -1,0 +1,19 @@
+{
+    "name": "TIEMPO Delivery",
+    "short_name": "TIEMPO",
+    "description": "App movil de TIEMPO Delivery para clientes.",
+    "start_url": "/app",
+    "scope": "/app/",
+    "display": "standalone",
+    "background_color": "#f6f7f4",
+    "theme_color": "#0f766e",
+    "orientation": "portrait",
+    "icons": [
+        {
+            "src": "/app/icon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        }
+    ]
+}

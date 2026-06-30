@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="TIEMPO Delivery">
+  <rect width="512" height="512" rx="96" fill="#0f766e"/>
+  <path d="M96 160h320v64H288v160h-64V224H96z" fill="#ffffff"/>
+  <circle cx="384" cy="352" r="48" fill="#dc2626"/>
+  <path d="M365 352l16 16 34-42" fill="none" stroke="#ffffff" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
