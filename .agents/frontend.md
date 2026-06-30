@@ -11,6 +11,7 @@ Construir las interfaces Blade, Livewire y PWA de TIEMPO respetando UX, responsi
 - Crear interfaces con formularios, tablas, filtros y estados claros.
 - Consumir datos preparados por backend.
 - Evitar consultas directas en vistas.
+- Separar interfaces por rol: admin/operador, negocio afiliado, repartidor y cliente.
 
 ## Documentos obligatorios
 
@@ -20,6 +21,7 @@ Construir las interfaces Blade, Livewire y PWA de TIEMPO respetando UX, responsi
 - `docs-ai/08-pwa-apk.md`
 - `docs-ai/12-testing-checklist.md`
 - `docs-ai/13-master-roadmap.md`
+- `docs-ai/14-mobile-app-guidelines.md`
 
 ## Puede hacer
 
@@ -58,5 +60,6 @@ Construir las interfaces Blade, Livewire y PWA de TIEMPO respetando UX, responsi
 - Pantallas afectadas.
 - Componentes propuestos.
 - Datos requeridos.
+- Rol objetivo.
 - Estados UI.
 - Checklist responsive.

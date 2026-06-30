@@ -16,6 +16,24 @@ Implementar roles y permisos para controlar:
 
 Debe existir control de acceso por modulo.
 
+Roles oficiales:
+
+- SuperAdmin.
+- Admin.
+- Operador.
+- Negocio Afiliado.
+- Repartidor.
+- Cliente.
+
+Reglas:
+
+- SuperAdmin puede administrar todo.
+- Admin solo accede a modulos autorizados.
+- Operador opera pedidos, pagos, estados, repartidores y comunicacion.
+- Negocio Afiliado solo accede a informacion y carta de su propio negocio.
+- Repartidor solo accede a pedidos asignados.
+- Cliente solo accede a su cuenta, pedidos, comprobantes e historial.
+
 ## Formularios
 
 - Usar CSRF en formularios.
@@ -60,3 +78,11 @@ Requieren permiso y auditoria:
 - Asignar repartidor.
 - Cancelar pedido.
 - Crear o desactivar usuarios.
+
+## Restricciones criticas
+
+- Un negocio afiliado nunca debe ver clientes globales.
+- Un negocio afiliado nunca debe ver pagos globales.
+- Un negocio afiliado nunca debe asignar repartidores.
+- Un repartidor nunca debe ver pedidos no asignados.
+- Un cliente nunca debe entrar a `/admin`.

@@ -20,6 +20,8 @@ Describir la interaccion: tabla, formulario, filtro, estado o dashboard.
 - Formulario:
 - Estado de carga:
 - Paginacion:
+- Rol objetivo:
+- Alcance de datos:
 
 ## Acciones
 
@@ -35,6 +37,8 @@ Describir la interaccion: tabla, formulario, filtro, estado o dashboard.
 - Delegar procesos a Services o Actions.
 - Validar inputs.
 - Emitir feedback claro.
+- Respetar permisos por rol.
+- No mostrar acciones fuera del alcance del usuario.
 
 ## Checklist
 

@@ -16,6 +16,8 @@ Buenas practicas:
 - Delegar negocio a Services o Actions.
 - Mostrar loading, empty y error states.
 - Proteger acciones por permiso.
+- Filtrar datos por rol y propietario.
+- Usar vistas especificas para Negocio Afiliado cuando solo gestione su carta/perfil.
 
 Evitar:
 
@@ -23,3 +25,4 @@ Evitar:
 - Logica de negocio extensa en componente.
 - SQL directo.
 - Duplicar reglas de validacion.
+- Mostrar acciones fuera del alcance del rol.

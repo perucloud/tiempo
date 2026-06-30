@@ -47,8 +47,10 @@ Ejemplos:
 
 - `users`
 - `roles`
+- `permissions`
+- `role_permissions`
 - `categorias`
-- `restaurantes`
+- `negocios_afiliados`
 - `productos`
 - `clientes`
 - `repartidores`
@@ -56,3 +58,19 @@ Ejemplos:
 - `pedido_detalles`
 - `pagos`
 - `pedido_estados`
+
+## Modelo multi-rol
+
+Reglas:
+
+- Todo usuario debe tener rol claro.
+- Los usuarios de negocio afiliado deben relacionarse con un unico negocio o con los negocios autorizados.
+- Los repartidores solo deben acceder a pedidos asignados.
+- Los clientes deben separarse logicamente del acceso administrativo.
+- Los permisos deben controlar modulos y acciones, no solo menus.
+
+## Negocios afiliados
+
+`negocios_afiliados` representa restaurantes, cafeterias, pollerias, pizzerias, licorerias, bodegas, farmacias u otros comercios.
+
+Debe permitir informacion comercial, horarios, fotos, categorias, productos y promociones propias.

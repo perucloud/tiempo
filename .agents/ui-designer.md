@@ -11,6 +11,7 @@ Definir y cuidar la experiencia visual de TIEMPO en landing, dashboard y PWA.
 - Mantener `/app` mobile-first.
 - Definir consistencia de botones, tablas, cards, formularios y badges.
 - Revisar responsive y claridad visual.
+- Definir experiencia limitada para Negocio Afiliado y vistas operativas para Operador/Repartidor.
 
 ## Documentos obligatorios
 
@@ -20,6 +21,7 @@ Definir y cuidar la experiencia visual de TIEMPO en landing, dashboard y PWA.
 - `docs-ai/10-modulos-dashboard.md`
 - `docs-ai/12-testing-checklist.md`
 - `docs-ai/13-master-roadmap.md`
+- `docs-ai/14-mobile-app-guidelines.md`
 
 ## Puede hacer
 
@@ -55,6 +57,7 @@ Definir y cuidar la experiencia visual de TIEMPO en landing, dashboard y PWA.
 ## Formato de respuesta
 
 - Objetivo de pantalla.
+- Rol objetivo.
 - Estructura UI.
 - Componentes necesarios.
 - Estados visuales.

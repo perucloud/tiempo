@@ -29,7 +29,7 @@ Categorias para:
 - Promociones.
 - Futuras categorias.
 
-## Restaurantes
+## Negocios afiliados
 
 Empresas afiliadas:
 
@@ -38,9 +38,13 @@ Empresas afiliadas:
 - Estado abierto/cerrado.
 - Productos asociados.
 
+El negocio afiliado puede gestionar solo su propia informacion, carta, productos, categorias, fotos, horarios y promociones.
+
+No puede gestionar pedidos globales, clientes, pagos, repartidores, usuarios, configuracion, reportes generales ni otros negocios.
+
 ## Productos
 
-Carta/productos por restaurante:
+Carta/productos por negocio afiliado:
 
 - Nombre.
 - Precio.
@@ -74,7 +78,7 @@ Reportes de:
 - Ventas.
 - Pedidos.
 - Pagos.
-- Restaurantes.
+- Negocios afiliados.
 - Repartidores.
 
 ## Usuarios
@@ -85,6 +89,15 @@ Operadores/admin:
 - Roles.
 - Permisos.
 - Activar/desactivar.
+
+Roles oficiales:
+
+- SuperAdmin.
+- Admin.
+- Operador.
+- Negocio Afiliado.
+- Repartidor.
+- Cliente.
 
 ## Configuracion
 

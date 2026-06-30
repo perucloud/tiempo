@@ -3,7 +3,7 @@
 ## Flujo del cliente
 
 1. Entra a `/app`.
-2. Selecciona restaurante.
+2. Selecciona negocio afiliado.
 3. Agrega productos.
 4. Confirma direccion.
 5. Sube voucher si aplica.
@@ -29,19 +29,28 @@
 5. Entrega pedido.
 6. Reporta incidencia si aplica.
 
-## Flujo de restaurantes
+## Flujo de negocios afiliados
 
-1. Restaurante se registra desde admin.
-2. Se configuran datos y horarios.
-3. Se agregan productos.
+1. Negocio afiliado se registra o es creado por TIEMPO.
+2. Se configuran datos, horarios, fotos y promociones.
+3. Se agregan categorias y productos propios.
 4. Se activa disponibilidad.
-5. Recibe pedidos segun operacion definida.
+5. TIEMPO usa su carta para vender a clientes.
+
+El negocio afiliado no administra pedidos, clientes, pagos ni repartidores.
+
+## Flujo del negocio afiliado
+
+1. Ingresa a su panel limitado.
+2. Actualiza perfil e informacion del negocio.
+3. Administra carta digital, productos, categorias, fotos, horarios y promociones.
+4. TIEMPO opera los pedidos generados por los clientes.
 
 ## Flujo de productos
 
 1. Crear categoria.
 2. Crear producto.
-3. Asociar restaurante.
+3. Asociar negocio afiliado.
 4. Definir precio.
 5. Activar disponibilidad.
 
@@ -68,4 +77,4 @@ Estados sugeridos:
 
 ## Flujo de venta completa
 
-Cliente compra, operador verifica pago, restaurante prepara, repartidor entrega y el sistema registra venta, pago, tiempos y estado final.
+Cliente compra, operador TIEMPO verifica pago, TIEMPO coordina con el negocio afiliado, repartidor entrega y el sistema registra venta, pago, tiempos y estado final.

@@ -11,6 +11,7 @@ Validar que TIEMPO funcione correctamente, cumpla criterios de fase y no rompa f
 - Reportar bugs con pasos reproducibles.
 - Confirmar criterios de finalizacion.
 - Bloquear cierre de fase si hay errores criticos.
+- Probar aislamiento por rol y alcance de datos.
 
 ## Documentos obligatorios
 
@@ -58,5 +59,6 @@ Validar que TIEMPO funcione correctamente, cumpla criterios de fase y no rompa f
 - Alcance probado.
 - Pruebas ejecutadas.
 - Resultado.
+- Roles probados.
 - Bugs encontrados.
 - Recomendacion de cierre.

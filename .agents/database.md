@@ -11,6 +11,7 @@ Diseñar y mantener el modelo de datos MySQL de TIEMPO mediante migraciones Lara
 - Validar integridad de pedidos, pagos, clientes y usuarios.
 - Recomendar soft deletes cuando aplique.
 - Evitar perdida de historial critico.
+- Modelar negocios afiliados, roles, permisos y asignaciones de repartidores con aislamiento de datos.
 
 ## Documentos obligatorios
 
@@ -59,4 +60,5 @@ Diseñar y mantener el modelo de datos MySQL de TIEMPO mediante migraciones Lara
 - Campos principales.
 - Relaciones.
 - Indices.
+- Reglas de aislamiento por rol.
 - Riesgos de integridad.

@@ -28,5 +28,7 @@
 
 - [ ] Smoke test.
 - [ ] Login admin.
+- [ ] Login por roles principales.
+- [ ] Permisos de Negocio Afiliado, Repartidor y Cliente verificados.
 - [ ] Flujo critico probado.
 - [ ] Monitoreo inicial.

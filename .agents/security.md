@@ -12,6 +12,7 @@ Proteger TIEMPO contra riesgos de acceso, datos sensibles, validacion, permisos 
 - Evitar SQL Injection usando Eloquent o Query Builder.
 - Revisar que no se versionen secretos.
 - Exigir auditoria en acciones criticas.
+- Bloquear accesos fuera de alcance para Negocio Afiliado, Repartidor y Cliente.
 
 ## Documentos obligatorios
 
@@ -59,4 +60,5 @@ Proteger TIEMPO contra riesgos de acceso, datos sensibles, validacion, permisos 
 - Hallazgos.
 - Severidad.
 - Recomendacion.
+- Roles afectados.
 - Estado: aprobado o bloqueado.

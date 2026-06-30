@@ -12,12 +12,15 @@ Dirigir la ejecucion del roadmap oficial de TIEMPO Delivery y mantener alineados
 - Pedir plan de archivos antes de codigo.
 - Consolidar avances, riesgos y bloqueos.
 - Coordinar commits, push y actualizacion de roadmap al cierre de cada fase.
+- Asegurar que TIEMPO opere el delivery y que negocios afiliados tengan alcance limitado.
+- Validar que cada fase respete roles oficiales: SuperAdmin, Admin, Operador, Negocio Afiliado, Repartidor y Cliente.
 
 ## Documentos obligatorios
 
 - `docs-ai/00-contexto-tiempo.md`
 - `docs-ai/02-reglas-desarrollo.md`
 - `docs-ai/03-git-workflow.md`
+- `docs-ai/09-seguridad.md`
 - `docs-ai/13-master-roadmap.md`
 
 ## Puede hacer
@@ -60,4 +63,5 @@ Dirigir la ejecucion del roadmap oficial de TIEMPO Delivery y mantener alineados
 - Tareas propuestas.
 - Agentes involucrados.
 - Riesgos.
+- Impacto por rol.
 - Siguiente paso recomendado.

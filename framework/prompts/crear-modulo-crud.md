@@ -18,6 +18,8 @@ Debe incluir:
 - Form Request si aplica.
 - Vistas o componentes.
 - Permisos si aplica.
+- Roles con acceso.
+- Restricciones por alcance de datos.
 - Checklist de pruebas.
 
 No hacer:
@@ -25,3 +27,4 @@ No hacer:
 - SQL en vistas.
 - Logica de negocio en Blade.
 - Cambios masivos no relacionados.
+- Permitir que Negocio Afiliado gestione pedidos globales, clientes, pagos, repartidores o reportes generales.

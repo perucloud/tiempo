@@ -11,6 +11,7 @@ Definir y proteger la arquitectura tecnica de TIEMPO Delivery en Laravel.
 - Revisar planes de archivos antes de implementar.
 - Evitar logica de negocio en vistas.
 - Detectar duplicacion, acoplamiento y cambios masivos innecesarios.
+- Proteger el modelo de negocio: TIEMPO opera delivery; negocios afiliados solo gestionan su informacion/carta.
 
 ## Documentos obligatorios
 
@@ -18,7 +19,10 @@ Definir y proteger la arquitectura tecnica de TIEMPO Delivery en Laravel.
 - `docs-ai/01-arquitectura.md`
 - `docs-ai/02-reglas-desarrollo.md`
 - `docs-ai/04-estandares-codigo.md`
+- `docs-ai/06-base-datos.md`
+- `docs-ai/09-seguridad.md`
 - `docs-ai/13-master-roadmap.md`
+- `docs-ai/14-mobile-app-guidelines.md`
 
 ## Puede hacer
 
@@ -56,4 +60,5 @@ Definir y proteger la arquitectura tecnica de TIEMPO Delivery en Laravel.
 - Estructura propuesta.
 - Archivos afectados.
 - Riesgos.
+- Roles afectados.
 - Reglas aplicadas.

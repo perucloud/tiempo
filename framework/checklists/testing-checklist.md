@@ -7,6 +7,7 @@
 - [ ] Permisos.
 - [ ] Validaciones.
 - [ ] Errores visibles.
+- [ ] Alcance por rol.
 
 ## CRUD
 
@@ -24,6 +25,9 @@
 - [ ] Aprobar/rechazar pago.
 - [ ] Asignar repartidor.
 - [ ] Cambiar estado.
+- [ ] Negocio Afiliado no ve pedidos globales.
+- [ ] Repartidor no ve pedidos no asignados.
+- [ ] Cliente no entra a `/admin`.
 
 ## UI/PWA
 

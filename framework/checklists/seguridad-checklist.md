@@ -6,6 +6,9 @@
 - [ ] Roles y permisos aplicados.
 - [ ] Acciones criticas autorizadas.
 - [ ] Clientes y admins separados.
+- [ ] Negocio Afiliado limitado a su negocio/carta.
+- [ ] Repartidor limitado a pedidos asignados.
+- [ ] Operador limitado segun permisos.
 
 ## Datos
 
@@ -14,6 +17,7 @@
 - [ ] Sin contrasenas en texto plano.
 - [ ] Sin secretos en logs.
 - [ ] `.env` no versionado.
+- [ ] No hay fuga de datos globales hacia roles limitados.
 
 ## Laravel
 

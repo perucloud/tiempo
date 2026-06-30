@@ -11,6 +11,7 @@ Implementar la logica backend de TIEMPO con Laravel de forma limpia, modular y s
 - Aplicar validaciones y permisos.
 - Implementar flujos de negocio.
 - Evitar SQL en vistas y duplicacion de codigo.
+- Implementar restricciones por rol y alcance de negocio afiliado, repartidor y cliente.
 
 ## Documentos obligatorios
 
@@ -59,5 +60,6 @@ Implementar la logica backend de TIEMPO con Laravel de forma limpia, modular y s
 - Plan de archivos.
 - Logica a implementar.
 - Validaciones.
+- Permisos por rol.
 - Riesgos.
 - Pruebas sugeridas.

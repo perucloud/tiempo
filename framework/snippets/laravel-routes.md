@@ -12,10 +12,12 @@ Convenciones:
 - Nombres admin: `admin.modulo.accion`.
 - Nombres app: `app.recurso.accion`.
 - Nombres API: `api.recurso.accion`.
+- Nombres afiliado si aplica: `affiliate.modulo.accion`.
 
 Reglas:
 
 - `/admin` siempre con middleware de autenticacion.
-- `/app` mobile-first.
+- `/admin` separa permisos de SuperAdmin, Admin, Operador, Negocio Afiliado y Repartidor.
+- `/app` mobile-first y exclusivo para clientes.
 - `/api` responde JSON.
 - No mezclar HTML y JSON en la misma ruta.

@@ -12,6 +12,14 @@ Usar convenciones Laravel por defecto salvo que exista una razon documentada par
 - Componentes Livewire con nombre claro: `AdminOrdersTable`.
 - Rutas con nombres consistentes: `admin.orders.index`.
 
+Nombres de dominio recomendados:
+
+- `AffiliateBusiness` para negocio afiliado.
+- `DeliveryDriver` para repartidor.
+- `Customer` para cliente.
+- `Order` para pedido.
+- `Payment` para pago.
+
 ## Controladores
 
 Los controladores deben ser delgados:
@@ -37,6 +45,13 @@ Usar Form Request cuando aplique:
 - Sin duplicacion innecesaria.
 - Comentarios solo cuando aporten claridad.
 - Metodos cortos y con responsabilidad clara.
+
+## Reglas de dominio en codigo
+
+- No llamar restaurante a todo negocio afiliado si el modulo admite bodegas, farmacias u otros comercios.
+- No mezclar permisos de Cliente, Repartidor, Negocio Afiliado y Operador.
+- No permitir que un Negocio Afiliado consulte pedidos, clientes, pagos o repartidores globales.
+- No permitir que un Repartidor consulte pedidos no asignados.
 
 ## Base de datos y vistas
 

@@ -20,7 +20,7 @@ Trabajar por modulos independientes:
 - Pedidos
 - Clientes
 - Categorias
-- Restaurantes
+- Negocios afiliados
 - Productos
 - Repartidores
 - Pagos
@@ -29,6 +29,15 @@ Trabajar por modulos independientes:
 - Configuracion
 
 No mezclar cambios de varios modulos salvo que sea necesario y autorizado.
+
+## Reglas de negocio obligatorias
+
+- TIEMPO es la empresa de delivery y administra la operacion.
+- Los negocios afiliados no gestionan pedidos globales, clientes, pagos, repartidores ni reportes generales.
+- Todo modulo debe validar permisos por rol: SuperAdmin, Admin, Operador, Negocio Afiliado, Repartidor y Cliente.
+- El acceso de Negocio Afiliado siempre debe estar limitado a su propia informacion y carta.
+- El acceso de Repartidor siempre debe estar limitado a pedidos asignados.
+- El acceso de Cliente siempre debe vivir en `/app`.
 
 ## Archivos globales
 

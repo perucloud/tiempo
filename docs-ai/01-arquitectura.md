@@ -16,6 +16,40 @@ Usar convenciones nativas de Laravel siempre que sea posible: rutas, controlador
 - Componentes Livewire: manejan interaccion dinamica.
 - API Resources: transforman respuestas JSON.
 
+## Separacion arquitectonica por interfaz
+
+TIEMPO se divide en cuatro superficies independientes:
+
+- Landing `/`: marketing, SEO, informacion publica y captacion.
+- Dashboard `/admin`: operacion interna de administradores, operadores y duenos. Desktop-first con experiencia completa y version movil simplificada para gestion rapida.
+- App Movil `/app`: experiencia principal del cliente, exclusiva para telefonos moviles.
+- API `/api`: capa JSON para la app movil e integraciones internas.
+
+Cada superficie debe tener layouts, componentes, navegacion y experiencia de usuario independientes.
+
+## Arquitectura de negocio
+
+TIEMPO centraliza la operacion del delivery. Los negocios afiliados son proveedores de carta/productos, no operadores del sistema.
+
+Reglas de dominio:
+
+- TIEMPO administra pedidos, clientes, pagos, repartidores, estados y reportes globales.
+- El negocio afiliado solo administra su propia informacion comercial y carta digital.
+- El operador de TIEMPO confirma/rechaza pedidos, verifica pagos y asigna repartidores.
+- El repartidor solo opera pedidos asignados.
+- El cliente solo interactua desde `/app`.
+
+Los permisos deben reflejar esta separacion y nunca depender solo de ocultar botones en la UI.
+
+Reglas:
+
+- La App Movil no debe reutilizar layout del Dashboard.
+- El Dashboard movil no debe reutilizar las tablas grandes del Dashboard desktop.
+- El Dashboard no debe comportarse como landing.
+- La Landing no debe contener logica operativa.
+- La API no debe retornar HTML.
+- La logica de negocio debe vivir en servicios, acciones o modelos, no en vistas.
+
 ## Estructura de carpetas recomendada
 
 - `routes/web.php`: landing y rutas web generales.
@@ -25,19 +59,37 @@ Usar convenciones nativas de Laravel siempre que sea posible: rutas, controlador
 - `app/Http/Controllers/Admin`: controladores admin.
 - `app/Http/Controllers/App`: controladores PWA.
 - `app/Http/Controllers/Api`: controladores API.
+- `app/Http/Controllers/Affiliate`: controladores para negocio afiliado si se separan del admin.
 - `app/Livewire/Admin`: componentes admin.
 - `app/Livewire/App`: componentes PWA.
+- `app/Livewire/Affiliate`: componentes para perfil/carta del negocio afiliado si aplica.
 - `app/Services` o `app/Actions`: logica de negocio.
 - `resources/views/admin`: vistas admin.
 - `resources/views/app`: vistas PWA.
 - `resources/views/web`: landing.
 
+Layouts recomendados:
+
+- `resources/views/layouts/web`: layout de landing.
+- `resources/views/layouts/admin`: layout del dashboard.
+- `resources/views/layouts/admin-mobile`: patrones responsive simplificados para operacion movil dentro de `/admin`.
+- `resources/views/layouts/app-mobile`: layout exclusivo para app movil.
+
 ## Responsabilidades
 
 - Landing `/`: presentar TIEMPO y captar usuarios.
-- Dashboard `/admin`: operar pedidos, pagos, restaurantes, productos, repartidores y reportes.
-- App/PWA `/app`: experiencia mobile para clientes.
+- Dashboard `/admin`: operar pedidos, pagos, negocios afiliados, productos, repartidores y reportes. En desktop debe ofrecer la experiencia completa; en movil debe priorizar gestion rapida de pedidos, pagos, estados, repartidores y ventas.
+- App/PWA `/app`: experiencia mobile principal y exclusiva para clientes, optimizada para uso tactil y futura APK.
 - API `/api`: entregar datos JSON a la app movil e integraciones internas.
+
+## Roles y permisos
+
+- SuperAdmin: acceso total y gestion de permisos.
+- Admin: acceso a modulos autorizados.
+- Operador: operacion diaria de pedidos, pagos, estados y repartidores.
+- Negocio Afiliado: acceso limitado a su propio negocio, carta, productos, categorias, fotos, horarios y promociones.
+- Repartidor: pedidos asignados, ruta, cliente y estados.
+- Cliente: compra, comprobantes, historial, seguimiento y perfil.
 
 ## Regla clave
 

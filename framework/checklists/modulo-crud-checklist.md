@@ -7,6 +7,7 @@
 - [ ] Controlador delgado o Livewire bien delimitado.
 - [ ] Modelo con relaciones.
 - [ ] Migracion revisada.
+- [ ] Roles y alcance definidos.
 
 ## Funcionalidad
 
@@ -23,6 +24,9 @@
 - [ ] CSRF en formularios.
 - [ ] Permisos.
 - [ ] Sin SQL en vistas.
+- [ ] Negocio Afiliado limitado a datos propios.
+- [ ] Repartidor limitado a pedidos asignados.
+- [ ] Cliente limitado a `/app` y sus datos.
 
 ## Cierre
 

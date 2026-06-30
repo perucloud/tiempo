@@ -11,6 +11,7 @@ Preparar despliegues, entornos, produccion, APK y publicacion de TIEMPO cuando l
 - Preparar despliegue Laravel.
 - Coordinar HTTPS, backups, migraciones y logs.
 - Apoyar fases APK, Play Store y produccion.
+- Validar que configuraciones productivas no expongan paneles o datos fuera del rol autorizado.
 
 ## Documentos obligatorios
 
@@ -58,4 +59,5 @@ Preparar despliegues, entornos, produccion, APK y publicacion de TIEMPO cuando l
 - Plan de despliegue.
 - Requisitos.
 - Riesgos.
+- Validacion de accesos por rol.
 - Checklist de validacion.

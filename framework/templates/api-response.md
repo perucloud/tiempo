@@ -36,3 +36,7 @@
 - Usar API Resources.
 - Paginar colecciones grandes.
 - Validar filtros y ordenamientos.
+- Filtrar respuestas por rol y propietario.
+- Negocio Afiliado no recibe pedidos/clientes/pagos/repartidores globales.
+- Repartidor no recibe pedidos no asignados.
+- Cliente no recibe datos de otros clientes.

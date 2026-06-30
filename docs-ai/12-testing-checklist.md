@@ -6,17 +6,26 @@
 - Probar acceso sin sesion.
 - Probar logout.
 - Probar usuario sin permiso.
+- Probar acceso por rol: SuperAdmin, Admin, Operador, Negocio Afiliado, Repartidor y Cliente.
 
 ## CRUDs
 
 Probar crear, ver, editar y desactivar cuando aplique:
 
 - Categorias.
-- Restaurantes.
+- Negocios afiliados.
 - Productos.
 - Clientes.
 - Repartidores.
 - Usuarios.
+
+## Permisos por rol
+
+- Probar que Negocio Afiliado solo ve su perfil/carta/productos/categorias/fotos/horarios/promociones.
+- Probar que Negocio Afiliado no ve pedidos globales, clientes, pagos, repartidores, usuarios, configuracion ni otros negocios.
+- Probar que Repartidor solo ve pedidos asignados.
+- Probar que Cliente no entra a `/admin`.
+- Probar que Operador puede gestionar pedidos, pagos, estados y repartidores segun permisos.
 
 ## Pedidos
 

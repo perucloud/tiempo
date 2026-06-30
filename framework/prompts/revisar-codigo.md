@@ -8,6 +8,7 @@ Revisa el cambio con foco en:
 - Seguridad.
 - Validaciones.
 - Permisos.
+- Aislamiento por rol.
 - Arquitectura Laravel.
 - Duplicacion.
 - Consultas ineficientes.
@@ -20,6 +21,7 @@ Formato:
 - Archivo afectado.
 - Riesgo.
 - Recomendacion.
+- Roles afectados.
 - Pruebas sugeridas.
 
 Si no hay hallazgos, indicar riesgos residuales y pruebas pendientes.

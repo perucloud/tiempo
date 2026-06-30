@@ -8,6 +8,14 @@
 
 Describir que gestiona el modulo y para que superficie aplica: `/admin`, `/app` o `/api`.
 
+## Roles y alcance
+
+- Roles con acceso:
+- Datos propios o globales:
+- Restricciones para Negocio Afiliado:
+- Restricciones para Repartidor:
+- Restricciones para Cliente:
+
 ## Archivos propuestos
 
 - Rutas:
@@ -45,5 +53,6 @@ Describir que gestiona el modulo y para que superficie aplica: `/admin`, `/app` 
 - CRUD funcional.
 - Validaciones activas.
 - Permisos aplicados.
+- Alcance por rol validado.
 - Responsive revisado.
 - Pruebas ejecutadas.

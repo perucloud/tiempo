@@ -10,7 +10,7 @@ Construir desde cero una plataforma integral de delivery con Laravel, MySQL, Liv
 
 ### Estado actual
 
-- Documentacion base `docs-ai/00` a `docs-ai/12` creada.
+- Documentacion base `docs-ai/00` a `docs-ai/14` creada.
 - Repositorio Git inicial creado y documentacion base subida a remoto.
 - Laravel aun no esta instalado.
 - No existe codigo de aplicacion.
@@ -19,9 +19,29 @@ Construir desde cero una plataforma integral de delivery con Laravel, MySQL, Liv
 ### Arquitectura
 
 - `/`: landing page publica.
-- `/admin`: dashboard administrativo desktop.
-- `/app`: app movil/PWA para clientes.
+- `/admin`: dashboard administrativo para desktop y operacion movil simplificada.
+- `/app`: app movil/PWA exclusiva para clientes, interfaz principal y exclusiva para telefonos moviles.
 - `/api`: API interna JSON.
+
+Las interfaces `/`, `/admin` y `/app` son independientes. Cada una tiene layout, navegacion, componentes y experiencia propios. `/admin` debe ser desktop-first con experiencia completa, pero tambien debe permitir al dueno u operador gestionar pedidos desde celular con una experiencia simplificada.
+
+### Modelo de negocio
+
+TIEMPO es una empresa de delivery, no un restaurante.
+
+- TIEMPO administra pedidos, clientes, pagos, estados, repartidores y reportes generales.
+- Los negocios afiliados solo administran su informacion, carta digital, productos, categorias, fotos, horarios y promociones.
+- Los negocios afiliados no administran pedidos globales, clientes, pagos, reportes generales, repartidores, usuarios ni configuracion.
+- Los productos publicados por negocios afiliados son usados por TIEMPO para vender a clientes.
+
+Roles oficiales:
+
+- SuperAdmin.
+- Admin.
+- Operador.
+- Negocio Afiliado.
+- Repartidor.
+- Cliente.
 
 Capas objetivo:
 
@@ -51,7 +71,7 @@ Descripcion: Crear y mantener documentos de contexto, arquitectura, desarrollo, 
 
 Tareas:
 
-- Crear documentos `docs-ai/00` a `docs-ai/12`.
+- Crear documentos `docs-ai/00` a `docs-ai/14`.
 - Crear este Master Roadmap.
 - Mantener cada documento corto, claro y accionable.
 - Versionar cambios de documentacion.
@@ -62,7 +82,7 @@ Dependencias:
 
 Criterios de finalizacion:
 
-- Todos los documentos `00` a `13` existen.
+- Todos los documentos `00` a `14` existen.
 - El roadmap tiene fases, dependencias y reglas.
 - Cambios documentales estan commiteados y subidos al remoto.
 
@@ -129,7 +149,7 @@ Estado: ☐ Pendiente
 
 Objetivo: Implementar autenticacion base para admin y preparar separacion con clientes.
 
-Descripcion: Proteger `/admin` y dejar definidos flujos separados para usuarios administrativos y clientes.
+Descripcion: Proteger `/admin` y dejar definidos flujos separados para usuarios administrativos, negocios afiliados, repartidores y clientes.
 
 Tareas:
 
@@ -138,6 +158,7 @@ Tareas:
 - Proteger rutas `/admin`.
 - Definir hashing y sesiones seguras.
 - Preparar roles/permisos.
+- Definir roles oficiales: SuperAdmin, Admin, Operador, Negocio Afiliado, Repartidor y Cliente.
 
 Dependencias:
 
@@ -147,6 +168,7 @@ Criterios de finalizacion:
 
 - Admin puede iniciar y cerrar sesion.
 - `/admin` bloquea usuarios no autenticados.
+- Negocio Afiliado, Repartidor y Cliente quedan separados por permisos y alcance.
 - Login probado.
 - Commit y push realizados.
 
@@ -156,7 +178,7 @@ Estado: ☐ Pendiente
 
 Objetivo: Crear layout base del dashboard administrativo.
 
-Descripcion: Construir interfaz desktop-first con sidebar, topbar, cards, tablas base y componentes reutilizables.
+Descripcion: Construir interfaz desktop-first con sidebar, topbar, cards, tablas base y componentes reutilizables, incluyendo una version responsive movil simplificada para operacion rapida.
 
 Tareas:
 
@@ -165,6 +187,8 @@ Tareas:
 - Crear dashboard inicial.
 - Crear componentes UI base.
 - Asegurar responsive minimo.
+- Definir patrones admin movil con cards, botones grandes y navegacion simple.
+- Priorizar en admin movil pedidos, pagos, estados, repartidores y ventas rapidas.
 
 Dependencias:
 
@@ -175,6 +199,8 @@ Criterios de finalizacion:
 - `/admin` carga con layout.
 - Sidebar muestra modulos previstos.
 - UI cumple reglas de `05-ui-ux.md`.
+- Admin movil permite operar lo urgente sin copiar tablas grandes de desktop.
+- Reportes complejos quedan reservados para desktop.
 - Commit y push realizados.
 
 ## FASE 05 - Base de Datos
@@ -192,6 +218,8 @@ Tareas:
 - Crear modelos Eloquent.
 - Crear seeders base.
 - Definir estados controlados.
+- Modelar negocios afiliados y permisos por rol.
+- Separar clientes, repartidores y usuarios administrativos segun alcance.
 
 Dependencias:
 
@@ -219,6 +247,7 @@ Tareas:
 - Crear vista responsive.
 - Agregar CTA y secciones basicas.
 - Enlazar acceso a `/app` y `/admin` si aplica.
+- Captar clientes y negocios afiliados.
 
 Dependencias:
 
@@ -246,6 +275,7 @@ Tareas:
 - Crear endpoints health o base.
 - Configurar autenticacion cuando aplique.
 - Documentar endpoints iniciales.
+- Definir alcance API por consumidor: cliente, repartidor, negocio afiliado y admin/operador.
 
 Dependencias:
 
@@ -257,6 +287,37 @@ Criterios de finalizacion:
 - `/api` responde con formato consistente.
 - Errores usan codigos HTTP correctos.
 - No expone datos sensibles.
+- No expone datos globales a negocios afiliados ni pedidos no asignados a repartidores.
+- Commit y push realizados.
+
+## FASE 07.5 - Diseno UX Mobile
+
+Estado: ☐ Pendiente
+
+Objetivo: Disenar completamente la experiencia movil antes de comenzar el desarrollo de `/app`.
+
+Descripcion: Definir la filosofia, navegacion, componentes, flujo de compra, carrito, formularios, estados visuales, comportamiento PWA y criterios para futura APK.
+
+Tareas:
+
+- Crear guia oficial de App Movil.
+- Definir navegacion inferior.
+- Definir componentes mobile: cards, botones, formularios, carrito y estados.
+- Definir flujo de compra inspirado en apps tipo Uber Eats, Rappi o PedidosYa.
+- Validar accesibilidad, uso con una mano y rendimiento.
+- Alinear PWA y futura APK con Capacitor.
+
+Dependencias:
+
+- FASE 00.
+- FASE 06.
+- FASE 07.
+
+Criterios de finalizacion:
+
+- `docs-ai/14-mobile-app-guidelines.md` existe.
+- La experiencia `/app` queda definida como interfaz independiente.
+- El equipo entiende que `/app` no reutiliza dashboard ni landing.
 - Commit y push realizados.
 
 ## FASE 08 - App movil / PWA
@@ -265,7 +326,7 @@ Estado: ☐ Pendiente
 
 Objetivo: Crear base mobile-first en `/app`.
 
-Descripcion: Implementar estructura inicial de la PWA para clientes.
+Descripcion: Implementar estructura inicial de la PWA para clientes siguiendo la guia oficial mobile.
 
 Tareas:
 
@@ -280,6 +341,7 @@ Dependencias:
 - FASE 02.
 - FASE 06.
 - FASE 07.
+- FASE 07.5.
 
 Criterios de finalizacion:
 
@@ -294,7 +356,7 @@ Estado: ☐ Pendiente
 
 Objetivo: Administrar usuarios operadores/admin.
 
-Descripcion: Crear CRUD de usuarios, roles y permisos administrativos.
+Descripcion: Crear CRUD de usuarios, roles y permisos para SuperAdmin, Admin, Operador, Negocio Afiliado, Repartidor y Cliente segun alcance.
 
 Tareas:
 
@@ -303,6 +365,9 @@ Tareas:
 - Crear permisos por modulo.
 - Validar crear, editar, activar/desactivar.
 - Proteger acciones criticas.
+- Restringir Negocio Afiliado a su propio negocio/carta.
+- Restringir Repartidor a pedidos asignados.
+- Restringir Cliente a `/app`.
 
 Dependencias:
 
@@ -314,6 +379,7 @@ Criterios de finalizacion:
 
 - CRUD usuarios funciona.
 - Permisos bloquean acciones no autorizadas.
+- Roles oficiales estan sembrados o documentados.
 - Testing de login y permisos completado.
 - Commit y push realizados.
 
@@ -344,13 +410,13 @@ Criterios de finalizacion:
 - UI cumple reglas de tabla/formulario.
 - Commit y push realizados.
 
-## FASE 11 - Restaurantes
+## FASE 11 - Negocios afiliados
 
 Estado: ☐ Pendiente
 
-Objetivo: Gestionar empresas afiliadas.
+Objetivo: Gestionar negocios afiliados.
 
-Descripcion: Crear CRUD de restaurantes con datos generales, horarios y estado.
+Descripcion: Crear CRUD de negocios afiliados con datos generales, horarios, estado e informacion comercial.
 
 Tareas:
 
@@ -358,6 +424,7 @@ Tareas:
 - Crear CRUD admin.
 - Gestionar abierto/cerrado.
 - Relacionar con productos.
+- Permitir acceso limitado del Negocio Afiliado a su propia informacion.
 
 Dependencias:
 
@@ -367,23 +434,24 @@ Dependencias:
 
 Criterios de finalizacion:
 
-- Restaurantes se administran desde `/admin`.
+- Negocios afiliados se administran desde `/admin`.
 - Estado de disponibilidad funciona.
+- Negocio Afiliado no accede a pedidos/clientes/pagos/repartidores globales.
 - Commit y push realizados.
 
 ## FASE 12 - Productos
 
 Estado: ☐ Pendiente
 
-Objetivo: Gestionar carta/productos por restaurante.
+Objetivo: Gestionar carta/productos por negocio afiliado.
 
-Descripcion: Crear CRUD de productos con precio, categoria, restaurante y disponibilidad.
+Descripcion: Crear CRUD de productos con precio, categoria, negocio afiliado y disponibilidad.
 
 Tareas:
 
 - Crear modelo y migraciones necesarias.
 - Crear CRUD admin.
-- Asociar producto a restaurante y categoria.
+- Asociar producto a negocio afiliado y categoria.
 - Gestionar disponibilidad.
 - Preparar imagen si aplica.
 
@@ -544,7 +612,7 @@ Estado: ☐ Pendiente
 
 Objetivo: Crear reportes administrativos.
 
-Descripcion: Mostrar ventas, pedidos, pagos, restaurantes y repartidores.
+Descripcion: Mostrar ventas, pedidos, pagos, negocios afiliados y repartidores.
 
 Tareas:
 
@@ -797,7 +865,7 @@ Despues de finalizar cada fase, todo agente IA debe:
 Reglas adicionales:
 
 - Este documento es el director del proyecto.
-- Siempre leer `docs-ai/00` a `docs-ai/13` antes de trabajar.
+- Siempre leer `docs-ai/00` a `docs-ai/14` antes de trabajar.
 - No instalar dependencias sin justificar.
 - No modificar archivos globales sin explicar impacto.
 - No generar codigo de aplicacion antes de planificar archivos.
