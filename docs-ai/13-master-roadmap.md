@@ -20,7 +20,8 @@ Construir desde cero una plataforma integral de delivery con Laravel, MySQL, Liv
 - Modelo relacional inicial de TIEMPO creado con migraciones, modelos, relaciones y seeders base.
 - Landing publica en `/` creada y verificada.
 - Base de API interna bajo `/api` creada y verificada.
-- La siguiente accion tecnica debe ser disenar completamente la experiencia movil antes de desarrollar `/app`.
+- Diseno UX Mobile de `/app` definido antes del desarrollo.
+- La siguiente accion tecnica debe ser crear la base mobile-first en `/app`.
 
 ### Arquitectura
 
@@ -360,7 +361,7 @@ Resumen de trabajo realizado:
 
 ## FASE 07.5 - Diseno UX Mobile
 
-Estado: ☐ Pendiente
+Estado: ☑ Finalizado
 
 Objetivo: Disenar completamente la experiencia movil antes de comenzar el desarrollo de `/app`.
 
@@ -387,6 +388,14 @@ Criterios de finalizacion:
 - La experiencia `/app` queda definida como interfaz independiente.
 - El equipo entiende que `/app` no reutiliza dashboard ni landing.
 - Commit y push realizados.
+
+Resumen de trabajo realizado:
+
+- Guia oficial mobile ampliada con mapa de pantallas base.
+- Navegacion inferior definida para Inicio, Buscar, Carrito, Pedidos y Perfil.
+- Componentes por pantalla definidos para inicio, negocio, producto, carrito y seguimiento.
+- Reglas de botones, formularios, carrito, checkout y estados de pedido definidas.
+- Criterios PWA/APK, rendimiento y accesibilidad alineados antes de implementar `/app`.
 
 ## FASE 08 - App movil / PWA
 
@@ -942,6 +951,6 @@ Reglas adicionales:
 
 ## Estado de siguiente fase propuesta
 
-Siguiente fase sugerida: FASE 07.5 - Diseno UX Mobile.
+Siguiente fase sugerida: FASE 08 - App movil / PWA.
 
-Antes de iniciar FASE 07.5, el agente debe revisar la guia mobile y proponer el diseno completo de experiencia `/app`: navegacion, pantallas base, componentes, flujo de compra, carrito, estados y criterios PWA/APK.
+Antes de iniciar FASE 08, el agente debe proponer plan de archivos para crear rutas `/app`, layout mobile-first, vistas base, navegacion inferior, estilos iniciales, manifest PWA y pruebas sin mezclar dashboard ni landing.
