@@ -12,7 +12,7 @@ class AdminNavigation
             ['key' => 'clientes', 'label' => 'Clientes', 'icon' => 'C', 'url' => '#'],
             ['key' => 'categorias', 'label' => 'Categorias', 'icon' => 'G', 'url' => route('admin.categories.index')],
             ['key' => 'negocios', 'label' => 'Negocios afiliados', 'icon' => 'N', 'url' => route('admin.businesses.index')],
-            ['key' => 'productos', 'label' => 'Productos', 'icon' => 'R', 'url' => '#'],
+            ['key' => 'productos', 'label' => 'Productos', 'icon' => 'R', 'url' => route('admin.products.index')],
             ['key' => 'repartidores', 'label' => 'Repartidores', 'icon' => 'M', 'url' => '#'],
             ['key' => 'pagos', 'label' => 'Pagos', 'icon' => 'Y', 'url' => '#'],
             ['key' => 'reportes', 'label' => 'Reportes', 'icon' => 'T', 'url' => '#'],

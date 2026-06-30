@@ -16,6 +16,11 @@ class Producto extends Model
 
     public const ESTADO_INACTIVO = 'inactivo';
 
+    public const ESTADOS = [
+        self::ESTADO_ACTIVO,
+        self::ESTADO_INACTIVO,
+    ];
+
     protected $fillable = [
         'negocio_afiliado_id',
         'categoria_id',
@@ -36,6 +41,21 @@ class Producto extends Model
             'precio_promocional' => 'decimal:2',
             'disponible' => 'boolean',
         ];
+    }
+
+    public static function estadoOptions(): array
+    {
+        return [
+            self::ESTADO_ACTIVO => 'Activo',
+            self::ESTADO_INACTIVO => 'Inactivo',
+        ];
+    }
+
+    public function precioVenta(): string
+    {
+        $price = $this->precio_promocional ?: $this->precio;
+
+        return 'S/ '.number_format((float) $price, 2);
     }
 
     public function negocioAfiliado(): BelongsTo

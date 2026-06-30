@@ -25,7 +25,8 @@ Construir desde cero una plataforma integral de delivery con Laravel, MySQL, Liv
 - Gestion de Usuarios base implementada en `/admin`.
 - Categorias globales implementadas en `/admin`.
 - Negocios afiliados implementados en `/admin`.
-- La siguiente accion tecnica debe ser implementar Productos.
+- Productos implementados en `/admin`.
+- La siguiente accion tecnica debe ser implementar Clientes.
 
 ### Arquitectura
 
@@ -568,7 +569,7 @@ Resumen de trabajo realizado:
 
 ## FASE 12 - Productos
 
-Estado: ☐ Pendiente
+Estado: ☑ Finalizado
 
 Objetivo: Gestionar carta/productos por negocio afiliado.
 
@@ -592,6 +593,18 @@ Criterios de finalizacion:
 - Productos se administran correctamente.
 - Catalogo puede consumir productos activos.
 - Commit y push realizados.
+
+Resumen de trabajo realizado:
+
+- Modulo `admin/products` creado para listar, crear, editar y desactivar productos.
+- Middleware especifico agregado para permitir gestion a SuperAdmin, Admin y Operador.
+- Negocio Afiliado queda bloqueado para este CRUD global.
+- Validaciones creadas con Form Requests.
+- Productos asociados a negocio afiliado y categoria.
+- Disponibilidad, estado, precio y precio promocional implementados.
+- Slug unico generado por negocio afiliado.
+- UI de listado, filtros y formulario agregada al dashboard.
+- Tests de acceso, creacion, edicion, filtros, validacion de precio promocional y soft delete agregados y ejecutados correctamente.
 
 ## FASE 13 - Clientes
 
@@ -1001,6 +1014,6 @@ Reglas adicionales:
 
 ## Estado de siguiente fase propuesta
 
-Siguiente fase sugerida: FASE 12 - Productos.
+Siguiente fase sugerida: FASE 13 - Clientes.
 
-Antes de iniciar FASE 12, el agente debe proponer plan de archivos para CRUD de productos por negocio afiliado, respetando categorias, disponibilidad, precios, alcance del Negocio Afiliado y operacion centralizada de TIEMPO.
+Antes de iniciar FASE 13, el agente debe proponer plan de archivos para gestion de clientes, respetando que el cliente opera desde `/app`, que sus datos no son visibles para Negocio Afiliado y que TIEMPO centraliza la operacion.

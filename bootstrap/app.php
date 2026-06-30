@@ -3,6 +3,7 @@
 use App\Http\Middleware\EnsureAdminAccess;
 use App\Http\Middleware\EnsureBusinessManagementAccess;
 use App\Http\Middleware\EnsureCategoryManagementAccess;
+use App\Http\Middleware\EnsureProductManagementAccess;
 use App\Http\Middleware\EnsureUserManagementAccess;
 use App\Http\Responses\ApiResponse;
 use Illuminate\Foundation\Application;
@@ -25,6 +26,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin.access' => EnsureAdminAccess::class,
             'admin.businesses' => EnsureBusinessManagementAccess::class,
             'admin.categories' => EnsureCategoryManagementAccess::class,
+            'admin.products' => EnsureProductManagementAccess::class,
             'admin.users' => EnsureUserManagementAccess::class,
         ]);
     })
