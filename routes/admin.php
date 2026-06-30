@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
@@ -14,6 +15,11 @@ Route::prefix('admin')->name('admin.')->group(function (): void {
     Route::middleware(['auth', 'admin.access'])->group(function (): void {
         Route::get('/', DashboardController::class)->name('dashboard');
         Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+
+        Route::middleware('admin.categories')->group(function (): void {
+            Route::resource('categories', CategoryController::class)
+                ->except(['show']);
+        });
 
         Route::middleware('admin.users')->group(function (): void {
             Route::resource('users', UserController::class)

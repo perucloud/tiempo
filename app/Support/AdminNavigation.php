@@ -10,7 +10,7 @@ class AdminNavigation
             ['key' => 'dashboard', 'label' => 'Dashboard', 'icon' => 'D', 'url' => route('admin.dashboard')],
             ['key' => 'pedidos', 'label' => 'Pedidos', 'icon' => 'P', 'url' => '#'],
             ['key' => 'clientes', 'label' => 'Clientes', 'icon' => 'C', 'url' => '#'],
-            ['key' => 'categorias', 'label' => 'Categorias', 'icon' => 'G', 'url' => '#'],
+            ['key' => 'categorias', 'label' => 'Categorias', 'icon' => 'G', 'url' => route('admin.categories.index')],
             ['key' => 'negocios', 'label' => 'Negocios afiliados', 'icon' => 'N', 'url' => '#'],
             ['key' => 'productos', 'label' => 'Productos', 'icon' => 'R', 'url' => '#'],
             ['key' => 'repartidores', 'label' => 'Repartidores', 'icon' => 'M', 'url' => '#'],

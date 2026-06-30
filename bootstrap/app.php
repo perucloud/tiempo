@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\EnsureAdminAccess;
+use App\Http\Middleware\EnsureCategoryManagementAccess;
 use App\Http\Middleware\EnsureUserManagementAccess;
 use App\Http\Responses\ApiResponse;
 use Illuminate\Foundation\Application;
@@ -21,6 +22,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->alias([
             'admin.access' => EnsureAdminAccess::class,
+            'admin.categories' => EnsureCategoryManagementAccess::class,
             'admin.users' => EnsureUserManagementAccess::class,
         ]);
     })

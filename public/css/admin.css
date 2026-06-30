@@ -276,8 +276,16 @@ a {
 }
 
 .admin-link {
+    border: 0;
+    padding: 0;
+    background: transparent;
     color: var(--admin-blue);
+    cursor: pointer;
     font-weight: 800;
+}
+
+.admin-link-danger {
+    color: var(--admin-red);
 }
 
 .admin-alert {
@@ -337,6 +345,25 @@ a {
 .admin-form-actions {
     display: flex;
     justify-content: flex-end;
+}
+
+.admin-filter-bar {
+    display: grid;
+    grid-template-columns: minmax(220px, 1fr) 180px 180px auto;
+    gap: 12px;
+    align-items: end;
+    margin-bottom: 16px;
+}
+
+.admin-filter-actions,
+.admin-row-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.admin-row-actions form {
+    margin: 0;
 }
 
 .admin-pagination {
@@ -431,6 +458,15 @@ a {
 
     .admin-form-grid {
         grid-template-columns: 1fr;
+    }
+
+    .admin-filter-bar {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-filter-actions {
+        align-items: stretch;
+        flex-direction: column;
     }
 
     .admin-form-actions {

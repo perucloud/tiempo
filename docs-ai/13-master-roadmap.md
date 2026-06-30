@@ -23,7 +23,8 @@ Construir desde cero una plataforma integral de delivery con Laravel, MySQL, Liv
 - Diseno UX Mobile de `/app` definido antes del desarrollo.
 - Base mobile-first de `/app` creada y verificada.
 - Gestion de Usuarios base implementada en `/admin`.
-- La siguiente accion tecnica debe ser implementar Categorias.
+- Categorias globales implementadas en `/admin`.
+- La siguiente accion tecnica debe ser implementar Negocios afiliados.
 
 ### Arquitectura
 
@@ -486,7 +487,7 @@ Resumen de trabajo realizado:
 
 ## FASE 10 - Categorias
 
-Estado: ☐ Pendiente
+Estado: ☑ Finalizado
 
 Objetivo: Gestionar categorias de comidas, bebidas y futuras categorias.
 
@@ -510,6 +511,17 @@ Criterios de finalizacion:
 - Categorias se crean, editan y desactivan.
 - UI cumple reglas de tabla/formulario.
 - Commit y push realizados.
+
+Resumen de trabajo realizado:
+
+- Modulo `admin/categories` creado para listar, crear, editar y desactivar categorias globales.
+- Middleware especifico agregado para permitir gestion a SuperAdmin, Admin y Operador.
+- Negocio Afiliado queda bloqueado para categorias globales de TIEMPO.
+- Validaciones creadas con Form Requests.
+- Filtros por busqueda, tipo y estado agregados.
+- Slug unico generado automaticamente desde el nombre.
+- UI de listado, filtros y formulario agregada al dashboard.
+- Tests de acceso, creacion, edicion, filtros y soft delete agregados y ejecutados correctamente.
 
 ## FASE 11 - Negocios afiliados
 
@@ -975,6 +987,6 @@ Reglas adicionales:
 
 ## Estado de siguiente fase propuesta
 
-Siguiente fase sugerida: FASE 10 - Categorias.
+Siguiente fase sugerida: FASE 11 - Negocios afiliados.
 
-Antes de iniciar FASE 10, el agente debe proponer plan de archivos para CRUD administrativo de categorias, respetando estados, orden, busqueda, permisos y separacion entre categorias globales y alcance de Negocio Afiliado.
+Antes de iniciar FASE 11, el agente debe proponer plan de archivos para CRUD de negocios afiliados, respetando que solo TIEMPO administra la operacion global y que el Negocio Afiliado solo gestiona su propia informacion/carta.
