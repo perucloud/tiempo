@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\EnsureAdminAccess;
+use App\Http\Middleware\EnsureUserManagementAccess;
 use App\Http\Responses\ApiResponse;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -20,6 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->alias([
             'admin.access' => EnsureAdminAccess::class,
+            'admin.users' => EnsureUserManagementAccess::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

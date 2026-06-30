@@ -275,6 +275,75 @@ a {
     color: #fff;
 }
 
+.admin-link {
+    color: var(--admin-blue);
+    font-weight: 800;
+}
+
+.admin-alert {
+    margin-bottom: 14px;
+    border: 1px solid #bbf7d0;
+    border-radius: 8px;
+    padding: 12px 14px;
+    background: #f0fdf4;
+    color: var(--admin-green);
+    font-weight: 800;
+}
+
+.admin-form {
+    display: grid;
+    gap: 18px;
+}
+
+.admin-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.admin-field {
+    display: grid;
+    gap: 7px;
+}
+
+.admin-field span {
+    color: var(--admin-muted);
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.admin-field input,
+.admin-field select {
+    width: 100%;
+    min-height: 42px;
+    border: 1px solid var(--admin-line);
+    border-radius: 6px;
+    padding: 9px 11px;
+    background: #fff;
+    color: var(--admin-text);
+}
+
+.admin-field input:focus,
+.admin-field select:focus {
+    border-color: var(--admin-blue);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, .14);
+    outline: none;
+}
+
+.admin-field small {
+    color: var(--admin-red);
+}
+
+.admin-form-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.admin-pagination {
+    margin-top: 16px;
+    color: var(--admin-muted);
+}
+
 .admin-table-wrap {
     overflow-x: auto;
 }
@@ -358,6 +427,18 @@ a {
 
     .admin-card-value {
         font-size: 26px;
+    }
+
+    .admin-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-form-actions {
+        justify-content: stretch;
+    }
+
+    .admin-form-actions .admin-button {
+        width: 100%;
     }
 
     .admin-desktop-table {

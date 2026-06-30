@@ -22,7 +22,8 @@ Construir desde cero una plataforma integral de delivery con Laravel, MySQL, Liv
 - Base de API interna bajo `/api` creada y verificada.
 - Diseno UX Mobile de `/app` definido antes del desarrollo.
 - Base mobile-first de `/app` creada y verificada.
-- La siguiente accion tecnica debe ser implementar Gestion de Usuarios.
+- Gestion de Usuarios base implementada en `/admin`.
+- La siguiente accion tecnica debe ser implementar Categorias.
 
 ### Arquitectura
 
@@ -442,7 +443,7 @@ Resumen de trabajo realizado:
 
 ## FASE 09 - Gestion de Usuarios
 
-Estado: ☐ Pendiente
+Estado: ☑ Finalizado
 
 Objetivo: Administrar usuarios operadores/admin.
 
@@ -472,6 +473,16 @@ Criterios de finalizacion:
 - Roles oficiales estan sembrados o documentados.
 - Testing de login y permisos completado.
 - Commit y push realizados.
+
+Resumen de trabajo realizado:
+
+- Modulo `admin/users` creado para listar, crear y editar usuarios.
+- Middleware especifico agregado para limitar Gestion de Usuarios a SuperAdmin y Admin.
+- Validaciones creadas con Form Requests para alta y actualizacion.
+- Roles y estados oficiales usados desde el modelo `User`.
+- Navegacion administrativa centralizada para activar el modulo Usuarios.
+- UI de listado y formulario agregada al dashboard.
+- Tests de acceso, creacion, actualizacion y bloqueo por rol agregados y ejecutados correctamente.
 
 ## FASE 10 - Categorias
 
@@ -964,6 +975,6 @@ Reglas adicionales:
 
 ## Estado de siguiente fase propuesta
 
-Siguiente fase sugerida: FASE 09 - Gestion de Usuarios.
+Siguiente fase sugerida: FASE 10 - Categorias.
 
-Antes de iniciar FASE 09, el agente debe proponer plan de archivos para CRUD de usuarios, roles y permisos, respetando SuperAdmin, Admin, Operador, Negocio Afiliado, Repartidor y Cliente.
+Antes de iniciar FASE 10, el agente debe proponer plan de archivos para CRUD administrativo de categorias, respetando estados, orden, busqueda, permisos y separacion entre categorias globales y alcance de Negocio Afiliado.

@@ -43,6 +43,20 @@ class User extends Authenticatable
         self::ROLE_NEGOCIO_AFILIADO,
     ];
 
+    public const ROLES = [
+        self::ROLE_SUPERADMIN,
+        self::ROLE_ADMIN,
+        self::ROLE_OPERADOR,
+        self::ROLE_NEGOCIO_AFILIADO,
+        self::ROLE_REPARTIDOR,
+        self::ROLE_CLIENTE,
+    ];
+
+    public const STATUSES = [
+        self::STATUS_ACTIVE,
+        self::STATUS_INACTIVE,
+    ];
+
     public function canAccessAdmin(): bool
     {
         return $this->status === self::STATUS_ACTIVE
@@ -60,6 +74,26 @@ class User extends Authenticatable
             self::ROLE_CLIENTE => 'Cliente',
             default => 'Sin rol',
         };
+    }
+
+    public static function roleOptions(): array
+    {
+        return [
+            self::ROLE_SUPERADMIN => 'SuperAdmin',
+            self::ROLE_ADMIN => 'Admin',
+            self::ROLE_OPERADOR => 'Operador',
+            self::ROLE_NEGOCIO_AFILIADO => 'Negocio Afiliado',
+            self::ROLE_REPARTIDOR => 'Repartidor',
+            self::ROLE_CLIENTE => 'Cliente',
+        ];
+    }
+
+    public static function statusOptions(): array
+    {
+        return [
+            self::STATUS_ACTIVE => 'Activo',
+            self::STATUS_INACTIVE => 'Inactivo',
+        ];
     }
 
     public function roleRecord(): BelongsTo
