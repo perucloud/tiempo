@@ -18,7 +18,8 @@ Construir desde cero una plataforma integral de delivery con Laravel, MySQL, Liv
 - Autenticacion base de `/admin` implementada y verificada.
 - Dashboard administrativo base creado con layout desktop-first y responsive movil simplificado.
 - Modelo relacional inicial de TIEMPO creado con migraciones, modelos, relaciones y seeders base.
-- La siguiente accion tecnica debe ser crear la landing publica en `/`.
+- Landing publica en `/` creada y verificada.
+- La siguiente accion tecnica debe ser crear la base de API interna bajo `/api`.
 
 ### Arquitectura
 
@@ -282,7 +283,7 @@ Resumen de trabajo realizado:
 
 ## FASE 06 - Landing Page
 
-Estado: ☐ Pendiente
+Estado: ☑ Finalizado
 
 Objetivo: Crear landing publica en `/`.
 
@@ -306,6 +307,16 @@ Criterios de finalizacion:
 - Landing carga en desktop y mobile.
 - No mezcla logica de negocio.
 - Commit y push realizados.
+
+Resumen de trabajo realizado:
+
+- Ruta publica `/` configurada con nombre `home`.
+- Layout web independiente creado para la landing publica.
+- Landing responsive creada para captacion de clientes y negocios afiliados.
+- CTAs agregados para app de clientes, afiliacion de negocios y acceso admin.
+- Estilos publicos organizados en `public/css/web.css`.
+- Asset visual local creado para el hero de la landing.
+- Tests de landing agregados y ejecutados correctamente.
 
 ## FASE 07 - API
 
@@ -921,6 +932,6 @@ Reglas adicionales:
 
 ## Estado de siguiente fase propuesta
 
-Siguiente fase sugerida: FASE 06 - Landing Page.
+Siguiente fase sugerida: FASE 07 - API.
 
-Antes de iniciar FASE 06, el agente debe proponer plan de archivos para landing publica, layout web, contenido institucional, CTAs para clientes y negocios afiliados, y separacion clara respecto a `/admin` y `/app`.
+Antes de iniciar FASE 07, el agente debe proponer plan de rutas, controladores API, formato JSON uniforme, manejo de errores, endpoint base y alcance por consumidor.
