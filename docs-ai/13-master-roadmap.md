@@ -19,7 +19,8 @@ Construir desde cero una plataforma integral de delivery con Laravel, MySQL, Liv
 - Dashboard administrativo base creado con layout desktop-first y responsive movil simplificado.
 - Modelo relacional inicial de TIEMPO creado con migraciones, modelos, relaciones y seeders base.
 - Landing publica en `/` creada y verificada.
-- La siguiente accion tecnica debe ser crear la base de API interna bajo `/api`.
+- Base de API interna bajo `/api` creada y verificada.
+- La siguiente accion tecnica debe ser disenar completamente la experiencia movil antes de desarrollar `/app`.
 
 ### Arquitectura
 
@@ -320,7 +321,7 @@ Resumen de trabajo realizado:
 
 ## FASE 07 - API
 
-Estado: ☐ Pendiente
+Estado: ☑ Finalizado
 
 Objetivo: Crear base de API interna bajo `/api`.
 
@@ -347,6 +348,15 @@ Criterios de finalizacion:
 - No expone datos sensibles.
 - No expone datos globales a negocios afiliados ni pedidos no asignados a repartidores.
 - Commit y push realizados.
+
+Resumen de trabajo realizado:
+
+- Archivo `routes/api.php` creado y registrado en Laravel.
+- Endpoint base `/api/v1/health` creado.
+- Controlador API separado en `app/Http/Controllers/Api`.
+- Respuesta JSON uniforme creada con `data`, `message`, `errors` y `meta`.
+- Manejo JSON uniforme para rutas API no encontradas.
+- Tests de contrato API agregados y ejecutados correctamente.
 
 ## FASE 07.5 - Diseno UX Mobile
 
@@ -932,6 +942,6 @@ Reglas adicionales:
 
 ## Estado de siguiente fase propuesta
 
-Siguiente fase sugerida: FASE 07 - API.
+Siguiente fase sugerida: FASE 07.5 - Diseno UX Mobile.
 
-Antes de iniciar FASE 07, el agente debe proponer plan de rutas, controladores API, formato JSON uniforme, manejo de errores, endpoint base y alcance por consumidor.
+Antes de iniciar FASE 07.5, el agente debe revisar la guia mobile y proponer el diseno completo de experiencia `/app`: navegacion, pantallas base, componentes, flujo de compra, carrito, estados y criterios PWA/APK.
