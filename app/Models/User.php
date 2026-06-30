@@ -7,10 +7,13 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password', 'role', 'status'])]
+#[Fillable(['name', 'email', 'password', 'role', 'role_id', 'status'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -57,6 +60,31 @@ class User extends Authenticatable
             self::ROLE_CLIENTE => 'Cliente',
             default => 'Sin rol',
         };
+    }
+
+    public function roleRecord(): BelongsTo
+    {
+        return $this->belongsTo(Role::class, 'role_id');
+    }
+
+    public function negocioAfiliado(): HasOne
+    {
+        return $this->hasOne(NegocioAfiliado::class);
+    }
+
+    public function cliente(): HasOne
+    {
+        return $this->hasOne(Cliente::class);
+    }
+
+    public function repartidor(): HasOne
+    {
+        return $this->hasOne(Repartidor::class);
+    }
+
+    public function pedidosOperados(): HasMany
+    {
+        return $this->hasMany(Pedido::class, 'operador_id');
     }
 
     /**

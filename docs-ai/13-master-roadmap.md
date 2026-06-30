@@ -17,7 +17,8 @@ Construir desde cero una plataforma integral de delivery con Laravel, MySQL, Liv
 - Entorno local configurado con MySQL, timezone, locale y variables base.
 - Autenticacion base de `/admin` implementada y verificada.
 - Dashboard administrativo base creado con layout desktop-first y responsive movil simplificado.
-- La siguiente accion tecnica debe ser crear el modelo relacional inicial de TIEMPO.
+- Modelo relacional inicial de TIEMPO creado con migraciones, modelos, relaciones y seeders base.
+- La siguiente accion tecnica debe ser crear la landing publica en `/`.
 
 ### Arquitectura
 
@@ -241,7 +242,7 @@ Resumen de trabajo realizado:
 
 ## FASE 05 - Base de Datos
 
-Estado: ☐ Pendiente
+Estado: ☑ Finalizado
 
 Objetivo: Crear modelo relacional inicial de TIEMPO.
 
@@ -268,6 +269,16 @@ Criterios de finalizacion:
 - Relaciones Eloquent principales existen.
 - Seeders base funcionan.
 - Commit y push realizados.
+
+Resumen de trabajo realizado:
+
+- Migracion central creada para roles, permisos, categorias, negocios afiliados, productos, clientes, repartidores, pedidos, detalle de pedidos, pagos e historial de estados.
+- Modelos Eloquent principales creados con relaciones iniciales.
+- Estados controlados definidos en modelos clave.
+- Factories principales creadas para pruebas y futuros modulos.
+- Seeders base creados para roles oficiales, permisos iniciales y categorias.
+- Migraciones y seeders ejecutados correctamente en MySQL local.
+- Tests de esquema y relaciones agregados y ejecutados correctamente.
 
 ## FASE 06 - Landing Page
 
@@ -910,6 +921,6 @@ Reglas adicionales:
 
 ## Estado de siguiente fase propuesta
 
-Siguiente fase sugerida: FASE 05 - Base de Datos.
+Siguiente fase sugerida: FASE 06 - Landing Page.
 
-Antes de iniciar FASE 05, el agente debe proponer plan de migraciones, modelos, relaciones, seeders y estados controlados para el modelo relacional inicial de TIEMPO.
+Antes de iniciar FASE 06, el agente debe proponer plan de archivos para landing publica, layout web, contenido institucional, CTAs para clientes y negocios afiliados, y separacion clara respecto a `/admin` y `/app`.
