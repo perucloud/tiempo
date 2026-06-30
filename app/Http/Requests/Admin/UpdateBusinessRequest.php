@@ -1,0 +1,43 @@
+<?php
+
+namespace App\Http\Requests\Admin;
+
+use App\Models\NegocioAfiliado;
+use App\Models\User;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+
+class UpdateBusinessRequest extends FormRequest
+{
+    public function authorize(): bool
+    {
+        return in_array($this->user()?->role, [
+            User::ROLE_SUPERADMIN,
+            User::ROLE_ADMIN,
+            User::ROLE_OPERADOR,
+        ], true);
+    }
+
+    public function rules(): array
+    {
+        return [
+            'nombre_comercial' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('negocios_afiliados', 'nombre_comercial')
+                    ->ignore($this->route('business'))
+                    ->whereNull('deleted_at'),
+            ],
+            'tipo_negocio' => ['required', Rule::in(NegocioAfiliado::TIPOS)],
+            'ruc' => ['nullable', 'string', 'max:20'],
+            'telefono' => ['nullable', 'string', 'max:30'],
+            'email' => ['nullable', 'email', 'max:255'],
+            'direccion' => ['nullable', 'string', 'max:255'],
+            'descripcion' => ['nullable', 'string', 'max:1000'],
+            'estado' => ['required', Rule::in(NegocioAfiliado::ESTADOS)],
+            'abierto' => ['required', 'boolean'],
+            'horarios_texto' => ['nullable', 'string', 'max:500'],
+        ];
+    }
+}

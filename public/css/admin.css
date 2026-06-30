@@ -321,9 +321,9 @@ a {
 }
 
 .admin-field input,
-.admin-field select {
+.admin-field select,
+.admin-field textarea {
     width: 100%;
-    min-height: 42px;
     border: 1px solid var(--admin-line);
     border-radius: 6px;
     padding: 9px 11px;
@@ -331,8 +331,19 @@ a {
     color: var(--admin-text);
 }
 
+.admin-field input,
+.admin-field select {
+    min-height: 42px;
+}
+
+.admin-field textarea {
+    min-height: 112px;
+    resize: vertical;
+}
+
 .admin-field input:focus,
-.admin-field select:focus {
+.admin-field select:focus,
+.admin-field textarea:focus {
     border-color: var(--admin-blue);
     box-shadow: 0 0 0 3px rgba(37, 99, 235, .14);
     outline: none;
@@ -345,6 +356,10 @@ a {
 .admin-form-actions {
     display: flex;
     justify-content: flex-end;
+}
+
+.admin-field-wide {
+    grid-column: 1 / -1;
 }
 
 .admin-filter-bar {
