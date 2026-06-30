@@ -1,0 +1,811 @@
+# Master Roadmap TIEMPO Delivery
+
+Este documento es la fuente oficial del estado del proyecto TIEMPO Delivery. Todo agente IA debe leerlo antes de proponer o ejecutar trabajo.
+
+## 1. Vision General del Proyecto
+
+### Objetivo
+
+Construir desde cero una plataforma integral de delivery con Laravel, MySQL, Livewire, Bootstrap o Tailwind, PWA en `/app` y futura APK Android con Capacitor.
+
+### Estado actual
+
+- Documentacion base `docs-ai/00` a `docs-ai/12` creada.
+- Repositorio Git inicial creado y documentacion base subida a remoto.
+- Laravel aun no esta instalado.
+- No existe codigo de aplicacion.
+- La siguiente accion tecnica debe ser proponer plan de archivos para instalar Laravel limpio.
+
+### Arquitectura
+
+- `/`: landing page publica.
+- `/admin`: dashboard administrativo desktop.
+- `/app`: app movil/PWA para clientes.
+- `/api`: API interna JSON.
+
+Capas objetivo:
+
+- Rutas separadas por superficie.
+- Controladores delgados.
+- Modelos Eloquent con relaciones claras.
+- Servicios o Actions para logica de negocio.
+- Blade y Livewire para interfaces.
+- API Resources para respuestas JSON.
+- Migraciones, seeders y factories para base de datos.
+
+### Leyenda de estados
+
+- ☐ Pendiente
+- ◐ En desarrollo
+- ☑ Finalizado
+
+## 2. Fases del Proyecto
+
+## FASE 00 - Documentacion IA
+
+Estado: ◐ En desarrollo
+
+Objetivo: Definir las reglas oficiales para que agentes IA desarrollen TIEMPO con consistencia.
+
+Descripcion: Crear y mantener documentos de contexto, arquitectura, desarrollo, Git, estandares, UI/UX, base de datos, API, PWA, seguridad, modulos, flujos, testing y roadmap.
+
+Tareas:
+
+- Crear documentos `docs-ai/00` a `docs-ai/12`.
+- Crear este Master Roadmap.
+- Mantener cada documento corto, claro y accionable.
+- Versionar cambios de documentacion.
+
+Dependencias:
+
+- Ninguna.
+
+Criterios de finalizacion:
+
+- Todos los documentos `00` a `13` existen.
+- El roadmap tiene fases, dependencias y reglas.
+- Cambios documentales estan commiteados y subidos al remoto.
+
+Resumen de trabajo realizado:
+
+- Documentacion base creada y versionada.
+- Master Roadmap creado en esta fase.
+
+## FASE 01 - Instalacion Laravel
+
+Estado: ☐ Pendiente
+
+Objetivo: Instalar un proyecto Laravel limpio en el repositorio.
+
+Descripcion: Crear la base tecnica sin reutilizar codigo heredado.
+
+Tareas:
+
+- Proponer plan de archivos antes de instalar.
+- Instalar Laravel limpio.
+- Confirmar estructura base.
+- Verificar que no se versionen `vendor`, `.env` ni temporales.
+
+Dependencias:
+
+- FASE 00.
+
+Criterios de finalizacion:
+
+- Laravel instalado correctamente.
+- `php artisan` funciona.
+- Proyecto arranca localmente.
+- Commit y push realizados.
+
+## FASE 02 - Configuracion del entorno
+
+Estado: ☐ Pendiente
+
+Objetivo: Configurar entorno local, variables, base MySQL y herramientas base.
+
+Descripcion: Preparar `.env`, conexion MySQL, Vite, timezone, locale y configuraciones iniciales.
+
+Tareas:
+
+- Configurar `.env.example`.
+- Configurar MySQL.
+- Definir `APP_NAME`, timezone y locale.
+- Validar `php artisan migrate` cuando existan migraciones.
+
+Dependencias:
+
+- FASE 01.
+
+Criterios de finalizacion:
+
+- Entorno local documentado.
+- Conexion MySQL verificada.
+- No se sube `.env`.
+- Commit y push realizados.
+
+## FASE 03 - Autenticacion
+
+Estado: ☐ Pendiente
+
+Objetivo: Implementar autenticacion base para admin y preparar separacion con clientes.
+
+Descripcion: Proteger `/admin` y dejar definidos flujos separados para usuarios administrativos y clientes.
+
+Tareas:
+
+- Elegir stack de autenticacion Laravel.
+- Crear login admin.
+- Proteger rutas `/admin`.
+- Definir hashing y sesiones seguras.
+- Preparar roles/permisos.
+
+Dependencias:
+
+- FASE 02.
+
+Criterios de finalizacion:
+
+- Admin puede iniciar y cerrar sesion.
+- `/admin` bloquea usuarios no autenticados.
+- Login probado.
+- Commit y push realizados.
+
+## FASE 04 - Dashboard Base
+
+Estado: ☐ Pendiente
+
+Objetivo: Crear layout base del dashboard administrativo.
+
+Descripcion: Construir interfaz desktop-first con sidebar, topbar, cards, tablas base y componentes reutilizables.
+
+Tareas:
+
+- Crear layout admin.
+- Crear sidebar y topbar.
+- Crear dashboard inicial.
+- Crear componentes UI base.
+- Asegurar responsive minimo.
+
+Dependencias:
+
+- FASE 03.
+
+Criterios de finalizacion:
+
+- `/admin` carga con layout.
+- Sidebar muestra modulos previstos.
+- UI cumple reglas de `05-ui-ux.md`.
+- Commit y push realizados.
+
+## FASE 05 - Base de Datos
+
+Estado: ☐ Pendiente
+
+Objetivo: Crear modelo relacional inicial de TIEMPO.
+
+Descripcion: Implementar migraciones, relaciones, seeders y factories principales.
+
+Tareas:
+
+- Crear tablas iniciales.
+- Definir foreign keys e indices.
+- Crear modelos Eloquent.
+- Crear seeders base.
+- Definir estados controlados.
+
+Dependencias:
+
+- FASE 02.
+- FASE 03.
+
+Criterios de finalizacion:
+
+- Migraciones corren desde cero.
+- Relaciones Eloquent principales existen.
+- Seeders base funcionan.
+- Commit y push realizados.
+
+## FASE 06 - Landing Page
+
+Estado: ☐ Pendiente
+
+Objetivo: Crear landing publica en `/`.
+
+Descripcion: Presentar TIEMPO, beneficios y accesos principales.
+
+Tareas:
+
+- Crear ruta publica `/`.
+- Crear vista responsive.
+- Agregar CTA y secciones basicas.
+- Enlazar acceso a `/app` y `/admin` si aplica.
+
+Dependencias:
+
+- FASE 01.
+- FASE 02.
+
+Criterios de finalizacion:
+
+- Landing carga en desktop y mobile.
+- No mezcla logica de negocio.
+- Commit y push realizados.
+
+## FASE 07 - API
+
+Estado: ☐ Pendiente
+
+Objetivo: Crear base de API interna bajo `/api`.
+
+Descripcion: Definir respuestas JSON uniformes, middleware, Resources y versionado inicial si aplica.
+
+Tareas:
+
+- Crear estructura de controladores API.
+- Definir formato JSON.
+- Crear endpoints health o base.
+- Configurar autenticacion cuando aplique.
+- Documentar endpoints iniciales.
+
+Dependencias:
+
+- FASE 02.
+- FASE 05.
+
+Criterios de finalizacion:
+
+- `/api` responde con formato consistente.
+- Errores usan codigos HTTP correctos.
+- No expone datos sensibles.
+- Commit y push realizados.
+
+## FASE 08 - App movil / PWA
+
+Estado: ☐ Pendiente
+
+Objetivo: Crear base mobile-first en `/app`.
+
+Descripcion: Implementar estructura inicial de la PWA para clientes.
+
+Tareas:
+
+- Crear rutas `/app`.
+- Crear layout mobile-first.
+- Crear navegacion base.
+- Preparar manifest.
+- Definir estrategia de service worker.
+
+Dependencias:
+
+- FASE 02.
+- FASE 06.
+- FASE 07.
+
+Criterios de finalizacion:
+
+- `/app` carga en celular.
+- Layout mobile-first funcional.
+- PWA preparada sin cachear datos sensibles.
+- Commit y push realizados.
+
+## FASE 09 - Gestion de Usuarios
+
+Estado: ☐ Pendiente
+
+Objetivo: Administrar usuarios operadores/admin.
+
+Descripcion: Crear CRUD de usuarios, roles y permisos administrativos.
+
+Tareas:
+
+- Crear modulo usuarios en `/admin`.
+- Crear roles.
+- Crear permisos por modulo.
+- Validar crear, editar, activar/desactivar.
+- Proteger acciones criticas.
+
+Dependencias:
+
+- FASE 03.
+- FASE 04.
+- FASE 05.
+
+Criterios de finalizacion:
+
+- CRUD usuarios funciona.
+- Permisos bloquean acciones no autorizadas.
+- Testing de login y permisos completado.
+- Commit y push realizados.
+
+## FASE 10 - Categorias
+
+Estado: ☐ Pendiente
+
+Objetivo: Gestionar categorias de comidas, bebidas y futuras categorias.
+
+Descripcion: Crear CRUD administrativo para categorias.
+
+Tareas:
+
+- Crear migracion/modelo si falta.
+- Crear CRUD en `/admin`.
+- Agregar filtros y estados.
+- Validar nombres duplicados.
+
+Dependencias:
+
+- FASE 04.
+- FASE 05.
+- FASE 09.
+
+Criterios de finalizacion:
+
+- Categorias se crean, editan y desactivan.
+- UI cumple reglas de tabla/formulario.
+- Commit y push realizados.
+
+## FASE 11 - Restaurantes
+
+Estado: ☐ Pendiente
+
+Objetivo: Gestionar empresas afiliadas.
+
+Descripcion: Crear CRUD de restaurantes con datos generales, horarios y estado.
+
+Tareas:
+
+- Crear modelo y migraciones necesarias.
+- Crear CRUD admin.
+- Gestionar abierto/cerrado.
+- Relacionar con productos.
+
+Dependencias:
+
+- FASE 05.
+- FASE 09.
+- FASE 10.
+
+Criterios de finalizacion:
+
+- Restaurantes se administran desde `/admin`.
+- Estado de disponibilidad funciona.
+- Commit y push realizados.
+
+## FASE 12 - Productos
+
+Estado: ☐ Pendiente
+
+Objetivo: Gestionar carta/productos por restaurante.
+
+Descripcion: Crear CRUD de productos con precio, categoria, restaurante y disponibilidad.
+
+Tareas:
+
+- Crear modelo y migraciones necesarias.
+- Crear CRUD admin.
+- Asociar producto a restaurante y categoria.
+- Gestionar disponibilidad.
+- Preparar imagen si aplica.
+
+Dependencias:
+
+- FASE 10.
+- FASE 11.
+
+Criterios de finalizacion:
+
+- Productos se administran correctamente.
+- Catalogo puede consumir productos activos.
+- Commit y push realizados.
+
+## FASE 13 - Clientes
+
+Estado: ☐ Pendiente
+
+Objetivo: Gestionar clientes y sus datos.
+
+Descripcion: Crear registro, consulta, direcciones e historial base del cliente.
+
+Tareas:
+
+- Crear modelo cliente.
+- Crear direcciones.
+- Crear consulta admin.
+- Preparar autenticacion cliente para `/app`.
+
+Dependencias:
+
+- FASE 05.
+- FASE 08.
+- FASE 09.
+
+Criterios de finalizacion:
+
+- Clientes pueden existir con direcciones.
+- Admin puede consultar clientes.
+- Commit y push realizados.
+
+## FASE 14 - Carrito
+
+Estado: ☐ Pendiente
+
+Objetivo: Implementar carrito de compra en `/app`.
+
+Descripcion: Permitir agregar productos, modificar cantidades y preparar checkout.
+
+Tareas:
+
+- Crear UI de carrito.
+- Manejar cantidades.
+- Calcular subtotal.
+- Validar disponibilidad.
+- Preparar datos para pedido.
+
+Dependencias:
+
+- FASE 08.
+- FASE 12.
+- FASE 13.
+
+Criterios de finalizacion:
+
+- Cliente puede armar carrito.
+- Carrito mantiene datos necesarios.
+- Commit y push realizados.
+
+## FASE 15 - Pedidos
+
+Estado: ☐ Pendiente
+
+Objetivo: Crear gestion completa del pedido.
+
+Descripcion: Implementar creacion, detalle, historial, estados y gestion operativa.
+
+Tareas:
+
+- Crear pedido desde `/app`.
+- Crear detalle en `/admin`.
+- Implementar estados.
+- Registrar historial.
+- Permitir cancelacion con motivo.
+
+Dependencias:
+
+- FASE 14.
+- FASE 05.
+- FASE 09.
+
+Criterios de finalizacion:
+
+- Pedido se crea desde carrito.
+- Admin puede ver y cambiar estados.
+- Historial queda registrado.
+- Commit y push realizados.
+
+## FASE 16 - Pagos
+
+Estado: ☐ Pendiente
+
+Objetivo: Implementar verificacion de pagos Yape/Plin.
+
+Descripcion: Permitir voucher, revision, aprobacion, rechazo y auditoria de pagos.
+
+Tareas:
+
+- Crear modelo pago.
+- Subir voucher desde `/app`.
+- Revisar voucher desde `/admin`.
+- Aprobar/rechazar pago.
+- Vincular pago con avance de pedido.
+
+Dependencias:
+
+- FASE 15.
+- FASE 09.
+
+Criterios de finalizacion:
+
+- Voucher se sube y valida.
+- Operador aprueba o rechaza.
+- Estados de pago impactan pedido.
+- Commit y push realizados.
+
+## FASE 17 - Repartidores
+
+Estado: ☐ Pendiente
+
+Objetivo: Gestionar repartidores y asignaciones.
+
+Descripcion: Crear disponibilidad, asignacion a pedidos y flujo de entrega.
+
+Tareas:
+
+- Crear CRUD repartidores.
+- Gestionar disponibilidad.
+- Asignar pedido.
+- Cambiar estado en camino/entregado.
+- Registrar incidencias.
+
+Dependencias:
+
+- FASE 15.
+- FASE 16.
+
+Criterios de finalizacion:
+
+- Repartidor puede ser asignado.
+- Pedido avanza a entrega.
+- Historial registra cambios.
+- Commit y push realizados.
+
+## FASE 18 - Reportes
+
+Estado: ☐ Pendiente
+
+Objetivo: Crear reportes administrativos.
+
+Descripcion: Mostrar ventas, pedidos, pagos, restaurantes y repartidores.
+
+Tareas:
+
+- Crear reportes por fecha.
+- Crear reportes de ventas.
+- Crear reportes de pagos.
+- Crear indicadores de repartidores.
+- Agregar filtros.
+
+Dependencias:
+
+- FASE 15.
+- FASE 16.
+- FASE 17.
+
+Criterios de finalizacion:
+
+- Reportes clave cargan en `/admin`.
+- Filtros funcionan.
+- Datos son consistentes.
+- Commit y push realizados.
+
+## FASE 19 - Notificaciones
+
+Estado: ☐ Pendiente
+
+Objetivo: Notificar eventos importantes a clientes y operadores.
+
+Descripcion: Definir y crear notificaciones para estados del pedido, pagos e incidencias.
+
+Tareas:
+
+- Definir canales iniciales.
+- Notificar pago aprobado/rechazado.
+- Notificar estado del pedido.
+- Preparar base para push futuro.
+
+Dependencias:
+
+- FASE 15.
+- FASE 16.
+- FASE 08.
+
+Criterios de finalizacion:
+
+- Eventos principales generan notificacion.
+- No se exponen datos sensibles.
+- Commit y push realizados.
+
+## FASE 20 - Configuracion
+
+Estado: ☐ Pendiente
+
+Objetivo: Gestionar datos generales del sistema.
+
+Descripcion: Crear modulo de configuracion para nombre, contacto, zonas, tarifas y parametros operativos.
+
+Tareas:
+
+- Crear configuraciones generales.
+- Crear zonas y tarifas.
+- Proteger acceso por permiso.
+- Auditar cambios.
+
+Dependencias:
+
+- FASE 09.
+- FASE 05.
+
+Criterios de finalizacion:
+
+- Configuracion se administra desde `/admin`.
+- Cambios criticos quedan auditados.
+- Commit y push realizados.
+
+## FASE 21 - Testing
+
+Estado: ☐ Pendiente
+
+Objetivo: Validar funcionalidad critica.
+
+Descripcion: Ejecutar checklist manual y pruebas automatizadas cuando existan.
+
+Tareas:
+
+- Probar login.
+- Probar CRUDs.
+- Probar pedido completo.
+- Probar voucher y pagos.
+- Probar asignacion de repartidor.
+- Probar responsive y PWA.
+- Probar API.
+
+Dependencias:
+
+- FASE 15.
+- FASE 16.
+- FASE 17.
+- FASE 20.
+
+Criterios de finalizacion:
+
+- Checklist `12-testing-checklist.md` completado.
+- Errores criticos corregidos.
+- Commit y push realizados.
+
+## FASE 22 - Optimizacion
+
+Estado: ☐ Pendiente
+
+Objetivo: Mejorar rendimiento, UX y mantenibilidad.
+
+Descripcion: Optimizar consultas, assets, componentes, validaciones y flujos lentos.
+
+Tareas:
+
+- Revisar consultas N+1.
+- Agregar indices faltantes.
+- Optimizar assets.
+- Mejorar cargas en `/app`.
+- Revisar experiencia de admin.
+
+Dependencias:
+
+- FASE 21.
+
+Criterios de finalizacion:
+
+- Flujos principales son rapidos.
+- No hay problemas evidentes de rendimiento.
+- Commit y push realizados.
+
+## FASE 23 - APK Android
+
+Estado: ☐ Pendiente
+
+Objetivo: Preparar APK Android con Capacitor.
+
+Descripcion: Empaquetar la PWA mobile usando Capacitor cuando `/app` este estable.
+
+Tareas:
+
+- Instalar/configurar Capacitor cuando sea autorizado.
+- Configurar iconos y splash.
+- Validar permisos Android.
+- Generar APK de prueba.
+
+Dependencias:
+
+- FASE 08.
+- FASE 21.
+- FASE 22.
+
+Criterios de finalizacion:
+
+- APK de prueba instala y carga `/app`.
+- Solo se recompila por cambios nativos necesarios.
+- Commit y push realizados.
+
+## FASE 24 - Publicacion Play Store
+
+Estado: ☐ Pendiente
+
+Objetivo: Preparar publicacion Android.
+
+Descripcion: Completar requisitos de Play Store, ficha, politicas y build firmada.
+
+Tareas:
+
+- Preparar build release.
+- Preparar iconos, capturas y descripcion.
+- Revisar politicas de privacidad.
+- Publicar prueba interna.
+
+Dependencias:
+
+- FASE 23.
+
+Criterios de finalizacion:
+
+- App aceptada en canal de prueba o produccion segun decision.
+- Documentacion de publicacion registrada.
+- Commit y push realizados.
+
+## FASE 25 - Produccion
+
+Estado: ☐ Pendiente
+
+Objetivo: Desplegar TIEMPO en entorno productivo.
+
+Descripcion: Configurar servidor, dominio, HTTPS, base de datos, backups y variables.
+
+Tareas:
+
+- Configurar hosting/servidor.
+- Configurar HTTPS.
+- Configurar `.env` productivo.
+- Ejecutar migraciones.
+- Configurar backups.
+- Validar flujos criticos.
+
+Dependencias:
+
+- FASE 21.
+- FASE 22.
+
+Criterios de finalizacion:
+
+- Sistema operativo en produccion.
+- `APP_DEBUG=false`.
+- Backups definidos.
+- Commit y push de ajustes no sensibles realizados.
+
+## FASE 26 - Mantenimiento
+
+Estado: ☐ Pendiente
+
+Objetivo: Mantener, corregir y evolucionar TIEMPO.
+
+Descripcion: Atender bugs, mejoras, soporte, seguridad y nuevas funcionalidades.
+
+Tareas:
+
+- Monitorear errores.
+- Revisar logs.
+- Corregir bugs.
+- Planificar mejoras.
+- Mantener dependencias.
+- Actualizar documentacion.
+
+Dependencias:
+
+- FASE 25.
+
+Criterios de finalizacion:
+
+- Fase continua; se considera saludable si hay seguimiento, backups, documentacion y releases controlados.
+
+## 3. Reglas del Roadmap
+
+Despues de finalizar cada fase, todo agente IA debe:
+
+- Actualizar el estado de la fase en este documento.
+- Registrar un resumen del trabajo realizado.
+- Crear un commit Git descriptivo.
+- Hacer push al repositorio remoto.
+- Proponer automaticamente la siguiente fase.
+- Nunca saltar una fase sin autorizacion.
+
+Reglas adicionales:
+
+- Este documento es el director del proyecto.
+- Siempre leer `docs-ai/00` a `docs-ai/13` antes de trabajar.
+- No instalar dependencias sin justificar.
+- No modificar archivos globales sin explicar impacto.
+- No generar codigo de aplicacion antes de planificar archivos.
+- No usar force push.
+- No versionar `.env`, `vendor`, `node_modules`, logs ni temporales.
+
+## Estado de siguiente fase propuesta
+
+Siguiente fase sugerida: FASE 01 - Instalacion Laravel.
+
+Antes de iniciar FASE 01, el agente debe proponer plan de archivos y comandos, incluyendo como conservar `docs-ai` y evitar versionar archivos sensibles.
