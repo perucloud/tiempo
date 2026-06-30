@@ -1,0 +1,371 @@
+:root {
+    --admin-bg: #f4f6f8;
+    --admin-panel: #ffffff;
+    --admin-text: #111827;
+    --admin-muted: #667085;
+    --admin-line: #d9dee7;
+    --admin-dark: #172033;
+    --admin-blue: #2563eb;
+    --admin-green: #16845b;
+    --admin-red: #dc2626;
+    --admin-yellow: #b7791f;
+    --admin-radius: 8px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    color: var(--admin-text);
+    background: var(--admin-bg);
+    font-family: Arial, sans-serif;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.admin-shell {
+    display: grid;
+    min-height: 100vh;
+    grid-template-columns: 260px minmax(0, 1fr);
+}
+
+.admin-sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    padding: 18px 14px;
+    background: var(--admin-dark);
+    color: #fff;
+}
+
+.admin-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px 18px;
+}
+
+.admin-brand-mark {
+    display: grid;
+    width: 38px;
+    height: 38px;
+    place-items: center;
+    border-radius: 8px;
+    background: #fff;
+    color: var(--admin-dark);
+    font-weight: 800;
+}
+
+.admin-brand small,
+.admin-user small {
+    display: block;
+    color: #aab4c5;
+    font-size: 12px;
+}
+
+.admin-nav {
+    display: grid;
+    gap: 4px;
+}
+
+.admin-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 42px;
+    padding: 10px 12px;
+    border-radius: 6px;
+    color: #d6dce8;
+    font-size: 14px;
+}
+
+.admin-nav-link:hover,
+.admin-nav-link.is-active {
+    background: rgba(255, 255, 255, .12);
+    color: #fff;
+}
+
+.admin-nav-icon {
+    width: 22px;
+    text-align: center;
+}
+
+.admin-main {
+    min-width: 0;
+}
+
+.admin-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 78px;
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--admin-line);
+    background: var(--admin-panel);
+}
+
+.admin-topbar h1 {
+    margin: 2px 0 0;
+    font-size: 26px;
+}
+
+.admin-eyebrow {
+    margin: 0;
+    color: var(--admin-muted);
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.admin-user {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-align: right;
+}
+
+.admin-user small {
+    color: var(--admin-muted);
+}
+
+.admin-content {
+    display: grid;
+    gap: 22px;
+    padding: 24px;
+}
+
+.admin-grid {
+    display: grid;
+    gap: 16px;
+}
+
+.admin-grid-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.admin-grid-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.admin-card,
+.admin-panel {
+    border: 1px solid var(--admin-line);
+    border-radius: var(--admin-radius);
+    background: var(--admin-panel);
+}
+
+.admin-card {
+    padding: 18px;
+}
+
+.admin-card-title {
+    margin: 0 0 10px;
+    color: var(--admin-muted);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.admin-card-value {
+    margin: 0;
+    font-size: 30px;
+    font-weight: 800;
+}
+
+.admin-card-note {
+    margin: 8px 0 0;
+    color: var(--admin-muted);
+    font-size: 13px;
+}
+
+.admin-panel {
+    padding: 18px;
+}
+
+.admin-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 16px;
+}
+
+.admin-panel-header h2 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.admin-panel-header p {
+    margin: 4px 0 0;
+    color: var(--admin-muted);
+}
+
+.admin-module-list {
+    display: grid;
+    gap: 10px;
+}
+
+.admin-module-item,
+.admin-mobile-task {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    min-height: 58px;
+    padding: 12px 14px;
+    border: 1px solid var(--admin-line);
+    border-radius: 8px;
+    background: #fff;
+}
+
+.admin-module-item strong,
+.admin-mobile-task strong {
+    display: block;
+}
+
+.admin-module-item small,
+.admin-mobile-task small {
+    color: var(--admin-muted);
+}
+
+.admin-badge {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    padding: 3px 9px;
+    border-radius: 999px;
+    background: #eef2ff;
+    color: var(--admin-blue);
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.admin-badge-green {
+    background: #e8f7f0;
+    color: var(--admin-green);
+}
+
+.admin-badge-yellow {
+    background: #fff7e6;
+    color: var(--admin-yellow);
+}
+
+.admin-badge-red {
+    background: #fee2e2;
+    color: var(--admin-red);
+}
+
+.admin-button {
+    min-height: 38px;
+    border: 0;
+    border-radius: 6px;
+    padding: 9px 13px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.admin-button-dark {
+    background: var(--admin-dark);
+    color: #fff;
+}
+
+.admin-table-wrap {
+    overflow-x: auto;
+}
+
+.admin-table {
+    width: 100%;
+    min-width: 720px;
+    border-collapse: collapse;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 12px;
+    border-bottom: 1px solid var(--admin-line);
+    text-align: left;
+    white-space: nowrap;
+}
+
+.admin-table th {
+    color: var(--admin-muted);
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+.admin-mobile-priority {
+    display: none;
+}
+
+@media (max-width: 980px) {
+    .admin-shell {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-sidebar {
+        position: static;
+        height: auto;
+        padding: 12px;
+    }
+
+    .admin-brand {
+        padding-bottom: 10px;
+    }
+
+    .admin-nav {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        overflow-x: auto;
+    }
+
+    .admin-nav-link {
+        justify-content: center;
+        min-width: 112px;
+    }
+
+    .admin-grid-4,
+    .admin-grid-3 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 640px) {
+    .admin-topbar,
+    .admin-panel-header,
+    .admin-user {
+        align-items: flex-start;
+        flex-direction: column;
+        text-align: left;
+    }
+
+    .admin-content {
+        padding: 14px;
+    }
+
+    .admin-grid-4,
+    .admin-grid-3 {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-topbar h1 {
+        font-size: 22px;
+    }
+
+    .admin-card-value {
+        font-size: 26px;
+    }
+
+    .admin-desktop-table {
+        display: none;
+    }
+
+    .admin-mobile-priority {
+        display: grid;
+        gap: 10px;
+    }
+}

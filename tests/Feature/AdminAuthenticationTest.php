@@ -34,7 +34,12 @@ class AdminAuthenticationTest extends TestCase
 
         $this->get('/admin')
             ->assertOk()
-            ->assertSee('Dashboard administrativo');
+            ->assertSee('Dashboard administrativo')
+            ->assertSee('Pedidos')
+            ->assertSee('Pagos')
+            ->assertSee('Repartidores')
+            ->assertSee('Negocios afiliados')
+            ->assertSee('Operacion rapida movil');
     }
 
     public function test_client_role_cannot_access_admin_dashboard(): void

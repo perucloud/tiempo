@@ -16,7 +16,8 @@ Construir desde cero una plataforma integral de delivery con Laravel, MySQL, Liv
 - No existe codigo funcional de negocio.
 - Entorno local configurado con MySQL, timezone, locale y variables base.
 - Autenticacion base de `/admin` implementada y verificada.
-- La siguiente accion tecnica debe ser crear el dashboard administrativo base.
+- Dashboard administrativo base creado con layout desktop-first y responsive movil simplificado.
+- La siguiente accion tecnica debe ser crear el modelo relacional inicial de TIEMPO.
 
 ### Arquitectura
 
@@ -201,7 +202,7 @@ Resumen de trabajo realizado:
 
 ## FASE 04 - Dashboard Base
 
-Estado: ☐ Pendiente
+Estado: ☑ Finalizado
 
 Objetivo: Crear layout base del dashboard administrativo.
 
@@ -229,6 +230,14 @@ Criterios de finalizacion:
 - Admin movil permite operar lo urgente sin copiar tablas grandes de desktop.
 - Reportes complejos quedan reservados para desktop.
 - Commit y push realizados.
+
+Resumen de trabajo realizado:
+
+- Layout admin creado con sidebar, topbar, usuario autenticado y logout.
+- Dashboard inicial creado con cards estadisticas, modulos previstos y tabla base desktop.
+- Vista movil simplificada creada para pedidos, pagos, estados, repartidores y ventas rapidas.
+- CSS admin organizado en `public/css/admin.css` sin dependencias adicionales.
+- Tests actualizados para validar que el dashboard muestra modulos principales.
 
 ## FASE 05 - Base de Datos
 
@@ -901,6 +910,6 @@ Reglas adicionales:
 
 ## Estado de siguiente fase propuesta
 
-Siguiente fase sugerida: FASE 04 - Dashboard Base.
+Siguiente fase sugerida: FASE 05 - Base de Datos.
 
-Antes de iniciar FASE 04, el agente debe proponer plan de archivos para layout admin, sidebar, topbar, dashboard inicial, responsive movil simplificado y componentes base.
+Antes de iniciar FASE 05, el agente debe proponer plan de migraciones, modelos, relaciones, seeders y estados controlados para el modelo relacional inicial de TIEMPO.
