@@ -393,6 +393,19 @@ input {
     outline: none;
 }
 
+.delivery-form select {
+    min-height: 46px;
+    border: 1px solid var(--app-line);
+    border-radius: 8px;
+    padding: 0 12px;
+    background: #ffffff;
+    outline: none;
+}
+
+.payment-form {
+    margin: 12px 0;
+}
+
 .delivery-form input:focus {
     border-color: var(--app-primary);
     box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.14);

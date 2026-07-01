@@ -184,6 +184,26 @@
 
     <section id="pedidos" class="order-status">
         <h2>Seguimiento</h2>
+        <form class="delivery-form payment-form" method="POST" action="{{ route('app.payments.store') }}">
+            @csrf
+            <label for="payment-code">Codigo de pedido</label>
+            <input id="payment-code" name="codigo" type="text" value="{{ old('codigo') }}" placeholder="PED-YYYYMMDD-00001" required>
+
+            <label for="payment-method">Metodo de pago</label>
+            <select id="payment-method" name="metodo" required>
+                <option value="yape">Yape</option>
+                <option value="plin">Plin</option>
+            </select>
+
+            <label for="payment-operation">Codigo de operacion</label>
+            <input id="payment-operation" name="codigo_operacion" type="text" value="{{ old('codigo_operacion') }}" placeholder="Operacion o referencia">
+
+            <label for="payment-voucher">Voucher URL</label>
+            <input id="payment-voucher" name="voucher_path" type="url" value="{{ old('voucher_path') }}" placeholder="https://...">
+
+            <button type="submit">Enviar pago</button>
+        </form>
+
         <ol>
             <li class="is-current">Pendiente de pago</li>
             <li>Pago en revision</li>

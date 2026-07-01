@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ClientController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
@@ -22,6 +23,11 @@ Route::prefix('admin')->name('admin.')->group(function (): void {
 
         Route::middleware('admin.orders')->group(function (): void {
             Route::resource('orders', OrderController::class)
+                ->only(['index', 'edit', 'update']);
+        });
+
+        Route::middleware('admin.payments')->group(function (): void {
+            Route::resource('payments', PaymentController::class)
                 ->only(['index', 'edit', 'update']);
         });
 

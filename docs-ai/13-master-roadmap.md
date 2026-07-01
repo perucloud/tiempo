@@ -29,7 +29,8 @@ Construir desde cero una plataforma integral de delivery con Laravel, MySQL, Liv
 - Clientes implementados en `/admin`.
 - Carrito de compra implementado en `/app`.
 - Pedidos implementados desde `/app` y gestion operativa en `/admin`.
-- La siguiente accion tecnica debe ser implementar Pagos.
+- Pagos Yape/Plin implementados con revision operativa.
+- La siguiente accion tecnica debe ser implementar Repartidores.
 
 ### Arquitectura
 
@@ -733,7 +734,7 @@ Resumen de trabajo realizado:
 
 ## FASE 16 - Pagos
 
-Estado: ☐ Pendiente
+Estado: ☑ Finalizado
 
 Objetivo: Implementar verificacion de pagos Yape/Plin.
 
@@ -758,6 +759,19 @@ Criterios de finalizacion:
 - Operador aprueba o rechaza.
 - Estados de pago impactan pedido.
 - Commit y push realizados.
+
+Resumen de trabajo realizado:
+
+- Registro de pago desde `/app` implementado por codigo de pedido.
+- Metodos Yape y Plin definidos.
+- Voucher se registra como URL y codigo de operacion.
+- Pedido pasa a `pago_en_revision` al registrar pago.
+- Vista admin `admin/payments` agregada para listar y filtrar pagos.
+- Vista admin de revision permite aprobar o rechazar.
+- Aprobacion actualiza pago, confirma pedido y registra historial.
+- Rechazo actualiza pago, retorna pedido a pendiente y registra historial.
+- Negocio Afiliado queda bloqueado para pagos globales.
+- Tests de registro, filtros, aprobacion, rechazo y bloqueo por rol agregados y ejecutados correctamente.
 
 ## FASE 17 - Repartidores
 
@@ -1055,6 +1069,6 @@ Reglas adicionales:
 
 ## Estado de siguiente fase propuesta
 
-Siguiente fase sugerida: FASE 16 - Pagos.
+Siguiente fase sugerida: FASE 17 - Repartidores.
 
-Antes de iniciar FASE 16, el agente debe proponer plan de archivos para pagos Yape/Plin, subida de voucher desde `/app`, revision desde `/admin`, estados de pago y relacion con avance del pedido.
+Antes de iniciar FASE 17, el agente debe proponer plan de archivos para gestion de repartidores, disponibilidad, asignacion a pedidos, estados de ruta y restricciones para que cada repartidor solo vea pedidos asignados.

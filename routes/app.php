@@ -3,6 +3,7 @@
 use App\Http\Controllers\App\CartController;
 use App\Http\Controllers\App\HomeController;
 use App\Http\Controllers\App\OrderController;
+use App\Http\Controllers\App\PaymentController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('app')->name('app.')->group(function (): void {
@@ -12,6 +13,7 @@ Route::prefix('app')->name('app.')->group(function (): void {
     Route::patch('cart/address', [CartController::class, 'address'])->name('cart.address');
     Route::delete('cart', [CartController::class, 'destroy'])->name('cart.destroy');
     Route::post('orders', [OrderController::class, 'store'])->name('orders.store');
+    Route::post('payments', [PaymentController::class, 'store'])->name('payments.store');
     Route::get('manifest.webmanifest', fn () => response(
         file_get_contents(public_path('app/manifest.webmanifest')),
         200,

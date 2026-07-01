@@ -16,6 +16,21 @@ class Pago extends Model
 
     public const ESTADO_RECHAZADO = 'rechazado';
 
+    public const METODO_YAPE = 'yape';
+
+    public const METODO_PLIN = 'plin';
+
+    public const METODOS = [
+        self::METODO_YAPE,
+        self::METODO_PLIN,
+    ];
+
+    public const ESTADOS = [
+        self::ESTADO_PENDIENTE,
+        self::ESTADO_APROBADO,
+        self::ESTADO_RECHAZADO,
+    ];
+
     protected $fillable = [
         'pedido_id',
         'verificado_por',
@@ -39,6 +54,28 @@ class Pago extends Model
     public function pedido(): BelongsTo
     {
         return $this->belongsTo(Pedido::class);
+    }
+
+    public static function metodoOptions(): array
+    {
+        return [
+            self::METODO_YAPE => 'Yape',
+            self::METODO_PLIN => 'Plin',
+        ];
+    }
+
+    public static function estadoOptions(): array
+    {
+        return [
+            self::ESTADO_PENDIENTE => 'Pendiente',
+            self::ESTADO_APROBADO => 'Aprobado',
+            self::ESTADO_RECHAZADO => 'Rechazado',
+        ];
+    }
+
+    public function estadoLabel(): string
+    {
+        return self::estadoOptions()[$this->estado] ?? ucfirst($this->estado);
     }
 
     public function verificador(): BelongsTo
