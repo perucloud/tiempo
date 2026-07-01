@@ -34,7 +34,8 @@ Construir desde cero una plataforma integral de delivery con Laravel, MySQL, Liv
 - Reportes administrativos implementados con filtros por fecha, ventas, pagos, negocios y repartidores.
 - Notificaciones internas implementadas para pagos, estados de pedido y asignacion de repartidores.
 - Configuracion general, zonas, tarifas y auditoria implementadas en `/admin/settings`.
-- La siguiente accion tecnica debe ser ejecutar Testing.
+- Testing automatizado de funcionalidades criticas ejecutado y documentado.
+- La siguiente accion tecnica debe ser implementar Optimizacion.
 
 ### Arquitectura
 
@@ -940,7 +941,7 @@ Resumen de trabajo realizado:
 
 ## FASE 21 - Testing
 
-Estado: ☐ Pendiente
+Estado: ☑ Finalizado
 
 Objetivo: Validar funcionalidad critica.
 
@@ -968,6 +969,16 @@ Criterios de finalizacion:
 - Checklist `12-testing-checklist.md` completado.
 - Errores criticos corregidos.
 - Commit y push realizados.
+
+Resumen de trabajo realizado:
+
+- Checklist de testing revisado contra pruebas existentes.
+- Suite automatizada completa ejecutada correctamente.
+- Formato de codigo validado con Pint.
+- Rutas del sistema revisadas con `php artisan route:list`.
+- Informe de testing creado en `docs-ai/15-testing-fase-21.md`.
+- No se detectaron errores criticos automatizados.
+- Pruebas responsive, PWA e instalacion en dispositivo quedan marcadas como validacion manual.
 
 ## FASE 22 - Optimizacion
 
@@ -1124,7 +1135,7 @@ Reglas adicionales:
 
 ## Estado de siguiente fase propuesta
 
-Siguiente fase sugerida: FASE 21 - Testing.
+Siguiente fase sugerida: FASE 22 - Optimizacion.
 
-Antes de iniciar FASE 21, el agente debe proponer plan de pruebas basado en `docs-ai/12-testing-checklist.md`, ejecutar pruebas automatizadas existentes, revisar rutas criticas y documentar hallazgos.
+Antes de iniciar FASE 22, el agente debe proponer plan de optimizacion para consultas, indices, assets, cargas de `/app` y experiencia administrativa, priorizando cambios medibles y de bajo riesgo.
 
