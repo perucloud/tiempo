@@ -4,6 +4,8 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\BusinessController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ClientController;
+use App\Http\Controllers\Admin\CourierAssignmentController;
+use App\Http\Controllers\Admin\CourierController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\PaymentController;
@@ -24,6 +26,13 @@ Route::prefix('admin')->name('admin.')->group(function (): void {
         Route::middleware('admin.orders')->group(function (): void {
             Route::resource('orders', OrderController::class)
                 ->only(['index', 'edit', 'update']);
+        });
+
+        Route::middleware('admin.couriers')->group(function (): void {
+            Route::resource('couriers', CourierController::class)
+                ->except(['show']);
+            Route::patch('orders/{order}/courier', [CourierAssignmentController::class, 'update'])
+                ->name('orders.courier.update');
         });
 
         Route::middleware('admin.payments')->group(function (): void {

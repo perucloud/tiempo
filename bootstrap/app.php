@@ -4,6 +4,7 @@ use App\Http\Middleware\EnsureAdminAccess;
 use App\Http\Middleware\EnsureBusinessManagementAccess;
 use App\Http\Middleware\EnsureCategoryManagementAccess;
 use App\Http\Middleware\EnsureClientManagementAccess;
+use App\Http\Middleware\EnsureCourierManagementAccess;
 use App\Http\Middleware\EnsureOrderManagementAccess;
 use App\Http\Middleware\EnsurePaymentManagementAccess;
 use App\Http\Middleware\EnsureProductManagementAccess;
@@ -30,6 +31,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin.businesses' => EnsureBusinessManagementAccess::class,
             'admin.categories' => EnsureCategoryManagementAccess::class,
             'admin.clients' => EnsureClientManagementAccess::class,
+            'admin.couriers' => EnsureCourierManagementAccess::class,
             'admin.orders' => EnsureOrderManagementAccess::class,
             'admin.payments' => EnsurePaymentManagementAccess::class,
             'admin.products' => EnsureProductManagementAccess::class,

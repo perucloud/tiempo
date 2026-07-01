@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\UpdateOrderStatusRequest;
 use App\Models\Pedido;
+use App\Models\Repartidor;
 use App\Support\AdminNavigation;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -36,10 +37,21 @@ class OrderController extends Controller
 
     public function edit(Pedido $order): View
     {
+        $availableCouriers = Repartidor::query()
+            ->where(function ($query) use ($order): void {
+                $query->where('estado', Repartidor::ESTADO_DISPONIBLE)
+                    ->orWhere('id', $order->repartidor_id);
+            })
+            ->orderBy('nombres')
+            ->orderBy('apellidos')
+            ->get();
+
         return view('admin.orders.edit', [
             'adminModules' => AdminNavigation::for('pedidos'),
-            'order' => $order->load(['cliente', 'negocioAfiliado', 'detalles', 'estados.user']),
+            'order' => $order->load(['cliente', 'negocioAfiliado', 'repartidor', 'detalles', 'estados.user']),
             'estadoOptions' => Pedido::estadoOptions(),
+            'availableCouriers' => $availableCouriers,
+            'courierEstadoOptions' => Repartidor::estadoOptions(),
         ]);
     }
 
@@ -49,6 +61,14 @@ class OrderController extends Controller
         $data = $request->validated();
 
         $order->update(['estado' => $data['estado']]);
+
+        if ($order->repartidor && in_array($data['estado'], [
+            Pedido::ESTADO_ENTREGADO,
+            Pedido::ESTADO_CANCELADO,
+        ], true)) {
+            $order->repartidor->update(['estado' => Repartidor::ESTADO_DISPONIBLE]);
+        }
+
         $order->estados()->create([
             'user_id' => $request->user()->id,
             'estado_anterior' => $previous,

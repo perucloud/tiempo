@@ -15,6 +15,7 @@
             </div>
             <div class="admin-module-list">
                 <div class="admin-module-item"><strong>Negocio</strong><span>{{ $order->negocioAfiliado?->nombre_comercial }}</span></div>
+                <div class="admin-module-item"><strong>Repartidor</strong><span>{{ $order->repartidor?->nombreCompleto() ?: 'Sin asignar' }}</span></div>
                 <div class="admin-module-item"><strong>Direccion</strong><span>{{ $order->direccion_entrega }}</span></div>
                 <div class="admin-module-item"><strong>Total</strong><span>S/ {{ number_format((float) $order->total, 2) }}</span></div>
             </div>
@@ -69,6 +70,40 @@
                 </label>
                 <div class="admin-form-actions">
                     <button class="admin-button admin-button-dark" type="submit">Actualizar estado</button>
+                </div>
+            </form>
+        </article>
+
+        <article class="admin-panel">
+            <div class="admin-panel-header">
+                <div>
+                    <h2>Repartidor</h2>
+                    <p>Asigna el pedido a un repartidor disponible.</p>
+                </div>
+            </div>
+
+            <form class="admin-form" method="POST" action="{{ route('admin.orders.courier.update', $order) }}">
+                @csrf
+                @method('PATCH')
+                <label class="admin-field">
+                    <span>Repartidor</span>
+                    <select name="repartidor_id" required>
+                        <option value="">Seleccionar</option>
+                        @foreach ($availableCouriers as $courier)
+                            <option value="{{ $courier->id }}" @selected((int) old('repartidor_id', $order->repartidor_id) === $courier->id)>
+                                {{ $courier->nombreCompleto() }} - {{ $courierEstadoOptions[$courier->estado] ?? $courier->estado }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('repartidor_id') <small>{{ $message }}</small> @enderror
+                </label>
+                <label class="admin-field">
+                    <span>Comentario</span>
+                    <textarea name="comentario" rows="3">{{ old('comentario') }}</textarea>
+                    @error('comentario') <small>{{ $message }}</small> @enderror
+                </label>
+                <div class="admin-form-actions">
+                    <button class="admin-button admin-button-dark" type="submit">Asignar repartidor</button>
                 </div>
             </form>
         </article>

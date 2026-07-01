@@ -18,6 +18,12 @@ class Repartidor extends Model
 
     public const ESTADO_INACTIVO = 'inactivo';
 
+    public const ESTADOS = [
+        self::ESTADO_DISPONIBLE,
+        self::ESTADO_OCUPADO,
+        self::ESTADO_INACTIVO,
+    ];
+
     protected $table = 'repartidores';
 
     protected $fillable = [
@@ -39,5 +45,19 @@ class Repartidor extends Model
     public function pedidos(): HasMany
     {
         return $this->hasMany(Pedido::class);
+    }
+
+    public static function estadoOptions(): array
+    {
+        return [
+            self::ESTADO_DISPONIBLE => 'Disponible',
+            self::ESTADO_OCUPADO => 'Ocupado',
+            self::ESTADO_INACTIVO => 'Inactivo',
+        ];
+    }
+
+    public function nombreCompleto(): string
+    {
+        return trim("{$this->nombres} {$this->apellidos}");
     }
 }

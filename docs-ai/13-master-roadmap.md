@@ -30,7 +30,8 @@ Construir desde cero una plataforma integral de delivery con Laravel, MySQL, Liv
 - Carrito de compra implementado en `/app`.
 - Pedidos implementados desde `/app` y gestion operativa en `/admin`.
 - Pagos Yape/Plin implementados con revision operativa.
-- La siguiente accion tecnica debe ser implementar Repartidores.
+- Repartidores implementados con CRUD, disponibilidad y asignacion a pedidos.
+- La siguiente accion tecnica debe ser implementar Reportes.
 
 ### Arquitectura
 
@@ -775,7 +776,7 @@ Resumen de trabajo realizado:
 
 ## FASE 17 - Repartidores
 
-Estado: ☐ Pendiente
+Estado: ☑ Finalizado
 
 Objetivo: Gestionar repartidores y asignaciones.
 
@@ -800,6 +801,18 @@ Criterios de finalizacion:
 - Pedido avanza a entrega.
 - Historial registra cambios.
 - Commit y push realizados.
+
+Resumen de trabajo realizado:
+
+- CRUD administrativo de repartidores implementado en `/admin/couriers`.
+- Middleware de acceso agregado para SuperAdmin, Admin y Operador.
+- Negocio Afiliado bloqueado para gestion de repartidores.
+- Validaciones de alta, edicion y asignacion agregadas.
+- Asignacion de repartidor desde la gestion de pedidos implementada.
+- Repartidor asignado pasa a estado ocupado.
+- Repartidor se libera al entregar o cancelar el pedido.
+- Historial de pedido registra la asignacion.
+- Tests de CRUD, filtros, permisos, asignacion y liberacion ejecutados correctamente.
 
 ## FASE 18 - Reportes
 
@@ -1069,6 +1082,7 @@ Reglas adicionales:
 
 ## Estado de siguiente fase propuesta
 
-Siguiente fase sugerida: FASE 17 - Repartidores.
+Siguiente fase sugerida: FASE 18 - Reportes.
 
-Antes de iniciar FASE 17, el agente debe proponer plan de archivos para gestion de repartidores, disponibilidad, asignacion a pedidos, estados de ruta y restricciones para que cada repartidor solo vea pedidos asignados.
+Antes de iniciar FASE 18, el agente debe proponer plan de archivos para reportes administrativos de ventas, pedidos, pagos, negocios afiliados y desempeno de repartidores, con filtros por fecha y sin exponer informacion restringida a negocios afiliados.
+
