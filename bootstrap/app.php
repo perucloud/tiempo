@@ -10,6 +10,7 @@ use App\Http\Middleware\EnsureOrderManagementAccess;
 use App\Http\Middleware\EnsurePaymentManagementAccess;
 use App\Http\Middleware\EnsureProductManagementAccess;
 use App\Http\Middleware\EnsureReportManagementAccess;
+use App\Http\Middleware\EnsureSettingManagementAccess;
 use App\Http\Middleware\EnsureUserManagementAccess;
 use App\Http\Responses\ApiResponse;
 use Illuminate\Foundation\Application;
@@ -39,6 +40,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin.payments' => EnsurePaymentManagementAccess::class,
             'admin.products' => EnsureProductManagementAccess::class,
             'admin.reports' => EnsureReportManagementAccess::class,
+            'admin.settings' => EnsureSettingManagementAccess::class,
             'admin.users' => EnsureUserManagementAccess::class,
         ]);
     })

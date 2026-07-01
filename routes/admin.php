@@ -7,11 +7,13 @@ use App\Http\Controllers\Admin\ClientController;
 use App\Http\Controllers\Admin\CourierAssignmentController;
 use App\Http\Controllers\Admin\CourierController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\DeliveryZoneController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ReportController;
+use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -48,6 +50,13 @@ Route::prefix('admin')->name('admin.')->group(function (): void {
 
         Route::middleware('admin.notifications')->group(function (): void {
             Route::get('notifications', [NotificationController::class, 'index'])->name('notifications.index');
+        });
+
+        Route::middleware('admin.settings')->group(function (): void {
+            Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
+            Route::put('settings', [SettingController::class, 'update'])->name('settings.update');
+            Route::resource('delivery-zones', DeliveryZoneController::class)
+                ->except(['index', 'show']);
         });
 
         Route::middleware('admin.businesses')->group(function (): void {
