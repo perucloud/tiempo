@@ -31,7 +31,8 @@ Construir desde cero una plataforma integral de delivery con Laravel, MySQL, Liv
 - Pedidos implementados desde `/app` y gestion operativa en `/admin`.
 - Pagos Yape/Plin implementados con revision operativa.
 - Repartidores implementados con CRUD, disponibilidad y asignacion a pedidos.
-- La siguiente accion tecnica debe ser implementar Reportes.
+- Reportes administrativos implementados con filtros por fecha, ventas, pagos, negocios y repartidores.
+- La siguiente accion tecnica debe ser implementar Notificaciones.
 
 ### Arquitectura
 
@@ -816,7 +817,7 @@ Resumen de trabajo realizado:
 
 ## FASE 18 - Reportes
 
-Estado: ☐ Pendiente
+Estado: ☑ Finalizado
 
 Objetivo: Crear reportes administrativos.
 
@@ -842,6 +843,19 @@ Criterios de finalizacion:
 - Filtros funcionan.
 - Datos son consistentes.
 - Commit y push realizados.
+
+Resumen de trabajo realizado:
+
+- Vista administrativa `/admin/reports` implementada.
+- Reportes globales limitados a SuperAdmin y Admin.
+- Negocio Afiliado y Operador bloqueados para reportes generales.
+- Filtros por rango de fecha agregados.
+- Indicadores de ventas, pagos, pedidos, negocios activos y repartidores disponibles agregados.
+- Reporte de pedidos por estado agregado.
+- Reporte de pagos por metodo agregado.
+- Top de negocios afiliados por ventas entregadas agregado.
+- Indicador de entregas por repartidor agregado.
+- Tests de acceso, filtros y metricas ejecutados correctamente.
 
 ## FASE 19 - Notificaciones
 
@@ -1082,7 +1096,7 @@ Reglas adicionales:
 
 ## Estado de siguiente fase propuesta
 
-Siguiente fase sugerida: FASE 18 - Reportes.
+Siguiente fase sugerida: FASE 19 - Notificaciones.
 
-Antes de iniciar FASE 18, el agente debe proponer plan de archivos para reportes administrativos de ventas, pedidos, pagos, negocios afiliados y desempeno de repartidores, con filtros por fecha y sin exponer informacion restringida a negocios afiliados.
+Antes de iniciar FASE 19, el agente debe proponer plan de archivos para notificaciones de pagos, estados de pedido e incidencias, definiendo primero canales internos y evitando exponer datos sensibles.
 

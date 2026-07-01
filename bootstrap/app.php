@@ -8,6 +8,7 @@ use App\Http\Middleware\EnsureCourierManagementAccess;
 use App\Http\Middleware\EnsureOrderManagementAccess;
 use App\Http\Middleware\EnsurePaymentManagementAccess;
 use App\Http\Middleware\EnsureProductManagementAccess;
+use App\Http\Middleware\EnsureReportManagementAccess;
 use App\Http\Middleware\EnsureUserManagementAccess;
 use App\Http\Responses\ApiResponse;
 use Illuminate\Foundation\Application;
@@ -35,6 +36,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin.orders' => EnsureOrderManagementAccess::class,
             'admin.payments' => EnsurePaymentManagementAccess::class,
             'admin.products' => EnsureProductManagementAccess::class,
+            'admin.reports' => EnsureReportManagementAccess::class,
             'admin.users' => EnsureUserManagementAccess::class,
         ]);
     })

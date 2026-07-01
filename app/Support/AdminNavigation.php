@@ -15,7 +15,7 @@ class AdminNavigation
             ['key' => 'productos', 'label' => 'Productos', 'icon' => 'R', 'url' => route('admin.products.index')],
             ['key' => 'repartidores', 'label' => 'Repartidores', 'icon' => 'M', 'url' => route('admin.couriers.index')],
             ['key' => 'pagos', 'label' => 'Pagos', 'icon' => 'Y', 'url' => route('admin.payments.index')],
-            ['key' => 'reportes', 'label' => 'Reportes', 'icon' => 'T', 'url' => '#'],
+            ['key' => 'reportes', 'label' => 'Reportes', 'icon' => 'T', 'url' => route('admin.reports.index')],
             ['key' => 'usuarios', 'label' => 'Usuarios', 'icon' => 'U', 'url' => route('admin.users.index')],
             ['key' => 'configuracion', 'label' => 'Configuracion', 'icon' => 'S', 'url' => '#'],
         ];

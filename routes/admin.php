@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -38,6 +39,10 @@ Route::prefix('admin')->name('admin.')->group(function (): void {
         Route::middleware('admin.payments')->group(function (): void {
             Route::resource('payments', PaymentController::class)
                 ->only(['index', 'edit', 'update']);
+        });
+
+        Route::middleware('admin.reports')->group(function (): void {
+            Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
         });
 
         Route::middleware('admin.businesses')->group(function (): void {
