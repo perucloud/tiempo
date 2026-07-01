@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\ClientController;
 use App\Http\Controllers\Admin\CourierAssignmentController;
 use App\Http\Controllers\Admin\CourierController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\ProductController;
@@ -43,6 +44,10 @@ Route::prefix('admin')->name('admin.')->group(function (): void {
 
         Route::middleware('admin.reports')->group(function (): void {
             Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
+        });
+
+        Route::middleware('admin.notifications')->group(function (): void {
+            Route::get('notifications', [NotificationController::class, 'index'])->name('notifications.index');
         });
 
         Route::middleware('admin.businesses')->group(function (): void {

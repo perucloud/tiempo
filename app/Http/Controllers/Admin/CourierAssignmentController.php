@@ -6,11 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\AssignCourierRequest;
 use App\Models\Pedido;
 use App\Models\Repartidor;
+use App\Services\NotificationService;
 use Illuminate\Http\RedirectResponse;
 
 class CourierAssignmentController extends Controller
 {
-    public function update(AssignCourierRequest $request, Pedido $order): RedirectResponse
+    public function update(AssignCourierRequest $request, Pedido $order, NotificationService $notifications): RedirectResponse
     {
         $data = $request->validated();
         $previous = $order->estado;
@@ -34,6 +35,8 @@ class CourierAssignmentController extends Controller
             'estado_nuevo' => Pedido::ESTADO_ASIGNADO,
             'comentario' => $data['comentario'] ?? 'Repartidor asignado.',
         ]);
+        $notifications->orderStatusChanged($order->refresh(), $previous);
+        $notifications->courierAssigned($order, $courier);
 
         return redirect()
             ->route('admin.orders.edit', $order)

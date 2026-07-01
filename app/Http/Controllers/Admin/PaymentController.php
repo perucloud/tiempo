@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ReviewPaymentRequest;
 use App\Models\Pago;
 use App\Models\Pedido;
+use App\Services\NotificationService;
 use App\Support\AdminNavigation;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -42,7 +43,7 @@ class PaymentController extends Controller
         ]);
     }
 
-    public function update(ReviewPaymentRequest $request, Pago $payment): RedirectResponse
+    public function update(ReviewPaymentRequest $request, Pago $payment, NotificationService $notifications): RedirectResponse
     {
         $data = $request->validated();
         $pedido = $payment->pedido;
@@ -71,6 +72,7 @@ class PaymentController extends Controller
             'estado_nuevo' => $newOrderState,
             'comentario' => $data['observacion'] ?? 'Revision de pago registrada.',
         ]);
+        $notifications->paymentReviewed($payment->refresh());
 
         return redirect()
             ->route('admin.payments.edit', $payment)

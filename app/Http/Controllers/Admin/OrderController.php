@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\UpdateOrderStatusRequest;
 use App\Models\Pedido;
 use App\Models\Repartidor;
+use App\Services\NotificationService;
 use App\Support\AdminNavigation;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -55,7 +56,7 @@ class OrderController extends Controller
         ]);
     }
 
-    public function update(UpdateOrderStatusRequest $request, Pedido $order): RedirectResponse
+    public function update(UpdateOrderStatusRequest $request, Pedido $order, NotificationService $notifications): RedirectResponse
     {
         $previous = $order->estado;
         $data = $request->validated();
@@ -75,6 +76,7 @@ class OrderController extends Controller
             'estado_nuevo' => $data['estado'],
             'comentario' => $data['comentario'] ?? null,
         ]);
+        $notifications->orderStatusChanged($order->refresh(), $previous);
 
         return redirect()
             ->route('admin.orders.edit', $order)
