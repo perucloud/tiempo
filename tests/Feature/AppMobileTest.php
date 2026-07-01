@@ -35,6 +35,9 @@ class AppMobileTest extends TestCase
     {
         $this->get('/app/service-worker.js')
             ->assertOk()
+            ->assertSee('STATIC_ASSETS')
+            ->assertSee('/css/app-mobile.css')
+            ->assertSee('/js/app-mobile.js')
             ->assertSee('No cachear datos de clientes, pedidos, pagos ni sesiones');
     }
 }

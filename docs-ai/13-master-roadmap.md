@@ -35,7 +35,8 @@ Construir desde cero una plataforma integral de delivery con Laravel, MySQL, Liv
 - Notificaciones internas implementadas para pagos, estados de pedido y asignacion de repartidores.
 - Configuracion general, zonas, tarifas y auditoria implementadas en `/admin/settings`.
 - Testing automatizado de funcionalidades criticas ejecutado y documentado.
-- La siguiente accion tecnica debe ser implementar Optimizacion.
+- Optimizacion de indices, dashboard y shell PWA ejecutada y documentada.
+- La siguiente accion tecnica debe ser preparar APK Android.
 
 ### Arquitectura
 
@@ -982,7 +983,7 @@ Resumen de trabajo realizado:
 
 ## FASE 22 - Optimizacion
 
-Estado: ☐ Pendiente
+Estado: ☑ Finalizado
 
 Objetivo: Mejorar rendimiento, UX y mantenibilidad.
 
@@ -1005,6 +1006,16 @@ Criterios de finalizacion:
 - Flujos principales son rapidos.
 - No hay problemas evidentes de rendimiento.
 - Commit y push realizados.
+
+Resumen de trabajo realizado:
+
+- Indices compuestos agregados para consultas criticas de pedidos, pagos, productos, notificaciones, zonas y auditorias.
+- Dashboard administrativo actualizado para mostrar metricas reales.
+- Pedidos recientes del dashboard cargan con relaciones acotadas.
+- Service worker de `/app` optimizado para cachear shell estatico no sensible.
+- Se mantiene prohibicion de cachear datos de clientes, pedidos, pagos o sesiones.
+- Informe de optimizacion creado en `docs-ai/16-optimizacion-fase-22.md`.
+- Tests automatizados y Pint ejecutados correctamente.
 
 ## FASE 23 - APK Android
 
@@ -1135,7 +1146,7 @@ Reglas adicionales:
 
 ## Estado de siguiente fase propuesta
 
-Siguiente fase sugerida: FASE 22 - Optimizacion.
+Siguiente fase sugerida: FASE 23 - APK Android.
 
-Antes de iniciar FASE 22, el agente debe proponer plan de optimizacion para consultas, indices, assets, cargas de `/app` y experiencia administrativa, priorizando cambios medibles y de bajo riesgo.
+Antes de iniciar FASE 23, el agente debe proponer plan para configurar Capacitor, validar permisos Android, iconos, splash screen y generar una APK de prueba que cargue exclusivamente `/app`.
 

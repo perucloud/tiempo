@@ -1,7 +1,17 @@
-const CACHE_NAME = 'tiempo-app-shell-v1';
+const CACHE_NAME = 'tiempo-app-shell-v2';
+const STATIC_ASSETS = [
+    '/app/manifest.webmanifest',
+    '/css/app-mobile.css',
+    '/js/app-mobile.js',
+    '/app/icon.svg',
+];
 
 self.addEventListener('install', (event) => {
-    event.waitUntil(self.skipWaiting());
+    event.waitUntil(
+        caches.open(CACHE_NAME)
+            .then((cache) => cache.addAll(STATIC_ASSETS))
+            .finally(() => self.skipWaiting()),
+    );
 });
 
 self.addEventListener('activate', (event) => {
@@ -16,6 +26,16 @@ self.addEventListener('activate', (event) => {
     self.clients.claim();
 });
 
-self.addEventListener('fetch', () => {
+self.addEventListener('fetch', (event) => {
+    const url = new URL(event.request.url);
+    const isStaticAsset = STATIC_ASSETS.includes(url.pathname);
+
     // No cachear datos de clientes, pedidos, pagos ni sesiones sin una estrategia explicita.
+    if (! isStaticAsset || event.request.method !== 'GET') {
+        return;
+    }
+
+    event.respondWith(
+        caches.match(event.request).then((cached) => cached || fetch(event.request)),
+    );
 });
