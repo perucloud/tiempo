@@ -370,6 +370,10 @@ a {
     margin-bottom: 16px;
 }
 
+.admin-filter-bar-compact {
+    grid-template-columns: minmax(220px, 1fr) 180px auto;
+}
+
 .admin-filter-actions,
 .admin-row-actions {
     display: flex;

@@ -9,7 +9,7 @@ class AdminNavigation
         return [
             ['key' => 'dashboard', 'label' => 'Dashboard', 'icon' => 'D', 'url' => route('admin.dashboard')],
             ['key' => 'pedidos', 'label' => 'Pedidos', 'icon' => 'P', 'url' => '#'],
-            ['key' => 'clientes', 'label' => 'Clientes', 'icon' => 'C', 'url' => '#'],
+            ['key' => 'clientes', 'label' => 'Clientes', 'icon' => 'C', 'url' => route('admin.clients.index')],
             ['key' => 'categorias', 'label' => 'Categorias', 'icon' => 'G', 'url' => route('admin.categories.index')],
             ['key' => 'negocios', 'label' => 'Negocios afiliados', 'icon' => 'N', 'url' => route('admin.businesses.index')],
             ['key' => 'productos', 'label' => 'Productos', 'icon' => 'R', 'url' => route('admin.products.index')],

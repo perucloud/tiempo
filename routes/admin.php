@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\BusinessController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ClientController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\UserController;
@@ -25,6 +26,11 @@ Route::prefix('admin')->name('admin.')->group(function (): void {
 
         Route::middleware('admin.categories')->group(function (): void {
             Route::resource('categories', CategoryController::class)
+                ->except(['show']);
+        });
+
+        Route::middleware('admin.clients')->group(function (): void {
+            Route::resource('clients', ClientController::class)
                 ->except(['show']);
         });
 

@@ -26,7 +26,8 @@ Construir desde cero una plataforma integral de delivery con Laravel, MySQL, Liv
 - Categorias globales implementadas en `/admin`.
 - Negocios afiliados implementados en `/admin`.
 - Productos implementados en `/admin`.
-- La siguiente accion tecnica debe ser implementar Clientes.
+- Clientes implementados en `/admin`.
+- La siguiente accion tecnica debe ser implementar Carrito.
 
 ### Arquitectura
 
@@ -608,7 +609,7 @@ Resumen de trabajo realizado:
 
 ## FASE 13 - Clientes
 
-Estado: ☐ Pendiente
+Estado: ☑ Finalizado
 
 Objetivo: Gestionar clientes y sus datos.
 
@@ -629,9 +630,22 @@ Dependencias:
 
 Criterios de finalizacion:
 
-- Clientes pueden existir con direcciones.
+- Clientes pueden existir con datos base.
+- Direccion de entrega queda preparada para FASE 14 - Carrito.
 - Admin puede consultar clientes.
 - Commit y push realizados.
+
+Resumen de trabajo realizado:
+
+- Modulo `admin/clients` creado para listar, crear, editar y desactivar clientes.
+- Middleware especifico agregado para permitir gestion a SuperAdmin, Admin y Operador.
+- Negocio Afiliado queda bloqueado para consultar clientes globales.
+- Validaciones creadas con Form Requests.
+- Filtros por busqueda y estado agregados.
+- Telefono unico activo validado.
+- UI de listado, filtros y formulario agregada al dashboard.
+- Direcciones quedan pendientes para el flujo de carrito/checkout, donde se modelara la direccion de entrega.
+- Tests de acceso, creacion, edicion, filtros, duplicados y soft delete agregados y ejecutados correctamente.
 
 ## FASE 14 - Carrito
 
@@ -1014,6 +1028,6 @@ Reglas adicionales:
 
 ## Estado de siguiente fase propuesta
 
-Siguiente fase sugerida: FASE 13 - Clientes.
+Siguiente fase sugerida: FASE 14 - Carrito.
 
-Antes de iniciar FASE 13, el agente debe proponer plan de archivos para gestion de clientes, respetando que el cliente opera desde `/app`, que sus datos no son visibles para Negocio Afiliado y que TIEMPO centraliza la operacion.
+Antes de iniciar FASE 14, el agente debe proponer plan de archivos para carrito en `/app`, incluyendo UI mobile-first, manejo de cantidades, subtotal, persistencia temporal, validacion por negocio afiliado y preparacion de direccion de entrega.
