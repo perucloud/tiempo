@@ -113,6 +113,14 @@
             <p class="cart-status">{{ session('cart_status') }}</p>
         @endif
 
+        @if (session('order_status'))
+            <p class="cart-status">{{ session('order_status') }}</p>
+        @endif
+
+        @error('order')
+            <p class="cart-error">{{ $message }}</p>
+        @enderror
+
         @forelse ($cart['items'] as $item)
             <article class="cart-item">
                 <div>
@@ -145,6 +153,25 @@
             <span>Delivery <strong>S/ {{ number_format($cart['delivery'], 2) }}</strong></span>
             <span>Total <strong>S/ {{ number_format($cart['total'], 2) }}</strong></span>
         </div>
+
+        @if ($cart['count'] > 0)
+            <form class="delivery-form" method="POST" action="{{ route('app.orders.store') }}">
+                @csrf
+                <label for="customer-names">Nombres</label>
+                <input id="customer-names" name="nombres" type="text" value="{{ old('nombres') }}" placeholder="Tu nombre" required>
+
+                <label for="customer-phone">Telefono</label>
+                <input id="customer-phone" name="telefono" type="text" value="{{ old('telefono') }}" placeholder="Numero de contacto" required>
+
+                <label for="customer-email">Email opcional</label>
+                <input id="customer-email" name="email" type="email" value="{{ old('email') }}" placeholder="correo@ejemplo.com">
+
+                <label for="order-notes">Notas opcionales</label>
+                <input id="order-notes" name="notas" type="text" value="{{ old('notas') }}" placeholder="Referencia o indicaciones">
+
+                <button type="submit">Crear pedido</button>
+            </form>
+        @endif
 
         @if ($cart['count'] > 0)
             <form method="POST" action="{{ route('app.cart.destroy') }}">

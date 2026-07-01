@@ -28,7 +28,8 @@ Construir desde cero una plataforma integral de delivery con Laravel, MySQL, Liv
 - Productos implementados en `/admin`.
 - Clientes implementados en `/admin`.
 - Carrito de compra implementado en `/app`.
-- La siguiente accion tecnica debe ser implementar Pedidos.
+- Pedidos implementados desde `/app` y gestion operativa en `/admin`.
+- La siguiente accion tecnica debe ser implementar Pagos.
 
 ### Arquitectura
 
@@ -690,7 +691,7 @@ Resumen de trabajo realizado:
 
 ## FASE 15 - Pedidos
 
-Estado: ☐ Pendiente
+Estado: ☑ Finalizado
 
 Objetivo: Crear gestion completa del pedido.
 
@@ -716,6 +717,19 @@ Criterios de finalizacion:
 - Admin puede ver y cambiar estados.
 - Historial queda registrado.
 - Commit y push realizados.
+
+Resumen de trabajo realizado:
+
+- Creacion de pedido desde carrito implementada en `/app`.
+- Cliente se crea o actualiza por telefono al confirmar pedido.
+- Pedido, detalle e historial inicial se crean en transaccion.
+- Carrito se limpia despues de crear pedido.
+- Direccion de entrega es obligatoria para crear pedido.
+- Vista admin `admin/orders` agregada para listar y filtrar pedidos.
+- Vista admin de detalle permite revisar resumen, productos e historial.
+- Cambio de estado operativo implementado con auditoria en `pedido_estados`.
+- Negocio Afiliado queda bloqueado para pedidos globales.
+- Tests de creacion, validacion, listado, filtros y cambio de estado agregados y ejecutados correctamente.
 
 ## FASE 16 - Pagos
 
@@ -1041,6 +1055,6 @@ Reglas adicionales:
 
 ## Estado de siguiente fase propuesta
 
-Siguiente fase sugerida: FASE 15 - Pedidos.
+Siguiente fase sugerida: FASE 16 - Pagos.
 
-Antes de iniciar FASE 15, el agente debe proponer plan de archivos para crear pedidos desde carrito, detalle de pedido, historial de estados, validacion de cliente/direccion, y gestion operativa desde `/admin`.
+Antes de iniciar FASE 16, el agente debe proponer plan de archivos para pagos Yape/Plin, subida de voucher desde `/app`, revision desde `/admin`, estados de pago y relacion con avance del pedido.

@@ -4,6 +4,7 @@ use App\Http\Middleware\EnsureAdminAccess;
 use App\Http\Middleware\EnsureBusinessManagementAccess;
 use App\Http\Middleware\EnsureCategoryManagementAccess;
 use App\Http\Middleware\EnsureClientManagementAccess;
+use App\Http\Middleware\EnsureOrderManagementAccess;
 use App\Http\Middleware\EnsureProductManagementAccess;
 use App\Http\Middleware\EnsureUserManagementAccess;
 use App\Http\Responses\ApiResponse;
@@ -28,6 +29,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin.businesses' => EnsureBusinessManagementAccess::class,
             'admin.categories' => EnsureCategoryManagementAccess::class,
             'admin.clients' => EnsureClientManagementAccess::class,
+            'admin.orders' => EnsureOrderManagementAccess::class,
             'admin.products' => EnsureProductManagementAccess::class,
             'admin.users' => EnsureUserManagementAccess::class,
         ]);
