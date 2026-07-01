@@ -18,9 +18,12 @@
     </section>
 
     <section class="category-strip" aria-label="Categorias">
-        @foreach ($categories as $category)
+        @forelse ($categories as $category)
             <a href="#negocios">{{ $category }}</a>
-        @endforeach
+        @empty
+            <a href="#negocios">Comidas</a>
+            <a href="#negocios">Bebidas</a>
+        @endforelse
     </section>
 
     <section id="negocios" class="content-section">
@@ -30,19 +33,29 @@
         </div>
 
         <div class="business-list">
-            @foreach ($businesses as $business)
+            @forelse ($businesses as $business)
                 <article class="business-card">
                     <div class="business-visual">
-                        <span>{{ mb_substr($business['name'], 0, 1) }}</span>
+                        <span>{{ mb_substr($business->nombre_comercial, 0, 1) }}</span>
                     </div>
                     <div>
-                        <span class="status-badge">{{ $business['status'] }}</span>
-                        <h3>{{ $business['name'] }}</h3>
-                        <p>{{ $business['category'] }}</p>
-                        <small>{{ $business['eta'] }}</small>
+                        <span class="status-badge">{{ $business->abierto ? 'Abierto' : 'Cerrado' }}</span>
+                        <h3>{{ $business->nombre_comercial }}</h3>
+                        <p>{{ ucfirst($business->tipo_negocio) }} afiliado</p>
+                        <small>25-40 min</small>
                     </div>
                 </article>
-            @endforeach
+            @empty
+                <article class="business-card">
+                    <div class="business-visual"><span>T</span></div>
+                    <div>
+                        <span class="status-badge">Pronto</span>
+                        <h3>Negocios en preparacion</h3>
+                        <p>TIEMPO esta afiliando comercios para tu zona.</p>
+                        <small>Catalogo inicial</small>
+                    </div>
+                </article>
+            @endforelse
         </div>
     </section>
 
@@ -53,25 +66,93 @@
         </div>
 
         <div class="product-list">
-            @foreach ($products as $product)
+            @forelse ($products as $product)
                 <article class="product-card">
                     <div>
-                        <h3>{{ $product['name'] }}</h3>
-                        <p>{{ $product['business'] }}</p>
-                        <strong>{{ $product['price'] }}</strong>
+                        <h3>{{ $product->nombre }}</h3>
+                        <p>{{ $product->negocioAfiliado?->nombre_comercial }}</p>
+                        <strong>{{ $product->precioVenta() }}</strong>
                     </div>
-                    <button type="button">Agregar</button>
+                    <form method="POST" action="{{ route('app.cart.store') }}">
+                        @csrf
+                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                        <input type="hidden" name="quantity" value="1">
+                        <button type="submit">Agregar</button>
+                    </form>
                 </article>
-            @endforeach
+            @empty
+                <article class="product-card">
+                    <div>
+                        <h3>Catalogo en preparacion</h3>
+                        <p>Los productos activos apareceran aqui.</p>
+                        <strong>S/ 0.00</strong>
+                    </div>
+                    <button type="button" disabled>Pronto</button>
+                </article>
+            @endforelse
         </div>
     </section>
 
     <section id="carrito" class="cart-preview">
         <div>
             <span>Carrito</span>
-            <strong>0 productos</strong>
+            <strong>{{ $cart['count'] }} {{ $cart['count'] === 1 ? 'producto' : 'productos' }}</strong>
         </div>
-        <button type="button">Continuar</button>
+        <a class="cart-continue" href="#checkout">Continuar</a>
+    </section>
+
+    <section id="checkout" class="cart-detail">
+        <div class="section-heading">
+            <h2>Tu carrito</h2>
+            @if ($cart['business_name'])
+                <span>{{ $cart['business_name'] }}</span>
+            @endif
+        </div>
+
+        @if (session('cart_status'))
+            <p class="cart-status">{{ session('cart_status') }}</p>
+        @endif
+
+        @forelse ($cart['items'] as $item)
+            <article class="cart-item">
+                <div>
+                    <strong>{{ $item['product']->nombre }}</strong>
+                    <small>{{ $item['product']->precioVenta() }} c/u</small>
+                </div>
+                <form class="quantity-form" method="POST" action="{{ route('app.cart.update') }}">
+                    @csrf
+                    @method('PATCH')
+                    <input type="hidden" name="product_id" value="{{ $item['product']->id }}">
+                    <button type="submit" name="quantity" value="{{ $item['quantity'] - 1 }}" aria-label="Quitar uno">-</button>
+                    <span>{{ $item['quantity'] }}</span>
+                    <button type="submit" name="quantity" value="{{ $item['quantity'] + 1 }}" aria-label="Agregar uno">+</button>
+                </form>
+            </article>
+        @empty
+            <p class="cart-empty">Agrega productos para preparar tu pedido.</p>
+        @endforelse
+
+        <form class="delivery-form" method="POST" action="{{ route('app.cart.address') }}">
+            @csrf
+            @method('PATCH')
+            <label for="delivery-address">Direccion de entrega</label>
+            <input id="delivery-address" name="delivery_address" type="text" value="{{ $cart['delivery_address'] }}" placeholder="Calle, numero, referencia">
+            <button type="submit">Guardar direccion</button>
+        </form>
+
+        <div class="cart-totals">
+            <span>Subtotal <strong>S/ {{ number_format($cart['subtotal'], 2) }}</strong></span>
+            <span>Delivery <strong>S/ {{ number_format($cart['delivery'], 2) }}</strong></span>
+            <span>Total <strong>S/ {{ number_format($cart['total'], 2) }}</strong></span>
+        </div>
+
+        @if ($cart['count'] > 0)
+            <form method="POST" action="{{ route('app.cart.destroy') }}">
+                @csrf
+                @method('DELETE')
+                <button class="clear-cart-button" type="submit">Vaciar carrito</button>
+            </form>
+        @endif
     </section>
 
     <section id="pedidos" class="order-status">

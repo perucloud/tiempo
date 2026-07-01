@@ -27,7 +27,8 @@ Construir desde cero una plataforma integral de delivery con Laravel, MySQL, Liv
 - Negocios afiliados implementados en `/admin`.
 - Productos implementados en `/admin`.
 - Clientes implementados en `/admin`.
-- La siguiente accion tecnica debe ser implementar Carrito.
+- Carrito de compra implementado en `/app`.
+- La siguiente accion tecnica debe ser implementar Pedidos.
 
 ### Arquitectura
 
@@ -649,7 +650,7 @@ Resumen de trabajo realizado:
 
 ## FASE 14 - Carrito
 
-Estado: ☐ Pendiente
+Estado: ☑ Finalizado
 
 Objetivo: Implementar carrito de compra en `/app`.
 
@@ -674,6 +675,18 @@ Criterios de finalizacion:
 - Cliente puede armar carrito.
 - Carrito mantiene datos necesarios.
 - Commit y push realizados.
+
+Resumen de trabajo realizado:
+
+- Carrito en sesion creado para `/app`.
+- Cliente puede agregar productos activos y disponibles.
+- Cantidades pueden aumentar, disminuir o retirar producto.
+- Carrito valida un solo negocio afiliado por compra.
+- Subtotal, delivery y total se calculan en la vista mobile.
+- Direccion de entrega queda preparada para el checkout.
+- Cliente puede vaciar carrito.
+- Catalogo mobile consume categorias, negocios y productos activos reales.
+- Tests de carrito, disponibilidad, direccion, catalogo y rutas agregados y ejecutados correctamente.
 
 ## FASE 15 - Pedidos
 
@@ -1028,6 +1041,6 @@ Reglas adicionales:
 
 ## Estado de siguiente fase propuesta
 
-Siguiente fase sugerida: FASE 14 - Carrito.
+Siguiente fase sugerida: FASE 15 - Pedidos.
 
-Antes de iniciar FASE 14, el agente debe proponer plan de archivos para carrito en `/app`, incluyendo UI mobile-first, manejo de cantidades, subtotal, persistencia temporal, validacion por negocio afiliado y preparacion de direccion de entrega.
+Antes de iniciar FASE 15, el agente debe proponer plan de archivos para crear pedidos desde carrito, detalle de pedido, historial de estados, validacion de cliente/direccion, y gestion operativa desde `/admin`.

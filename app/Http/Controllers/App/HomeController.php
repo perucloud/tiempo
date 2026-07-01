@@ -3,40 +3,37 @@
 namespace App\Http\Controllers\App;
 
 use App\Http\Controllers\Controller;
+use App\Models\Categoria;
+use App\Models\NegocioAfiliado;
+use App\Models\Producto;
+use App\Support\ShoppingCart;
 use Illuminate\View\View;
 
 class HomeController extends Controller
 {
-    public function __invoke(): View
+    public function __invoke(ShoppingCart $cart): View
     {
         return view('app.home', [
-            'categories' => ['Pollos', 'Pizzas', 'Bodegas', 'Farmacias'],
-            'businesses' => [
-                [
-                    'name' => 'Brasas del Centro',
-                    'category' => 'Polleria afiliada',
-                    'eta' => '25-35 min',
-                    'status' => 'Abierto',
-                ],
-                [
-                    'name' => 'Pizza Norte',
-                    'category' => 'Pizzeria afiliada',
-                    'eta' => '30-40 min',
-                    'status' => 'Abierto',
-                ],
-            ],
-            'products' => [
-                [
-                    'name' => 'Combo familiar',
-                    'business' => 'Brasas del Centro',
-                    'price' => 'S/ 59.90',
-                ],
-                [
-                    'name' => 'Pizza americana',
-                    'business' => 'Pizza Norte',
-                    'price' => 'S/ 32.00',
-                ],
-            ],
+            'categories' => Categoria::query()
+                ->where('estado', Categoria::ESTADO_ACTIVO)
+                ->orderBy('orden')
+                ->orderBy('nombre')
+                ->limit(8)
+                ->pluck('nombre'),
+            'businesses' => NegocioAfiliado::query()
+                ->where('estado', NegocioAfiliado::ESTADO_ACTIVO)
+                ->orderByDesc('abierto')
+                ->orderBy('nombre_comercial')
+                ->limit(6)
+                ->get(),
+            'products' => Producto::query()
+                ->with(['negocioAfiliado', 'categoria'])
+                ->where('estado', Producto::ESTADO_ACTIVO)
+                ->where('disponible', true)
+                ->orderBy('nombre')
+                ->limit(8)
+                ->get(),
+            'cart' => $cart->summary(),
         ]);
     }
 }

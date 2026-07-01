@@ -2,10 +2,13 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class AppMobileTest extends TestCase
 {
+    use RefreshDatabase;
+
     public function test_customer_mobile_app_loads_public_base(): void
     {
         $this->get('/app')
