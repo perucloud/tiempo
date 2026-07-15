@@ -27,16 +27,22 @@ class DashboardController extends Controller
                     'label' => 'Pedidos nuevos',
                     'value' => Pedido::query()->where('estado', Pedido::ESTADO_PENDIENTE)->count(),
                     'note' => 'Pendientes de revision',
+                    'color' => 'indigo',
+                    'icon'  => 'bi-bag-check',
                 ],
                 [
                     'label' => 'Pagos por verificar',
                     'value' => Pago::query()->where('estado', Pago::ESTADO_PENDIENTE)->count(),
                     'note' => 'Yape/Plin en espera',
+                    'color' => 'rose',
+                    'icon'  => 'bi-credit-card',
                 ],
                 [
                     'label' => 'Repartidores activos',
                     'value' => Repartidor::query()->where('estado', Repartidor::ESTADO_DISPONIBLE)->count(),
-                    'note' => 'Disponibilidad actual',
+                    'note' => 'Disponibles ahora',
+                    'color' => 'emerald',
+                    'icon'  => 'bi-bicycle',
                 ],
                 [
                     'label' => 'Ventas de hoy',
@@ -45,6 +51,8 @@ class DashboardController extends Controller
                         ->where('created_at', '>=', $today)
                         ->sum('total'), 2),
                     'note' => 'Corte operativo',
+                    'color' => 'blue',
+                    'icon'  => 'bi-graph-up-arrow',
                 ],
             ],
             'mobileTasks' => [

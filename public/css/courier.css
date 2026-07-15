@@ -1,0 +1,351 @@
+/* ============================================================
+   TIEMPO — Interfaz de repartidor (turno GPS)
+   Mobile-first. Se abre en el celular del repartidor.
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+    --font:        'Inter', system-ui, sans-serif;
+    --bg:          #0f172a;
+    --surface:     #1e293b;
+    --surface-2:   #334155;
+    --border:      #334155;
+    --text:        #f1f5f9;
+    --text-muted:  #94a3b8;
+    --teal:        #14b8a6;
+    --teal-dark:   #0f766e;
+    --green:       #10b981;
+    --green-dark:  #059669;
+    --amber:       #f59e0b;
+    --red:         #ef4444;
+    --red-dark:    #dc2626;
+    --radius:      16px;
+    --radius-sm:   10px;
+    --shadow:      0 4px 24px rgba(0,0,0,.4);
+}
+
+html, body {
+    height: 100%;
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* ── Shell ───────────────────────────────────────────────── */
+.courier-shell {
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 0 0 env(safe-area-inset-bottom);
+}
+
+/* ── Header ──────────────────────────────────────────────── */
+.courier-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+}
+
+.courier-brand {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: -.02em;
+    color: var(--text);
+}
+
+.courier-brand-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: var(--teal);
+    color: #fff;
+    font-size: .85rem;
+    font-weight: 800;
+}
+
+.courier-header-badge {
+    font-size: .7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--teal);
+    background: rgba(20,184,166,.12);
+    padding: .25rem .65rem;
+    border-radius: 999px;
+    border: 1px solid rgba(20,184,166,.3);
+}
+
+/* ── Main ────────────────────────────────────────────────── */
+.courier-main {
+    flex: 1;
+    padding: 1.5rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+/* ── Footer ──────────────────────────────────────────────── */
+.courier-footer {
+    text-align: center;
+    padding: .75rem 1.25rem;
+    font-size: .7rem;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border);
+}
+
+/* ── Courier card de identidad ───────────────────────────── */
+.courier-id-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border: 1px solid var(--border);
+}
+
+.courier-avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--teal), var(--teal-dark));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.courier-id-info strong {
+    display: block;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.courier-id-info small {
+    font-size: .78rem;
+    color: var(--text-muted);
+}
+
+.courier-estado-badge {
+    margin-left: auto;
+    padding: .3rem .75rem;
+    border-radius: 999px;
+    font-size: .72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+}
+.courier-estado-badge.disponible { background: rgba(16,185,129,.15); color: var(--green); border: 1px solid rgba(16,185,129,.3); }
+.courier-estado-badge.ocupado    { background: rgba(245,158,11,.12);  color: var(--amber); border: 1px solid rgba(245,158,11,.25); }
+.courier-estado-badge.inactivo   { background: rgba(148,163,184,.1);  color: var(--text-muted); border: 1px solid var(--border); }
+
+/* ── Panel GPS ───────────────────────────────────────────── */
+.courier-gps-panel {
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    overflow: hidden;
+}
+
+.courier-gps-header {
+    padding: 1rem 1.25rem .75rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: .8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--text-muted);
+}
+
+.courier-gps-body {
+    padding: 1.5rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Indicador circular de GPS */
+.gps-indicator {
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    position: relative;
+    transition: all .4s;
+}
+
+.gps-indicator::before {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    transition: border-color .4s;
+}
+
+.gps-indicator.estado-idle {
+    background: rgba(148,163,184,.1);
+    color: var(--text-muted);
+}
+.gps-indicator.estado-loading {
+    background: rgba(245,158,11,.1);
+    color: var(--amber);
+    animation: pulse-amber 1.5s infinite;
+}
+.gps-indicator.estado-active {
+    background: rgba(16,185,129,.12);
+    color: var(--green);
+}
+.gps-indicator.estado-active::before {
+    border-color: rgba(16,185,129,.35);
+    animation: ring-expand 2s infinite;
+}
+.gps-indicator.estado-error {
+    background: rgba(239,68,68,.1);
+    color: var(--red);
+}
+
+@keyframes pulse-amber {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .5; }
+}
+@keyframes ring-expand {
+    0%   { transform: scale(1); opacity: 1; }
+    100% { transform: scale(1.35); opacity: 0; }
+}
+
+/* Badge de estado GPS */
+.gps-status-badge {
+    font-size: .82rem;
+    font-weight: 600;
+    text-align: center;
+    padding: .4rem 1rem;
+    border-radius: 999px;
+    min-width: 220px;
+    transition: all .3s;
+}
+.gps-status--neutral { background: rgba(148,163,184,.1);  color: var(--text-muted); }
+.gps-status--loading { background: rgba(245,158,11,.1);   color: var(--amber); }
+.gps-status--active  { background: rgba(16,185,129,.12);  color: var(--green); }
+.gps-status--warn    { background: rgba(245,158,11,.1);   color: var(--amber); }
+.gps-status--error   { background: rgba(239,68,68,.1);    color: var(--red); }
+
+/* Coordenadas actuales */
+.gps-posicion-wrap {
+    text-align: center;
+}
+.gps-posicion-label {
+    font-size: .7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    margin-bottom: .2rem;
+}
+#gps-posicion {
+    font-size: .85rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: var(--text);
+    font-family: 'Courier New', monospace;
+}
+
+/* ── Botones de turno ────────────────────────────────────── */
+.courier-actions {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+}
+
+.btn-turno {
+    width: 100%;
+    padding: 1rem;
+    border-radius: var(--radius-sm);
+    border: none;
+    font-family: var(--font);
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all .2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    letter-spacing: -.01em;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.btn-turno:active { transform: scale(.97); }
+.btn-turno:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+
+.btn-turno--iniciar {
+    background: linear-gradient(135deg, var(--green), var(--green-dark));
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(16,185,129,.35);
+}
+.btn-turno--iniciar:hover:not(:disabled) {
+    box-shadow: 0 6px 28px rgba(16,185,129,.5);
+}
+
+.btn-turno--terminar {
+    background: linear-gradient(135deg, var(--red), var(--red-dark));
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(239,68,68,.3);
+}
+.btn-turno--terminar:hover:not(:disabled) {
+    box-shadow: 0 6px 28px rgba(239,68,68,.45);
+}
+
+.hidden { display: none !important; }
+
+/* ── Instrucciones ───────────────────────────────────────── */
+.courier-instrucciones {
+    background: rgba(20,184,166,.07);
+    border: 1px solid rgba(20,184,166,.2);
+    border-radius: var(--radius-sm);
+    padding: 1rem 1.1rem;
+}
+
+.courier-instrucciones p {
+    font-size: .8rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
+.courier-instrucciones strong {
+    color: var(--teal);
+    font-weight: 600;
+}
+
+.courier-instrucciones ul {
+    padding-left: 1.1rem;
+    margin-top: .4rem;
+}
+
+.courier-instrucciones li {
+    font-size: .78rem;
+    color: var(--text-muted);
+    margin-bottom: .2rem;
+}

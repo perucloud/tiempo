@@ -35,6 +35,10 @@ Route::prefix('admin')->name('admin.')->group(function (): void {
         Route::middleware('admin.couriers')->group(function (): void {
             Route::resource('couriers', CourierController::class)
                 ->except(['show']);
+            Route::get('couriers-tracking', [CourierController::class, 'tracking'])
+                ->name('couriers.tracking');
+            Route::get('couriers-ubicaciones', [CourierController::class, 'ubicaciones'])
+                ->name('couriers.ubicaciones');
             Route::patch('orders/{order}/courier', [CourierAssignmentController::class, 'update'])
                 ->name('orders.courier.update');
         });

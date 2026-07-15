@@ -38,12 +38,12 @@ class AdminAuthenticationTest extends TestCase
 
         $this->get('/admin')
             ->assertOk()
-            ->assertSee('Dashboard administrativo')
+            ->assertSee('Dashboard')
             ->assertSee('Pedidos')
             ->assertSee('Pagos')
             ->assertSee('Repartidores')
             ->assertSee('Negocios afiliados')
-            ->assertSee('Operacion rapida movil');
+            ->assertSee('Operacion rapida');
     }
 
     public function test_admin_dashboard_uses_real_operational_metrics(): void

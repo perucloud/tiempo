@@ -60,10 +60,21 @@ Endpoints previstos:
 
 ## Alcance por consumidor
 
-- Cliente: negocios disponibles, productos, carrito, pedidos propios, pagos propios, perfil y direcciones.
-- Repartidor: pedidos asignados, ruta, cliente necesario para entrega y estados.
+- Cliente: negocios disponibles, productos, carrito, pedidos propios, pagos propios, perfil, direcciones y envío de ubicación propia al confirmar pedido.
+- Repartidor: pedidos asignados, ruta, cliente necesario para entrega, estados y envío de posición GPS durante el turno.
 - Negocio Afiliado: perfil, carta, productos, categorias, fotos, horarios y promociones propias.
-- Admin/Operador: endpoints internos autorizados para operacion de TIEMPO.
+- Admin/Operador: endpoints internos autorizados, tracking de repartidores activos y ubicación de clientes en pedidos.
+
+## Endpoints de geolocalización
+
+```
+POST /api/v1/pedidos/{codigo}/ubicacion        — cliente guarda coordenadas al confirmar pedido
+POST /api/v1/repartidores/ubicacion            — repartidor actualiza posición GPS cada 10s
+GET  /api/v1/repartidores/{id}/ubicacion       — operador consulta posición de un repartidor
+GET  /api/v1/repartidores/ubicaciones-activas  — operador obtiene mapa general de repartidores activos
+```
+
+Ver especificación completa en `docs-ai/17-geolocalizacion.md`.
 
 ## Laravel
 

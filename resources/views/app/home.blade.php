@@ -155,8 +155,11 @@
         </div>
 
         @if ($cart['count'] > 0)
-            <form class="delivery-form" method="POST" action="{{ route('app.orders.store') }}">
+            <form class="delivery-form" method="POST" action="{{ route('app.orders.store') }}" id="order-form">
                 @csrf
+                <input type="hidden" name="latitud_cliente"  id="geo-lat">
+                <input type="hidden" name="longitud_cliente" id="geo-lng">
+
                 <label for="customer-names">Nombres</label>
                 <input id="customer-names" name="nombres" type="text" value="{{ old('nombres') }}" placeholder="Tu nombre" required>
 
@@ -169,7 +172,16 @@
                 <label for="order-notes">Notas opcionales</label>
                 <input id="order-notes" name="notas" type="text" value="{{ old('notas') }}" placeholder="Referencia o indicaciones">
 
-                <button type="submit">Crear pedido</button>
+                {{-- Geolocalización: complementaria, no bloqueante --}}
+                <div class="geo-section" id="geo-section">
+                    <button class="geo-btn" type="button" id="geo-btn">
+                        <i class="geo-icon">📍</i>
+                        <span id="geo-label">Compartir mi ubicacion (recomendado)</span>
+                    </button>
+                    <small id="geo-hint">Ayuda al repartidor a encontrarte con exactitud.</small>
+                </div>
+
+                <button type="submit" class="order-submit-btn">Crear pedido</button>
             </form>
         @endif
 
@@ -218,3 +230,7 @@
         <a href="{{ route('home') }}">Volver a la landing</a>
     </section>
 @endsection
+
+@push('app_scripts')
+<script src="{{ asset('js/geolocalizacion-cliente.js') }}"></script>
+@endpush

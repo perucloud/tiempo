@@ -91,6 +91,21 @@ Layouts recomendados:
 - Repartidor: pedidos asignados, ruta, cliente y estados.
 - Cliente: compra, comprobantes, historial, seguimiento y perfil.
 
+## Geolocalización y tracking
+
+El sistema incorpora dos capas de geolocalización:
+
+- **Cliente**: captura puntual de coordenadas al confirmar pedido desde `/app`. Browser Geolocation API. Coordenadas guardadas en `pedidos`.
+- **Repartidor**: tracking GPS continuo durante el turno. `watchPosition()` + POST a API cada 10s. Posición guardada en `repartidores` + log en `repartidor_ubicaciones`.
+
+Mapas: Leaflet.js + OpenStreetMap (CDN, sin API key). Solo se cargan en las vistas que renderizan mapas.
+
+El tracking del repartidor es obligatorio — el sistema impide operar sin GPS activo.
+
+El operador hace seguimiento desde `/admin` con mapa en tiempo real.
+
+Ver especificación completa en `docs-ai/17-geolocalizacion.md`.
+
 ## Regla clave
 
 No mezclar logica de negocio en vistas Blade ni componentes visuales. Las vistas muestran datos; los servicios, acciones y modelos resuelven reglas.

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Restaurantes — Tiempo Delivery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FFF9F2;--surface:#fff;--ink:#27211B;--muted:#7C6F63;
+  --primary:#FF5A1F;--primary-deep:#E64812;--primary-soft:#FFE9DE;
+  --accent:#FFC53D;--accent-soft:#FFF3D6;
+  --drink:#00B3A4;--drink-deep:#00958A;--drink-soft:#DDF6F3;
+  --line:#F0E4D8;--radius:22px;
+  --shadow-soft:0 14px 34px -18px rgba(39,33,27,.25);
+  --display:'Fredoka',sans-serif;--body:'Nunito',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}ul{list-style:none}button{font:inherit;cursor:pointer;border:none;background:none}
+h1,h2,h3{font-family:var(--display);font-weight:600;line-height:1.15}
+.container{max-width:1180px;margin-inline:auto;padding-inline:clamp(1.25rem,4vw,2.5rem)}
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+.reveal.in{opacity:1;transform:none}
+
+header{position:sticky;top:0;z-index:80;background:rgba(255,249,242,.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;padding-block:.9rem}
+.logo{display:flex;align-items:center;gap:.6rem;font-family:var(--display);font-weight:700;font-size:1.3rem}
+.logo b{color:var(--primary)}
+.clock{width:36px;height:36px;border-radius:50%;background:var(--primary);position:relative;flex:0 0 auto;box-shadow:0 6px 14px -4px rgba(255,90,31,.6)}
+.clock::before,.clock::after{content:"";position:absolute;left:50%;bottom:50%;transform-origin:bottom center;background:#fff;border-radius:99px}
+.clock::before{width:3px;height:10px;transform:translateX(-50%) rotate(40deg);animation:tick 6s linear infinite}
+.clock::after{width:3px;height:7px;transform:translateX(-50%) rotate(160deg)}
+@keyframes tick{to{transform:translateX(-50%) rotate(400deg)}}
+.cart-btn{position:relative;display:flex;width:46px;height:46px;border-radius:14px;border:2px solid var(--line);align-items:center;justify-content:center;font-size:1.15rem;background:var(--surface)}
+.cart-btn span{position:absolute;top:-6px;right:-6px;background:var(--primary);color:#fff;font-size:.68rem;font-weight:800;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+
+.page-head{padding-block:clamp(2rem,5vw,3.25rem) 1.25rem}
+.crumbs{font-size:.85rem;font-weight:700;color:var(--muted);display:flex;gap:.4rem;flex-wrap:wrap}
+.crumbs a:hover{color:var(--primary)}
+.page-head h1{font-size:clamp(1.9rem,4.5vw + .5rem,2.9rem);margin-top:.7rem}
+.page-head h1 em{font-style:normal;color:var(--primary)}
+.page-head p{color:var(--muted);font-weight:600;margin-top:.4rem}
+
+.cat-switch{display:flex;gap:.6rem;margin-top:1.5rem;background:var(--surface);border:1.5px solid var(--line);border-radius:999px;padding:.4rem;width:fit-content}
+.cat-switch button{padding:.65rem 1.4rem;border-radius:999px;font-family:var(--display);font-weight:600;color:var(--muted);transition:all .25s;min-height:44px}
+.cat-switch button.active-food{background:var(--primary);color:#fff;box-shadow:0 10px 20px -8px rgba(255,90,31,.5)}
+.cat-switch button.active-drink{background:var(--drink);color:#fff;box-shadow:0 10px 20px -8px rgba(0,179,164,.5)}
+
+.toolbar{display:flex;gap:.6rem;overflow-x:auto;padding-block:1.25rem;scrollbar-width:none}
+.toolbar::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;padding:.55rem 1.15rem;border-radius:999px;background:var(--surface);border:1.5px solid var(--line);font-size:.87rem;font-weight:700;color:var(--muted);transition:all .2s;min-height:44px;display:flex;align-items:center;gap:.4rem}
+.chip:hover,.chip.on{border-color:var(--ink);color:var(--ink)}
+
+.grid{display:grid;gap:1.15rem;grid-template-columns:1fr;padding-bottom:4rem}
+@media(min-width:600px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1000px){.grid{grid-template-columns:repeat(3,1fr)}}
+.card{background:var(--surface);border:1.5px solid var(--line);border-radius:var(--radius);overflow:hidden;transition:transform .3s,box-shadow .3s;display:block}
+.card:hover{transform:translateY(-7px);box-shadow:var(--shadow-soft)}
+.thumb{height:160px;display:flex;align-items:center;justify-content:center;font-size:3.6rem;position:relative;overflow:hidden}
+.thumb span{transition:transform .45s ease}
+.card:hover .thumb span{transform:scale(1.22) rotate(-6deg)}
+.pill{position:absolute;top:.85rem;left:.85rem;background:rgba(255,255,255,.94);font-size:.72rem;font-weight:800;border-radius:999px;padding:.3rem .75rem}
+.pill.closed{background:var(--ink);color:#fff}
+.body{padding:1.15rem 1.25rem 1.35rem}
+.body .top{display:flex;justify-content:space-between;align-items:baseline;gap:.5rem}
+.body h3{font-size:1.1rem}
+.rating{font-weight:800;font-size:.8rem;color:#E8A500;background:var(--accent-soft);border-radius:8px;padding:.15rem .5rem;white-space:nowrap}
+.meta{color:var(--muted);font-size:.85rem;font-weight:700;margin-top:.35rem;display:flex;gap:.9rem;flex-wrap:wrap}
+.free{color:var(--drink-deep)}
+
+.empty{display:none;text-align:center;padding:3rem 1rem;color:var(--muted);font-weight:700}
+.empty.show{display:block}
+
+footer{background:var(--ink);color:rgba(255,249,242,.65);text-align:center;padding-block:1.75rem;font-size:.84rem;font-weight:600}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="nav container">
+    <a class="logo" href="index.html"><span class="clock" aria-hidden="true"></span>tiempo<b>delivery</b></a>
+    <button class="cart-btn" aria-label="Ver carrito">🛒<span>2</span></button>
+  </nav>
+</header>
+
+<main>
+  <div class="container page-head">
+    <nav class="crumbs" aria-label="Ruta"><a href="index.html">Inicio</a> › <span id="crumbCat">Comidas</span></nav>
+    <h1 id="pageTitle">¿Qué <em>comemos</em> hoy?</h1>
+    <p id="pageSub">Estos son los restaurantes disponibles ahora en tu zona.</p>
+
+    <div class="cat-switch" role="tablist" aria-label="Categoría">
+      <button id="btnFood" class="active-food" role="tab" aria-selected="true">🍔 Comidas</button>
+      <button id="btnDrink" role="tab" aria-selected="false">🥤 Bebidas</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="toolbar" id="chips"></div>
+    <div class="grid" id="grid"></div>
+    <div class="empty" id="empty">😅 No hay locales con ese filtro por ahora. Prueba con otro.</div>
+  </div>
+</main>
+
+<footer>© 2026 Tiempo Delivery — hecho con ⏱ para llegar siempre a tiempo.</footer>
+
+<script>
+const DATA = {
+  comidas: {
+    title:'¿Qué <em>comemos</em> hoy?',
+    chips:['Todos','Pollerías','Chifa','Parrillas','Regional','Pizzas','Menús'],
+    items:[
+      {n:'Pollería El Bracero',t:'Pollerías',e:'🍗',g:'linear-gradient(140deg,#FFE1CC,#FFC9A8)',r:4.8,eta:'25–35 min',envio:'S/ 3',open:true},
+      {n:'Chifa Fung Wa',t:'Chifa',e:'🥟',g:'linear-gradient(140deg,#FFF0C2,#FFE08F)',r:4.6,eta:'30–40 min',envio:'S/ 3',open:true},
+      {n:'Sazón de la Selva',t:'Regional',e:'🍛',g:'linear-gradient(140deg,#D9F4E7,#B4E8D2)',r:4.9,eta:'20–30 min',envio:'Gratis',open:true},
+      {n:'Pizzería La Leña',t:'Pizzas',e:'🍕',g:'linear-gradient(140deg,#FFE3E0,#FFC7C2)',r:4.5,eta:'30–40 min',envio:'S/ 3',open:true},
+      {n:'Parrillas Don Beto',t:'Parrillas',e:'🥩',g:'linear-gradient(140deg,#F3E2D0,#E4C7A8)',r:4.7,eta:'35–45 min',envio:'S/ 4',open:true},
+      {n:'Menú Casero María',t:'Menús',e:'🥘',g:'linear-gradient(140deg,#FFEFD6,#FFDCA8)',r:4.4,eta:'20–30 min',envio:'S/ 2',open:false},
+    ]
+  },
+  bebidas: {
+    title:'¿Qué <em>tomamos</em> hoy?',
+    chips:['Todos','Jugos','Café','Batidos','Gaseosas','Heladas'],
+    items:[
+      {n:'Juguería Tropical',t:'Jugos',e:'🧃',g:'linear-gradient(140deg,#DDF6F3,#B8ECE6)',r:4.7,eta:'15–25 min',envio:'S/ 2',open:true},
+      {n:'Café del Valle',t:'Café',e:'☕',g:'linear-gradient(140deg,#EFE2D2,#DCC3A5)',r:4.8,eta:'15–20 min',envio:'S/ 2',open:true},
+      {n:'Batidos La Fresa',t:'Batidos',e:'🍓',g:'linear-gradient(140deg,#FFE3EC,#FFC2D6)',r:4.6,eta:'15–25 min',envio:'S/ 2',open:true},
+      {n:'Punto Helado',t:'Heladas',e:'🥤',g:'linear-gradient(140deg,#DCEFFF,#B8DCFB)',r:4.5,eta:'20–30 min',envio:'S/ 3',open:true},
+    ]
+  }
+};
+
+let cat = new URLSearchParams(location.search).get('cat') === 'bebidas' ? 'bebidas' : 'comidas';
+let filter = 'Todos';
+
+const grid = document.getElementById('grid');
+const chips = document.getElementById('chips');
+const empty = document.getElementById('empty');
+const btnFood = document.getElementById('btnFood');
+const btnDrink = document.getElementById('btnDrink');
+
+function render(){
+  const d = DATA[cat];
+  document.getElementById('pageTitle').innerHTML = d.title;
+  document.getElementById('crumbCat').textContent = cat === 'comidas' ? 'Comidas' : 'Bebidas';
+  btnFood.className = cat === 'comidas' ? 'active-food' : '';
+  btnDrink.className = cat === 'bebidas' ? 'active-drink' : '';
+  btnFood.setAttribute('aria-selected', cat === 'comidas');
+  btnDrink.setAttribute('aria-selected', cat === 'bebidas');
+
+  chips.innerHTML = d.chips.map(c =>
+    `<button class="chip ${c===filter?'on':''}" data-c="${c}">${c}</button>`).join('');
+  chips.querySelectorAll('.chip').forEach(b => b.onclick = () => { filter = b.dataset.c; render(); });
+
+  const items = d.items.filter(i => filter === 'Todos' || i.t === filter);
+  empty.classList.toggle('show', items.length === 0);
+
+  grid.innerHTML = items.map((i,idx) => `
+    <a href="carta.html" class="card reveal" style="transition-delay:${idx*70}ms">
+      <div class="thumb" style="background:${i.g}">
+        <span>${i.e}</span>
+        <span class="pill ${i.open?'':'closed'}">${i.open ? '⏱ ' + i.eta : 'Cerrado ahora'}</span>
+      </div>
+      <div class="body">
+        <div class="top"><h3>${i.n}</h3><span class="rating">★ ${i.r}</span></div>
+        <div class="meta"><span>${i.t}</span><span class="${i.envio==='Gratis'?'free':''}">Envío ${i.envio}</span></div>
+      </div>
+    </a>`).join('');
+
+  requestAnimationFrame(() => grid.querySelectorAll('.reveal').forEach(el => el.classList.add('in')));
+}
+
+btnFood.onclick = () => { cat='comidas'; filter='Todos'; history.replaceState(null,'','restaurantes.html'); render(); };
+btnDrink.onclick = () => { cat='bebidas'; filter='Todos'; history.replaceState(null,'','restaurantes.html?cat=bebidas'); render(); };
+render();
+</script>
+</body>
+</html>

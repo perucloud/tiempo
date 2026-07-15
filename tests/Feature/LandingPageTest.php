@@ -10,10 +10,9 @@ class LandingPageTest extends TestCase
     {
         $this->get('/')
             ->assertOk()
-            ->assertSee('TIEMPO Delivery')
-            ->assertSee('Empresa de delivery, no restaurante')
-            ->assertSee('Afiliar mi negocio')
-            ->assertSee('Pedir desde la app')
+            ->assertSee('Tiempo Delivery')
+            ->assertSee('Quiero pedir')
+            ->assertSee('Registrar mi restaurante')
             ->assertSee('/admin/login');
     }
 }

@@ -41,5 +41,6 @@
     </div>
 
     <script src="{{ asset('js/app-mobile.js') }}" defer></script>
+    @stack('app_scripts')
 </body>
 </html>

@@ -21,6 +21,7 @@ Diseñar y mantener el modelo de datos MySQL de TIEMPO mediante migraciones Lara
 - `docs-ai/09-seguridad.md`
 - `docs-ai/11-flujos-negocio.md`
 - `docs-ai/13-master-roadmap.md`
+- `docs-ai/17-geolocalizacion.md`
 
 ## Puede hacer
 
@@ -53,6 +54,19 @@ Diseñar y mantener el modelo de datos MySQL de TIEMPO mediante migraciones Lara
 - Trabaja con Security en datos sensibles.
 - Trabaja con QA Tester en integridad.
 - Informa riesgos a Project Manager.
+
+## Cambios de esquema registrados
+
+### Geolocalización (FASE 28)
+
+Migraciones a crear:
+- `add_geolocation_to_pedidos` — agrega `latitud_cliente decimal(10,7)`, `longitud_cliente decimal(10,7)`, `geolocalizacion_at timestamp` (todos nullable).
+- `add_ubicacion_to_repartidores` — agrega `latitud_actual decimal(10,7)`, `longitud_actual decimal(10,7)`, `ubicacion_actualizada_at timestamp` (todos nullable).
+- `create_repartidor_ubicaciones_table` — tabla de log GPS: `id`, `repartidor_id` FK, `pedido_id` FK nullable, `latitud decimal(10,7)`, `longitud decimal(10,7)`, `created_at`. Sin `updated_at` ni soft delete.
+
+Índices en `repartidor_ubicaciones`: `repartidor_id`, `pedido_id`, `created_at`.
+
+Regla: `decimal(10,7)` para coordenadas — 7 decimales = precisión ~1cm.
 
 ## Formato de respuesta
 

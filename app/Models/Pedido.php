@@ -72,6 +72,9 @@ class Pedido extends Model
         'estado_pago',
         'direccion_entrega',
         'referencia_entrega',
+        'latitud_cliente',
+        'longitud_cliente',
+        'geolocalizacion_at',
         'subtotal',
         'costo_delivery',
         'total',
@@ -84,13 +87,21 @@ class Pedido extends Model
     protected function casts(): array
     {
         return [
-            'subtotal' => 'decimal:2',
-            'costo_delivery' => 'decimal:2',
-            'total' => 'decimal:2',
-            'confirmado_at' => 'datetime',
-            'entregado_at' => 'datetime',
-            'cancelado_at' => 'datetime',
+            'subtotal'          => 'decimal:2',
+            'costo_delivery'    => 'decimal:2',
+            'total'             => 'decimal:2',
+            'latitud_cliente'   => 'decimal:7',
+            'longitud_cliente'  => 'decimal:7',
+            'confirmado_at'     => 'datetime',
+            'entregado_at'      => 'datetime',
+            'cancelado_at'      => 'datetime',
+            'geolocalizacion_at' => 'datetime',
         ];
+    }
+
+    public function tieneGeolocalizacion(): bool
+    {
+        return $this->latitud_cliente !== null && $this->longitud_cliente !== null;
     }
 
     public static function estadoOptions(): array

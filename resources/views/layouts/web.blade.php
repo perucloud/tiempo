@@ -1,36 +1,19 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="@yield('description', 'TIEMPO Delivery conecta clientes, negocios afiliados y repartidores con una operacion centralizada de delivery.')">
-    <title>@yield('title', 'TIEMPO Delivery')</title>
+    <meta name="description" content="@yield('description', 'Delivery local de comidas y bebidas. Pide de tus restaurantes favoritos y recíbelo a tiempo.')">
+    <title>@yield('title', 'Tiempo Delivery')</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/tiempo-ui.css') }}">
     <link rel="stylesheet" href="{{ asset('css/web.css') }}">
+    @stack('web_styles')
 </head>
 <body>
-    <header class="web-header">
-        <nav class="web-nav" aria-label="Navegacion principal">
-            <a class="web-brand" href="{{ route('home') }}">
-                <span class="web-brand-mark">T</span>
-                <span>TIEMPO Delivery</span>
-            </a>
-
-            <div class="web-nav-links">
-                <a href="#clientes">Clientes</a>
-                <a href="#negocios">Negocios afiliados</a>
-                <a href="#operacion">Operacion</a>
-                <a class="web-button web-button-outline" href="{{ route('admin.login') }}">Admin</a>
-            </div>
-        </nav>
-    </header>
-
     @yield('content')
-
-    <footer class="web-footer">
-        <div class="web-section-inner">
-            <span>TIEMPO Delivery</span>
-            <span>Landing publica | App clientes | Dashboard operativo</span>
-        </div>
-    </footer>
+    @stack('web_scripts')
 </body>
 </html>

@@ -109,6 +109,36 @@
         </article>
     </section>
 
+    {{-- Mapa de ubicación del cliente --}}
+    <section class="admin-panel">
+        <div class="admin-panel-header">
+            <div>
+                <h2><i class="bi bi-geo-alt"></i> Ubicacion del cliente</h2>
+                <p>{{ $order->tieneGeolocalizacion() ? 'Capturada al confirmar el pedido — ' . $order->geolocalizacion_at?->format('d/m/Y H:i') : 'El cliente no compartio su ubicacion.' }}</p>
+            </div>
+            @if ($order->tieneGeolocalizacion())
+                <span class="admin-badge admin-badge-green"><i class="bi bi-check-circle"></i> GPS capturado</span>
+            @else
+                <span class="admin-badge">Sin GPS</span>
+            @endif
+        </div>
+
+        @if ($order->tieneGeolocalizacion())
+            <div id="mapa-cliente" style="height:320px; border-radius:10px; overflow:hidden;"></div>
+            <p style="margin:10px 0 0; font-size:12px; color:var(--admin-muted);">
+                <i class="bi bi-pin-map"></i>
+                Lat: {{ $order->latitud_cliente }} &nbsp;|&nbsp; Lng: {{ $order->longitud_cliente }}
+                &nbsp;&mdash;&nbsp;
+                <a class="admin-link" href="https://www.google.com/maps?q={{ $order->latitud_cliente }},{{ $order->longitud_cliente }}" target="_blank" rel="noopener">Ver en Google Maps &nearr;</a>
+            </p>
+        @else
+            <div style="display:flex; align-items:center; justify-content:center; height:120px; border-radius:10px; background:#f8fafc; border:1px dashed var(--admin-line); color:var(--admin-muted); gap:8px;">
+                <i class="bi bi-geo-alt" style="font-size:22px;"></i>
+                <span>El cliente no activo la geolocalizacion al hacer el pedido.</span>
+            </div>
+        @endif
+    </section>
+
     <section class="admin-panel">
         <div class="admin-panel-header">
             <div>
@@ -128,4 +158,29 @@
             @endforeach
         </div>
     </section>
+@if ($order->tieneGeolocalizacion())
+    @push('scripts')
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        (function () {
+            const lat = {{ $order->latitud_cliente }};
+            const lng = {{ $order->longitud_cliente }};
+            const map = L.map('mapa-cliente', { zoomControl: true, scrollWheelZoom: false }).setView([lat, lng], 16);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap'
+            }).addTo(map);
+            const icon = L.divIcon({
+                html: '<div style="background:#2563eb;width:14px;height:14px;border-radius:50%;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.4);"></div>',
+                className: '', iconAnchor: [7, 7]
+            });
+            L.marker([lat, lng], { icon })
+                .addTo(map)
+                .bindPopup('<strong>{{ addslashes($order->cliente?->nombreCompleto() ?? "Cliente") }}</strong><br>{{ addslashes($order->direccion_entrega) }}')
+                .openPopup();
+        })();
+    </script>
+    @endpush
+@endif
+
 @endsection

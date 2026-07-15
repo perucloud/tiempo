@@ -1,0 +1,671 @@
+/* ============================================================
+   TIEMPO UI — Biblioteca de componentes compartidos
+   Versión 1.0 | Julio 2026
+
+   Uso: cargar ANTES de cualquier CSS de superficie.
+   Todas las superficies (web, admin, app, courier) comparten
+   estos tokens y componentes base.
+
+   Superficies que lo usan:
+   - public/css/web.css        → landing pública
+   - public/css/admin.css      → dashboard operativo
+   - public/css/app-mobile.css → app PWA clientes
+   - public/css/courier.css    → interfaz del repartidor
+   ============================================================ */
+
+/* ─────────────────────────────────────────────────────────────
+   1. DESIGN TOKENS
+   ───────────────────────────────────────────────────────────── */
+:root {
+    /* Paleta de marca */
+    --t-orange:        #FF5A1F;
+    --t-orange-deep:   #E64812;
+    --t-orange-soft:   #FFE9DE;
+    --t-teal:          #00B3A4;
+    --t-teal-deep:     #00958A;
+    --t-teal-soft:     #DDF6F3;
+    --t-amber:         #FFC53D;
+    --t-amber-soft:    #FFF3D6;
+
+    /* Neutros */
+    --t-ink:           #27211B;
+    --t-ink-2:         #3A3129;
+    --t-muted:         #7C6F63;
+    --t-line:          #F0E4D8;
+    --t-surface:       #FFFFFF;
+    --t-bg:            #FFF9F2;
+
+    /* Semánticos */
+    --t-primary:       var(--t-orange);
+    --t-primary-deep:  var(--t-orange-deep);
+    --t-primary-soft:  var(--t-orange-soft);
+    --t-accent:        var(--t-amber);
+    --t-accent-soft:   var(--t-amber-soft);
+    --t-success:       #10b981;
+    --t-success-soft:  #d1fae5;
+    --t-danger:        #ef4444;
+    --t-danger-soft:   #fee2e2;
+    --t-warning:       #f59e0b;
+    --t-warning-soft:  #fef3c7;
+    --t-info:          #3b82f6;
+    --t-info-soft:     #dbeafe;
+
+    /* Tipografía */
+    --t-font-display:  'Fredoka', system-ui, sans-serif;
+    --t-font-body:     'Nunito', system-ui, sans-serif;
+    --t-font-mono:     'Courier New', monospace;
+
+    /* Escala tipográfica */
+    --t-text-xs:   0.72rem;   /* 11.5px */
+    --t-text-sm:   0.85rem;   /* 13.6px */
+    --t-text-base: 1rem;      /* 16px */
+    --t-text-lg:   1.1rem;    /* 17.6px */
+    --t-text-xl:   1.25rem;   /* 20px */
+    --t-text-2xl:  1.5rem;    /* 24px */
+    --t-text-3xl:  1.9rem;    /* 30px */
+    --t-text-4xl:  2.5rem;    /* 40px */
+
+    /* Espaciado */
+    --t-space-1:  4px;
+    --t-space-2:  8px;
+    --t-space-3:  12px;
+    --t-space-4:  16px;
+    --t-space-5:  20px;
+    --t-space-6:  24px;
+    --t-space-8:  32px;
+    --t-space-10: 40px;
+    --t-space-12: 48px;
+
+    /* Radios */
+    --t-radius-sm:   8px;
+    --t-radius:      14px;
+    --t-radius-lg:   22px;
+    --t-radius-xl:   34px;
+    --t-radius-full: 999px;
+
+    /* Sombras */
+    --t-shadow-sm:  0 2px 8px rgba(39,33,27,.06);
+    --t-shadow:     0 14px 34px -18px rgba(39,33,27,.25);
+    --t-shadow-lg:  0 24px 48px -24px rgba(255,90,31,.35);
+    --t-shadow-xl:  0 40px 80px -30px rgba(39,33,27,.45);
+
+    /* Transiciones */
+    --t-ease:    cubic-bezier(.2,.7,.3,1);
+    --t-fast:    .15s;
+    --t-normal:  .25s;
+    --t-slow:    .4s;
+
+    /* Z-index */
+    --t-z-base:    1;
+    --t-z-dropdown: 40;
+    --t-z-sticky:  50;
+    --t-z-overlay: 100;
+    --t-z-modal:   200;
+    --t-z-toast:   300;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   2. RESET BASE
+   ───────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+img, svg, video, canvas { max-width: 100%; display: block; }
+a    { color: inherit; text-decoration: none; }
+ul, ol { list-style: none; }
+button { font: inherit; cursor: pointer; border: none; background: none; }
+input, textarea, select { font: inherit; }
+h1, h2, h3, h4, h5, h6 { line-height: 1.15; }
+
+/* ─────────────────────────────────────────────────────────────
+   3. BOTONES
+
+   Uso: <a class="t-btn t-btn--primary">Pedir ahora</a>
+        <button class="t-btn t-btn--outline t-btn--sm">Cancelar</button>
+        <button class="t-btn t-btn--teal t-btn--lg t-btn--full">Confirmar</button>
+        <button class="t-btn t-btn--ghost">Ver más</button>
+        <button class="t-btn t-btn--danger">Eliminar</button>
+        <button class="t-btn t-btn--icon"><i class="bi bi-plus"></i></button>
+   ───────────────────────────────────────────────────────────── */
+.t-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--t-space-2);
+    font-family: var(--t-font-display);
+    font-weight: 600;
+    font-size: var(--t-text-base);
+    line-height: 1;
+    padding: .85rem 1.6rem;
+    border-radius: var(--t-radius-full);
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: transform var(--t-fast), box-shadow var(--t-fast), background var(--t-fast), color var(--t-fast), border-color var(--t-fast);
+    min-height: 48px;
+    white-space: nowrap;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+}
+.t-btn:disabled, .t-btn[aria-disabled="true"] {
+    opacity: .5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+.t-btn:active:not(:disabled) { transform: scale(.97); }
+
+/* Tamaños */
+.t-btn--xs  { font-size: var(--t-text-xs);  padding: .35rem .8rem;  min-height: 30px; }
+.t-btn--sm  { font-size: var(--t-text-sm);  padding: .55rem 1.1rem; min-height: 38px; }
+.t-btn--lg  { font-size: var(--t-text-lg);  padding: 1rem 2rem;     min-height: 56px; }
+.t-btn--xl  { font-size: var(--t-text-xl);  padding: 1.1rem 2.4rem; min-height: 64px; }
+.t-btn--full { width: 100%; }
+
+/* Variantes */
+.t-btn--primary {
+    background: var(--t-primary);
+    color: #fff;
+    box-shadow: var(--t-shadow-lg);
+}
+.t-btn--primary:hover { background: var(--t-primary-deep); transform: translateY(-2px); }
+
+.t-btn--teal {
+    background: var(--t-teal);
+    color: #fff;
+    box-shadow: 0 20px 40px -20px rgba(0,179,164,.5);
+}
+.t-btn--teal:hover { background: var(--t-teal-deep); transform: translateY(-2px); }
+
+.t-btn--outline {
+    background: transparent;
+    color: var(--t-ink);
+    border-color: var(--t-ink);
+}
+.t-btn--outline:hover { background: var(--t-ink); color: #fff; }
+
+.t-btn--outline-primary {
+    background: transparent;
+    color: var(--t-primary);
+    border-color: var(--t-primary);
+}
+.t-btn--outline-primary:hover { background: var(--t-primary); color: #fff; }
+
+.t-btn--outline-teal {
+    background: transparent;
+    color: var(--t-teal);
+    border-color: var(--t-teal);
+}
+.t-btn--outline-teal:hover { background: var(--t-teal); color: #fff; }
+
+.t-btn--ghost {
+    background: transparent;
+    color: var(--t-muted);
+    border-color: transparent;
+}
+.t-btn--ghost:hover { background: var(--t-line); color: var(--t-ink); }
+
+.t-btn--danger {
+    background: var(--t-danger);
+    color: #fff;
+}
+.t-btn--danger:hover { background: #dc2626; transform: translateY(-2px); }
+
+.t-btn--success {
+    background: var(--t-success);
+    color: #fff;
+}
+.t-btn--success:hover { background: #059669; transform: translateY(-2px); }
+
+.t-btn--dark {
+    background: var(--t-ink);
+    color: #fff;
+}
+.t-btn--dark:hover { background: var(--t-ink-2); transform: translateY(-2px); }
+
+/* Ícono solo */
+.t-btn--icon {
+    width: 44px;
+    height: 44px;
+    min-height: unset;
+    padding: 0;
+    border-radius: var(--t-radius);
+    font-size: 1.1rem;
+}
+.t-btn--icon.t-btn--sm { width: 34px; height: 34px; border-radius: var(--t-radius-sm); font-size: .9rem; }
+.t-btn--icon.t-btn--lg { width: 56px; height: 56px; border-radius: var(--t-radius-lg); font-size: 1.3rem; }
+
+/* Loading state */
+.t-btn--loading {
+    position: relative;
+    color: transparent !important;
+    pointer-events: none;
+}
+.t-btn--loading::after {
+    content: '';
+    position: absolute;
+    inset: 50% 50%;
+    width: 18px;
+    height: 18px;
+    margin: -9px 0 0 -9px;
+    border: 2px solid rgba(255,255,255,.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: t-spin .7s linear infinite;
+}
+@keyframes t-spin { to { transform: rotate(360deg); } }
+
+/* ─────────────────────────────────────────────────────────────
+   4. BADGES / CHIPS / PILLS
+
+   Uso: <span class="t-badge t-badge--orange">Nuevo</span>
+        <span class="t-badge t-badge--green t-badge--sm">Activo</span>
+        <span class="t-chip">Categoría</span>
+        <span class="t-chip t-chip--active">Seleccionado</span>
+   ───────────────────────────────────────────────────────────── */
+.t-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--t-space-1);
+    padding: .3rem .75rem;
+    border-radius: var(--t-radius-full);
+    font-size: var(--t-text-xs);
+    font-weight: 700;
+    line-height: 1;
+    white-space: nowrap;
+}
+.t-badge--sm { font-size: .65rem; padding: .2rem .55rem; }
+.t-badge--lg { font-size: var(--t-text-sm); padding: .4rem 1rem; }
+
+.t-badge--orange  { background: var(--t-orange-soft);  color: var(--t-orange-deep); }
+.t-badge--teal    { background: var(--t-teal-soft);    color: var(--t-teal-deep); }
+.t-badge--amber   { background: var(--t-amber-soft);   color: #92400e; }
+.t-badge--green   { background: var(--t-success-soft); color: #065f46; }
+.t-badge--red     { background: var(--t-danger-soft);  color: #991b1b; }
+.t-badge--blue    { background: var(--t-info-soft);    color: #1e40af; }
+.t-badge--neutral { background: var(--t-line);         color: var(--t-muted); }
+.t-badge--dark    { background: var(--t-ink);          color: #fff; }
+
+/* Chips interactivos */
+.t-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--t-space-1);
+    padding: .4rem .9rem;
+    border-radius: var(--t-radius-full);
+    font-size: var(--t-text-sm);
+    font-weight: 600;
+    border: 1.5px solid var(--t-line);
+    background: var(--t-surface);
+    color: var(--t-muted);
+    cursor: pointer;
+    transition: all var(--t-fast);
+    user-select: none;
+}
+.t-chip:hover   { border-color: var(--t-primary); color: var(--t-primary); }
+.t-chip--active { background: var(--t-primary); color: #fff; border-color: var(--t-primary); }
+.t-chip--teal.t-chip--active { background: var(--t-teal); border-color: var(--t-teal); }
+
+/* ─────────────────────────────────────────────────────────────
+   5. CARDS
+
+   Uso: <div class="t-card">...</div>
+        <div class="t-card t-card--hover t-card--bordered">...</div>
+        <div class="t-card t-card--dark">...</div>
+   ───────────────────────────────────────────────────────────── */
+.t-card {
+    background: var(--t-surface);
+    border-radius: var(--t-radius-lg);
+    padding: var(--t-space-6);
+    box-shadow: var(--t-shadow-sm);
+}
+.t-card--sm     { padding: var(--t-space-4); border-radius: var(--t-radius); }
+.t-card--lg     { padding: var(--t-space-8); border-radius: var(--t-radius-xl); }
+.t-card--bordered { border: 1.5px solid var(--t-line); box-shadow: none; }
+.t-card--hover  { transition: transform var(--t-normal), box-shadow var(--t-normal); cursor: pointer; }
+.t-card--hover:hover { transform: translateY(-6px); box-shadow: var(--t-shadow); }
+.t-card--dark   { background: var(--t-ink); color: #fff; }
+.t-card--glass  {
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.14);
+    backdrop-filter: blur(12px);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   6. MODALES
+
+   Uso:
+   <div class="t-overlay" id="mi-modal">
+     <div class="t-modal">
+       <div class="t-modal__header">
+         <h3 class="t-modal__title">Título</h3>
+         <button class="t-modal__close t-btn t-btn--icon t-btn--ghost" data-modal-close>✕</button>
+       </div>
+       <div class="t-modal__body">contenido</div>
+       <div class="t-modal__footer">
+         <button class="t-btn t-btn--ghost" data-modal-close>Cancelar</button>
+         <button class="t-btn t-btn--primary">Confirmar</button>
+       </div>
+     </div>
+   </div>
+
+   JS: ver sección 10 — t-modal-init()
+   ───────────────────────────────────────────────────────────── */
+.t-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(39,33,27,.55);
+    backdrop-filter: blur(4px);
+    z-index: var(--t-z-modal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--t-space-4);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--t-normal);
+}
+.t-overlay.is-open {
+    opacity: 1;
+    pointer-events: all;
+}
+.t-modal {
+    background: var(--t-surface);
+    border-radius: var(--t-radius-xl);
+    width: 100%;
+    max-width: 520px;
+    max-height: 90dvh;
+    overflow-y: auto;
+    box-shadow: var(--t-shadow-xl);
+    transform: translateY(20px) scale(.97);
+    transition: transform var(--t-normal) var(--t-ease);
+}
+.t-overlay.is-open .t-modal {
+    transform: translateY(0) scale(1);
+}
+.t-modal--sm { max-width: 380px; }
+.t-modal--lg { max-width: 680px; }
+.t-modal--full { max-width: 95vw; }
+
+.t-modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--t-space-6) var(--t-space-6) var(--t-space-4);
+    border-bottom: 1px solid var(--t-line);
+}
+.t-modal__title { font-size: var(--t-text-xl); font-weight: 700; }
+.t-modal__close { color: var(--t-muted); }
+.t-modal__body  { padding: var(--t-space-6); }
+.t-modal__footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--t-space-3);
+    padding: var(--t-space-4) var(--t-space-6) var(--t-space-6);
+    border-top: 1px solid var(--t-line);
+}
+
+/* Bottom sheet (mobile) */
+.t-bottom-sheet {
+    position: fixed;
+    inset: auto 0 0 0;
+    background: var(--t-surface);
+    border-radius: var(--t-radius-xl) var(--t-radius-xl) 0 0;
+    padding: var(--t-space-2) var(--t-space-6) calc(env(safe-area-inset-bottom) + var(--t-space-6));
+    max-height: 88dvh;
+    overflow-y: auto;
+    transform: translateY(100%);
+    transition: transform var(--t-normal) var(--t-ease);
+    z-index: var(--t-z-modal);
+    box-shadow: 0 -8px 40px rgba(39,33,27,.15);
+}
+.t-overlay.is-open .t-bottom-sheet { transform: translateY(0); }
+.t-bottom-sheet__handle {
+    width: 36px; height: 4px;
+    background: var(--t-line);
+    border-radius: 2px;
+    margin: var(--t-space-2) auto var(--t-space-5);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   7. FORMULARIOS
+
+   Uso: <label class="t-field">
+          <span class="t-field__label">Email</span>
+          <input class="t-input" type="email">
+          <span class="t-field__error">Campo requerido</span>
+        </label>
+   ───────────────────────────────────────────────────────────── */
+.t-field { display: flex; flex-direction: column; gap: var(--t-space-2); }
+.t-field__label { font-size: var(--t-text-sm); font-weight: 700; color: var(--t-ink); }
+.t-field__hint  { font-size: var(--t-text-xs); color: var(--t-muted); }
+.t-field__error { font-size: var(--t-text-xs); color: var(--t-danger); font-weight: 600; }
+
+.t-input, .t-select, .t-textarea {
+    width: 100%;
+    padding: .75rem 1rem;
+    border: 1.5px solid var(--t-line);
+    border-radius: var(--t-radius);
+    background: var(--t-surface);
+    color: var(--t-ink);
+    font-size: var(--t-text-base);
+    font-family: var(--t-font-body);
+    transition: border-color var(--t-fast), box-shadow var(--t-fast);
+    min-height: 48px;
+    outline: none;
+}
+.t-input:focus, .t-select:focus, .t-textarea:focus {
+    border-color: var(--t-primary);
+    box-shadow: 0 0 0 3px var(--t-orange-soft);
+}
+.t-input--error { border-color: var(--t-danger); }
+.t-input--error:focus { box-shadow: 0 0 0 3px var(--t-danger-soft); }
+.t-textarea { min-height: 120px; resize: vertical; }
+
+/* ─────────────────────────────────────────────────────────────
+   8. ALERTAS / TOASTS
+
+   Uso: <div class="t-alert t-alert--success">Pedido confirmado</div>
+        <div class="t-toast t-toast--error">Error al guardar</div>
+   ───────────────────────────────────────────────────────────── */
+.t-alert {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--t-space-3);
+    padding: var(--t-space-4) var(--t-space-5);
+    border-radius: var(--t-radius);
+    font-size: var(--t-text-sm);
+    font-weight: 600;
+    border-left: 4px solid currentColor;
+}
+.t-alert--success { background: var(--t-success-soft); color: #065f46; }
+.t-alert--danger  { background: var(--t-danger-soft);  color: #991b1b; }
+.t-alert--warning { background: var(--t-warning-soft); color: #92400e; }
+.t-alert--info    { background: var(--t-info-soft);    color: #1e40af; }
+
+.t-toast {
+    position: fixed;
+    bottom: calc(env(safe-area-inset-bottom) + var(--t-space-4));
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--t-ink);
+    color: #fff;
+    padding: var(--t-space-4) var(--t-space-6);
+    border-radius: var(--t-radius-lg);
+    font-size: var(--t-text-sm);
+    font-weight: 600;
+    white-space: nowrap;
+    box-shadow: var(--t-shadow-xl);
+    z-index: var(--t-z-toast);
+    opacity: 0;
+    transition: opacity var(--t-normal), transform var(--t-normal);
+    pointer-events: none;
+}
+.t-toast.is-visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+.t-toast--success { background: var(--t-success); }
+.t-toast--danger  { background: var(--t-danger); }
+
+/* ─────────────────────────────────────────────────────────────
+   9. EFECTOS Y ANIMACIONES
+   ───────────────────────────────────────────────────────────── */
+
+/* Reveal on scroll */
+.t-reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity .8s var(--t-ease), transform .8s var(--t-ease);
+}
+.t-reveal.is-in { opacity: 1; transform: none; }
+.t-reveal[data-delay="1"] { transition-delay: .1s; }
+.t-reveal[data-delay="2"] { transition-delay: .2s; }
+.t-reveal[data-delay="3"] { transition-delay: .3s; }
+.t-reveal[data-delay="4"] { transition-delay: .4s; }
+
+/* Shimmer (skeleton loading) */
+.t-shimmer {
+    background: linear-gradient(90deg, var(--t-line) 25%, var(--t-bg) 50%, var(--t-line) 75%);
+    background-size: 200% 100%;
+    animation: t-shimmer 1.5s infinite;
+    border-radius: var(--t-radius-sm);
+}
+@keyframes t-shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* Pulse (dot indicator GPS, notificaciones) */
+.t-pulse {
+    animation: t-pulse 2s ease-in-out infinite;
+}
+@keyframes t-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: .6; transform: scale(.94); }
+}
+
+/* Pulse ring (GPS activo) */
+.t-pulse-ring {
+    position: relative;
+}
+.t-pulse-ring::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 3px solid currentColor;
+    opacity: 0;
+    animation: t-ring 2s ease-out infinite;
+}
+@keyframes t-ring {
+    0%   { transform: scale(1); opacity: .6; }
+    100% { transform: scale(1.4); opacity: 0; }
+}
+
+/* Bob (flotar arriba/abajo) */
+.t-bob {
+    animation: t-bob 4s ease-in-out infinite;
+}
+@keyframes t-bob {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-10px); }
+}
+
+/* Spin */
+.t-spin { animation: t-spin .7s linear infinite; }
+
+/* Fade in */
+.t-fade-in { animation: t-fade-in .4s var(--t-ease) both; }
+@keyframes t-fade-in {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: none; }
+}
+
+/* Scale in */
+.t-scale-in { animation: t-scale-in .3s var(--t-ease) both; }
+@keyframes t-scale-in {
+    from { opacity: 0; transform: scale(.9); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   10. UTILIDADES
+   ───────────────────────────────────────────────────────────── */
+.t-hidden    { display: none !important; }
+.t-visible   { display: block !important; }
+.t-sr-only   { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; }
+.t-truncate  { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.t-center    { text-align: center; }
+.t-right     { text-align: right; }
+.t-muted     { color: var(--t-muted); }
+.t-primary   { color: var(--t-primary); }
+.t-teal      { color: var(--t-teal); }
+.t-success   { color: var(--t-success); }
+.t-danger    { color: var(--t-danger); }
+.t-bold      { font-weight: 700; }
+.t-semibold  { font-weight: 600; }
+.t-display   { font-family: var(--t-font-display); }
+.t-mono      { font-family: var(--t-font-mono); font-variant-numeric: tabular-nums; }
+.t-no-select { user-select: none; }
+.t-pointer   { cursor: pointer; }
+
+/* Separador */
+.t-divider   { height: 1px; background: var(--t-line); border: none; margin-block: var(--t-space-4); }
+.t-divider--dashed { background: none; border-top: 2px dashed var(--t-line); }
+
+/* Container */
+.t-container { width: 100%; max-width: 1180px; margin-inline: auto; padding-inline: clamp(1.25rem, 4vw, 2.5rem); }
+
+/* ─────────────────────────────────────────────────────────────
+   11. JS HELPERS (no estilos — solo documentación de uso)
+
+   Pega este bloque en cualquier layout que use tiempo-ui.css:
+
+   <script>
+   // Reveal on scroll
+   const tReveal = new IntersectionObserver(entries => {
+       entries.forEach(e => {
+           if (e.isIntersecting) { e.target.classList.add('is-in'); tReveal.unobserve(e.target); }
+       });
+   }, { threshold: .12 });
+   document.querySelectorAll('.t-reveal').forEach(el => tReveal.observe(el));
+
+   // Modales
+   function tModalOpen(id)  { document.getElementById(id)?.classList.add('is-open'); document.body.style.overflow = 'hidden'; }
+   function tModalClose(id) { document.getElementById(id)?.classList.remove('is-open'); document.body.style.overflow = ''; }
+   document.querySelectorAll('[data-modal-open]').forEach(btn  => btn.addEventListener('click',  () => tModalOpen(btn.dataset.modalOpen)));
+   document.querySelectorAll('[data-modal-close]').forEach(btn => btn.addEventListener('click', () => { const m = btn.closest('.t-overlay'); if (m) tModalClose(m.id); }));
+   document.querySelectorAll('.t-overlay').forEach(overlay => overlay.addEventListener('click', e => { if (e.target === overlay) tModalClose(overlay.id); }));
+
+   // Toast
+   function tToast(msg, type = '', duration = 3000) {
+       let el = document.getElementById('t-toast-global');
+       if (!el) { el = document.createElement('div'); el.id = 't-toast-global'; el.className = 't-toast'; document.body.appendChild(el); }
+       el.textContent = msg;
+       el.className = 't-toast' + (type ? ' t-toast--' + type : '');
+       el.classList.add('is-visible');
+       clearTimeout(el._timer);
+       el._timer = setTimeout(() => el.classList.remove('is-visible'), duration);
+   }
+   // Uso: tToast('Pedido guardado', 'success');
+   //      tToast('Error al procesar', 'danger');
+   </script>
+   ───────────────────────────────────────────────────────────── */
+
+/* ─────────────────────────────────────────────────────────────
+   12. ACCESIBILIDAD
+   ───────────────────────────────────────────────────────────── */
+:focus-visible {
+    outline: 3px solid var(--t-primary);
+    outline-offset: 3px;
+    border-radius: var(--t-radius-sm);
+}
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+    }
+    .t-reveal { opacity: 1; transform: none; }
+}

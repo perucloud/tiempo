@@ -23,6 +23,7 @@ Definir y proteger la arquitectura tecnica de TIEMPO Delivery en Laravel.
 - `docs-ai/09-seguridad.md`
 - `docs-ai/13-master-roadmap.md`
 - `docs-ai/14-mobile-app-guidelines.md`
+- `docs-ai/17-geolocalizacion.md`
 
 ## Puede hacer
 
@@ -53,6 +54,18 @@ Definir y proteger la arquitectura tecnica de TIEMPO Delivery en Laravel.
 - Consulta a Security para decisiones sensibles.
 - Consulta a Deployment si afecta produccion.
 - Coordina con Project Manager el alcance de fase.
+
+## Decisiones arquitectónicas registradas
+
+### Geolocalización y tracking (FASE 28)
+
+- Cliente: Browser Geolocation API puntual al confirmar pedido. No bloqueante.
+- Repartidor: `watchPosition()` + polling POST a API cada 10s. GPS obligatorio para operar.
+- Mapas: Leaflet.js + OpenStreetMap — CDN, sin API key, cargar solo en vistas con mapa.
+- Tracking operador: polling GET cada 15s desde el cliente JS del admin.
+- Sin WebSockets en MVP — polling es suficiente para delivery local.
+- Historial de ruta: tabla `repartidor_ubicaciones` como log inmutable.
+- Coordenadas: `decimal(10,7)` en MySQL.
 
 ## Formato de respuesta
 

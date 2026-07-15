@@ -1144,9 +1144,101 @@ Reglas adicionales:
 - No usar force push.
 - No versionar `.env`, `vendor`, `node_modules`, logs ni temporales.
 
+## FASE 27 - Mejoras UI/UX del Sistema
+
+Estado: ◐ En desarrollo
+
+Objetivo: Modernizar la interfaz del sistema existente — dashboard, landing, app móvil y módulos administrativos — elevando la calidad visual al nivel de un producto terminado.
+
+Descripcion: Iterar sobre las tres superficies del sistema (landing, dashboard admin y app móvil) para mejorar tipografía, iconografía, paleta de colores, jerarquía visual, componentes y experiencia operativa.
+
+Tareas completadas:
+
+- Sistema de diseño base definido: Inter + Bootstrap Icons 1.11.3 (CDN).
+- Dashboard `/admin` rediseñado: sidebar moderno con íconos reales, stat cards con gradientes de color, accesos rápidos reales (sin badges "Planificado"), layout de dos columnas.
+- CSS `admin.css` completo reescrito: nueva paleta, paneles con sombra, botones modernos, hover states, infraestructura de submenús flotantes.
+- Agentes UI Designer y Frontend actualizados con sistema de diseño activo.
+- Menú lateral reordenado: Pedidos, Pagos, Repartidores primero (flujo operativo).
+- Avatar de usuario en sidebar footer.
+
+Tareas pendientes:
+
+- Mejoras en landing page `/`.
+- Mejoras en app móvil `/app`.
+- Mejorar vistas de módulos admin (tables, forms, filters).
+- Agregar submenús flotantes al nav cuando se agrupen módulos.
+
+Dependencias:
+
+- FASE 22 (completada).
+
+## FASE 28 - Geolocalización y Tracking
+
+Estado: ☑ Finalizado
+
+Objetivo: Incorporar geolocalización del cliente al confirmar pedido y tracking GPS en tiempo real del repartidor durante el delivery.
+
+Dependencias:
+- FASE 15 (Pedidos).
+- FASE 17 (Repartidores).
+- FASE 27 (UI/UX base establecida).
+
+Criterios de finalizacion:
+- Cliente puede capturar y guardar su ubicación al pedir. ✅
+- Operador ve ubicación del cliente en el detalle del pedido. ✅
+- Repartidor no puede operar sin GPS activo. ✅
+- Operador ve posición de repartidores en mapa en tiempo real. ✅
+- Tests automatizados de endpoints pasando. ✅ (12 tests nuevos — 106 total)
+- Documentación actualizada. ✅
+
+Documento de referencia: `docs-ai/17-geolocalizacion.md`.
+
+Resumen de trabajo realizado:
+
+- 3 migraciones: geolocalización en `pedidos`, posición actual en `repartidores`, tabla log `repartidor_ubicaciones`.
+- Modelo `RepartidorUbicacion`, métodos helper `tieneGeolocalizacion()` y `tieneGpsActivo()`.
+- `GeolocationService`: 3 métodos — guardar ubicación cliente, actualizar posición repartidor, repartidores activos.
+- `GeolocationController` API con 4 endpoints: guardar ubicación cliente, actualizar posición repartidor, posición individual, todos activos.
+- `OrderCreator` actualizado para aceptar coordenadas opcionales del cliente.
+- JS `geolocalizacion-cliente.js`: captura puntual al confirmar pedido, no bloqueante.
+- JS `tracking-repartidor.js`: `watchPosition()` + POST cada 10s, estados visuales, cleanup en `beforeunload`.
+- JS `mapa-admin.js`: mapa Leaflet, markers por color/estado, polling cada 15s, sidebar click → centrar mapa.
+- Vista `admin/orders/edit` con mapa del cliente (condicional si tiene GPS).
+- Vista `admin/couriers/tracking` con mapa de todos los repartidores activos + sidebar.
+- Botón "Tracking en vivo" en lista de repartidores.
+- 12 tests automatizados: API cliente y repartidor, acceso por roles, modelos, endpoint JSON admin.
+
+## FASE 29 - Interfaz del repartidor (turno GPS)
+
+Estado: ☑ Finalizado
+
+Objetivo: Crear la interfaz móvil que el repartidor abre en su celular para activar su turno y que el sistema capture su GPS.
+
+Descripcion: El repartidor necesitaba una página web optimizada para su teléfono con los controles de turno: iniciar, GPS activo, posición actual y terminar. Esta interfaz carga el JS de tracking ya existente y provee el UX móvil adecuado para ser usado en campo.
+
+Dependencias:
+- FASE 28 (tracking-repartidor.js ya implementado).
+
+Criterios de finalizacion:
+- El repartidor puede abrir la URL en su celular sin instalar nada. ✅
+- El sistema bloquea repartidores inactivos. ✅
+- Indicador visual animado de GPS (idle/loading/activo/error). ✅
+- Operador puede copiar la URL del repartidor desde el admin. ✅
+
+Resumen de trabajo realizado:
+
+- Layout `resources/views/layouts/courier.blade.php` — mobile-first, dark theme, sin nav de admin.
+- CSS dedicado `public/css/courier.css` — indicador GPS animado, estados de badge, botones grandes para táctil.
+- Vista `resources/views/courier/turno.blade.php` — card de identidad del repartidor, panel GPS, botones iniciar/terminar, instrucciones.
+- Controlador `app/Http/Controllers/Courier/ShiftController.php` — bloquea inactivos con 403.
+- Ruta `GET /repartidor/{repartidor}/turno` en `routes/courier.php`.
+- Enlace "GPS" añadido en lista de repartidores del admin para que operador comparta la URL.
+- Agente `landing.md` creado para futuras mejoras de landing page.
+
 ## Estado de siguiente fase propuesta
 
-Siguiente fase sugerida: FASE 23 - APK Android.
-
-Antes de iniciar FASE 23, el agente debe proponer plan para configurar Capacitor, validar permisos Android, iconos, splash screen y generar una APK de prueba que cargue exclusivamente `/app`.
+Fases activas:
+- FASE 27 (mejoras UI/UX): continúa — landing page pendiente, mejoras de módulos admin.
+- FASE 23 (APK Android): postergada hasta autorización del usuario.
+- FASE 25 (Producción): pendiente.
 

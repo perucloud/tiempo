@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pollería El Bracero — Tiempo Delivery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FFF9F2;--surface:#fff;--ink:#27211B;--muted:#7C6F63;
+  --primary:#FF5A1F;--primary-deep:#E64812;--primary-soft:#FFE9DE;
+  --accent:#FFC53D;--accent-soft:#FFF3D6;
+  --drink:#00B3A4;--drink-deep:#00958A;--drink-soft:#DDF6F3;
+  --line:#F0E4D8;--radius:22px;
+  --shadow-soft:0 14px 34px -18px rgba(39,33,27,.25);
+  --display:'Fredoka',sans-serif;--body:'Nunito',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.6;-webkit-font-smoothing:antialiased;padding-bottom:90px}
+a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer;border:none;background:none}
+h1,h2,h3{font-family:var(--display);font-weight:600;line-height:1.15}
+.container{max-width:900px;margin-inline:auto;padding-inline:clamp(1.25rem,4vw,2.5rem)}
+
+header{position:sticky;top:0;z-index:80;background:rgba(255,249,242,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;padding-block:.9rem}
+.logo{display:flex;align-items:center;gap:.55rem;font-family:var(--display);font-weight:700;font-size:1.25rem}
+.logo b{color:var(--primary)}
+.clock{width:34px;height:34px;border-radius:50%;background:var(--primary);position:relative;flex:0 0 auto}
+.clock::before{content:"";position:absolute;left:50%;bottom:50%;width:3px;height:10px;background:#fff;border-radius:99px;transform-origin:bottom center;transform:translateX(-50%) rotate(40deg);animation:tick 6s linear infinite}
+@keyframes tick{to{transform:translateX(-50%) rotate(400deg)}}
+.back{font-weight:800;font-size:.9rem;color:var(--muted)}
+.back:hover{color:var(--primary)}
+
+.hero-rest{position:relative;height:210px;background:linear-gradient(140deg,#FFE1CC,#FFC9A8);display:flex;align-items:center;justify-content:center;font-size:5.5rem;overflow:hidden}
+.hero-rest::after{content:"";position:absolute;inset:0;background:radial-gradient(400px 200px at 30% 0%,rgba(255,255,255,.5),transparent 60%)}
+.rest-info{background:var(--surface);border:1.5px solid var(--line);border-radius:var(--radius);padding:1.4rem 1.5rem;margin-top:-3.25rem;position:relative;z-index:2;box-shadow:var(--shadow-soft)}
+.rest-info .row{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap}
+.rest-info h1{font-size:clamp(1.5rem,4vw,2rem)}
+.rating{font-weight:800;font-size:.85rem;color:#E8A500;background:var(--accent-soft);border-radius:10px;padding:.3rem .7rem;white-space:nowrap}
+.rest-meta{display:flex;gap:1.1rem;flex-wrap:wrap;color:var(--muted);font-weight:700;font-size:.88rem;margin-top:.5rem}
+.rest-meta .ok{color:var(--drink-deep)}
+
+.tabs{display:flex;gap:.6rem;overflow-x:auto;padding-block:1.4rem .4rem;scrollbar-width:none;position:sticky;top:63px;background:var(--bg);z-index:40}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;padding:.55rem 1.2rem;border-radius:999px;background:var(--surface);border:1.5px solid var(--line);font-family:var(--display);font-weight:600;font-size:.9rem;color:var(--muted);min-height:44px}
+.tab.on{background:var(--ink);border-color:var(--ink);color:#fff}
+
+.menu-sec{padding-top:1.4rem}
+.menu-sec h2{font-size:1.3rem;margin-bottom:.9rem;display:flex;align-items:center;gap:.5rem}
+.dish{display:flex;gap:1rem;background:var(--surface);border:1.5px solid var(--line);border-radius:var(--radius);padding:1rem;margin-bottom:.9rem;transition:transform .25s,box-shadow .25s}
+.dish:hover{transform:translateY(-4px);box-shadow:var(--shadow-soft)}
+.dish-img{width:76px;height:76px;flex:0 0 auto;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:2.1rem}
+.dish-body{flex:1;min-width:0}
+.dish-body h3{font-size:1.02rem}
+.dish-body p{color:var(--muted);font-size:.84rem;font-weight:600;margin-top:.15rem}
+.dish-foot{display:flex;justify-content:space-between;align-items:center;margin-top:.55rem}
+.price{font-family:var(--display);font-weight:700;color:var(--primary);font-size:1.05rem}
+.add{background:var(--primary-soft);color:var(--primary-deep);font-weight:800;border-radius:999px;padding:.5rem 1rem;font-size:.85rem;transition:all .2s;min-height:40px}
+.add:hover{background:var(--primary);color:#fff}
+.qty{display:none;align-items:center;gap:.7rem;background:var(--ink);color:#fff;border-radius:999px;padding:.35rem .5rem}
+.qty button{color:#fff;width:30px;height:30px;border-radius:50%;font-weight:800;font-size:1rem}
+.qty button:hover{background:rgba(255,255,255,.15)}
+.qty b{min-width:16px;text-align:center;font-size:.95rem}
+.dish.picked .add{display:none}
+.dish.picked .qty{display:flex}
+
+.cart-bar{position:fixed;left:0;right:0;bottom:0;z-index:90;padding:.85rem clamp(1.25rem,4vw,2.5rem);background:rgba(255,249,242,.95);backdrop-filter:blur(10px);border-top:1.5px solid var(--line);transform:translateY(110%);transition:transform .35s cubic-bezier(.2,.7,.3,1)}
+.cart-bar.show{transform:none}
+.cart-btn{width:100%;max-width:900px;margin-inline:auto;display:flex;justify-content:space-between;align-items:center;background:var(--primary);color:#fff;border-radius:999px;padding:1rem 1.5rem;font-family:var(--display);font-weight:600;font-size:1.05rem;box-shadow:0 18px 36px -14px rgba(255,90,31,.55);transition:transform .2s}
+.cart-btn:hover{transform:translateY(-2px)}
+.cart-btn .count{background:rgba(255,255,255,.25);border-radius:999px;padding:.2rem .8rem;font-size:.9rem}
+
+/* modal seguimiento */
+.overlay{position:fixed;inset:0;background:rgba(39,33,27,.55);z-index:100;display:none;align-items:flex-end;justify-content:center}
+.overlay.open{display:flex}
+.sheet{background:var(--bg);width:100%;max-width:520px;border-radius:28px 28px 0 0;padding:1.75rem;animation:up .4s cubic-bezier(.2,.7,.3,1)}
+@keyframes up{from{transform:translateY(60px);opacity:0}}
+.sheet h2{font-size:1.4rem}
+.sheet .eta{font-family:var(--display);font-weight:700;font-size:3rem;color:var(--primary);line-height:1;margin-top:.4rem}
+.tsteps{margin-top:1.4rem;display:flex;flex-direction:column}
+.tstep{display:flex;gap:.9rem;position:relative;padding-bottom:1.25rem}
+.tstep::before{content:"";position:absolute;left:9px;top:24px;bottom:0;width:2px;background:var(--line)}
+.tstep:last-child{padding-bottom:0}
+.tstep:last-child::before{display:none}
+.tstep i{width:20px;height:20px;border-radius:50%;flex:0 0 auto;border:2.5px solid var(--line);background:var(--surface);margin-top:2px}
+.tstep.done i{background:var(--drink);border-color:var(--drink)}
+.tstep.active i{background:var(--accent);border-color:var(--accent);animation:pulse 1.5s ease-in-out infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 8px rgba(255,197,61,.25)}}
+.tstep div{font-weight:700;font-size:.92rem}
+.tstep small{display:block;color:var(--muted);font-weight:600}
+.close-sheet{margin-top:1.5rem;width:100%;background:var(--ink);color:#fff;border-radius:999px;padding:1rem;font-family:var(--display);font-weight:600;min-height:48px}
+@media(min-width:640px){.overlay{align-items:center}.sheet{border-radius:28px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="nav container" style="max-width:900px">
+    <a class="back" href="restaurantes.html">← Restaurantes</a>
+    <a class="logo" href="index.html"><span class="clock" aria-hidden="true"></span>tiempo<b>delivery</b></a>
+  </nav>
+</header>
+
+<div class="hero-rest">🍗</div>
+
+<main class="container">
+  <div class="rest-info">
+    <div class="row">
+      <div>
+        <h1>Pollería El Bracero</h1>
+        <div class="rest-meta">
+          <span>⏱ 25–35 min</span>
+          <span>🛵 Envío S/ 3.00</span>
+          <span class="ok">● Abierto ahora</span>
+        </div>
+      </div>
+      <span class="rating">★ 4.8 (210+)</span>
+    </div>
+  </div>
+
+  <div class="tabs" id="tabs">
+    <button class="tab on" data-t="brasa">🍗 A la brasa</button>
+    <button class="tab" data-t="broaster">🍟 Broaster y piqueos</button>
+    <button class="tab" data-t="bebidas">🥤 Bebidas</button>
+  </div>
+
+  <section class="menu-sec" data-sec="brasa">
+    <h2>🍗 A la brasa</h2>
+    <div class="dish" data-name="1 Pollo entero a la brasa" data-price="58">
+      <div class="dish-img" style="background:var(--primary-soft)">🍗</div>
+      <div class="dish-body">
+        <h3>1 Pollo entero a la brasa</h3>
+        <p>Con papas fritas familiares, ensalada fresca y cremas de la casa.</p>
+        <div class="dish-foot"><span class="price">S/ 58.00</span>
+          <button class="add">+ Agregar</button>
+          <div class="qty"><button class="minus" aria-label="Quitar uno">−</button><b>1</b><button class="plus" aria-label="Agregar uno">+</button></div>
+        </div>
+      </div>
+    </div>
+    <div class="dish" data-name="1/2 Pollo a la brasa" data-price="32">
+      <div class="dish-img" style="background:var(--primary-soft)">🍗</div>
+      <div class="dish-body">
+        <h3>1/2 Pollo a la brasa</h3>
+        <p>Con papas, ensalada y cremas. Ideal para dos.</p>
+        <div class="dish-foot"><span class="price">S/ 32.00</span>
+          <button class="add">+ Agregar</button>
+          <div class="qty"><button class="minus" aria-label="Quitar uno">−</button><b>1</b><button class="plus" aria-label="Agregar uno">+</button></div>
+        </div>
+      </div>
+    </div>
+    <div class="dish" data-name="1/4 Pollo a la brasa" data-price="18">
+      <div class="dish-img" style="background:var(--primary-soft)">🍗</div>
+      <div class="dish-body">
+        <h3>1/4 Pollo a la brasa</h3>
+        <p>Con papas, ensalada y cremas. El clásico personal.</p>
+        <div class="dish-foot"><span class="price">S/ 18.00</span>
+          <button class="add">+ Agregar</button>
+          <div class="qty"><button class="minus" aria-label="Quitar uno">−</button><b>1</b><button class="plus" aria-label="Agregar uno">+</button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="menu-sec" data-sec="broaster" hidden>
+    <h2>🍟 Broaster y piqueos</h2>
+    <div class="dish" data-name="Combo broaster personal" data-price="15">
+      <div class="dish-img" style="background:var(--accent-soft)">🍟</div>
+      <div class="dish-body">
+        <h3>Combo broaster personal</h3>
+        <p>2 presas broaster, papas y gaseosa personal.</p>
+        <div class="dish-foot"><span class="price">S/ 15.00</span>
+          <button class="add">+ Agregar</button>
+          <div class="qty"><button class="minus" aria-label="Quitar uno">−</button><b>1</b><button class="plus" aria-label="Agregar uno">+</button></div>
+        </div>
+      </div>
+    </div>
+    <div class="dish" data-name="Salchipapa especial" data-price="12">
+      <div class="dish-img" style="background:var(--accent-soft)">🌭</div>
+      <div class="dish-body">
+        <h3>Salchipapa especial</h3>
+        <p>Doble porción con huevo frito y queso.</p>
+        <div class="dish-foot"><span class="price">S/ 12.00</span>
+          <button class="add">+ Agregar</button>
+          <div class="qty"><button class="minus" aria-label="Quitar uno">−</button><b>1</b><button class="plus" aria-label="Agregar uno">+</button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="menu-sec" data-sec="bebidas" hidden>
+    <h2>🥤 Bebidas</h2>
+    <div class="dish" data-name="Chicha morada 1L" data-price="8">
+      <div class="dish-img" style="background:var(--drink-soft)">🧃</div>
+      <div class="dish-body">
+        <h3>Chicha morada 1L</h3>
+        <p>Preparada del día, bien helada.</p>
+        <div class="dish-foot"><span class="price">S/ 8.00</span>
+          <button class="add">+ Agregar</button>
+          <div class="qty"><button class="minus" aria-label="Quitar uno">−</button><b>1</b><button class="plus" aria-label="Agregar uno">+</button></div>
+        </div>
+      </div>
+    </div>
+    <div class="dish" data-name="Gaseosa 1.5L" data-price="9">
+      <div class="dish-img" style="background:var(--drink-soft)">🥤</div>
+      <div class="dish-body">
+        <h3>Gaseosa 1.5L</h3>
+        <p>Elige el sabor al confirmar tu pedido.</p>
+        <div class="dish-foot"><span class="price">S/ 9.00</span>
+          <button class="add">+ Agregar</button>
+          <div class="qty"><button class="minus" aria-label="Quitar uno">−</button><b>1</b><button class="plus" aria-label="Agregar uno">+</button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="cart-bar" id="cartBar">
+  <button class="cart-btn" id="checkout">
+    <span class="count" id="cartCount">0 items</span>
+    <span>Hacer pedido 🛵</span>
+    <span id="cartTotal">S/ 0.00</span>
+  </button>
+</div>
+
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+  <div class="sheet">
+    <h2 id="sheetTitle">🎉 ¡Pedido confirmado!</h2>
+    <p style="color:var(--muted);font-weight:700;font-size:.9rem;margin-top:.2rem">Pedido #TD-1043 · Pollería El Bracero</p>
+    <div class="eta" id="sheetEta">28:00</div>
+    <div class="tsteps">
+      <div class="tstep done"><i></i><div>Pedido confirmado<small>El restaurante recibió tu orden</small></div></div>
+      <div class="tstep active"><i></i><div>Preparando tu pedido<small>En cocina ahora mismo</small></div></div>
+      <div class="tstep"><i></i><div>Repartidor en camino<small>Podrás verlo en el mapa</small></div></div>
+      <div class="tstep"><i></i><div>Entregado<small>¡Buen provecho!</small></div></div>
+    </div>
+    <button class="close-sheet" id="closeSheet">Seguir mirando la carta</button>
+  </div>
+</div>
+
+<script>
+/* Tabs */
+const tabs = document.querySelectorAll('.tab');
+const secs = document.querySelectorAll('.menu-sec');
+tabs.forEach(t => t.onclick = () => {
+  tabs.forEach(x => x.classList.remove('on'));
+  t.classList.add('on');
+  secs.forEach(s => s.hidden = s.dataset.sec !== t.dataset.t);
+});
+
+/* Carrito */
+const cart = {};
+const bar = document.getElementById('cartBar');
+const countEl = document.getElementById('cartCount');
+const totalEl = document.getElementById('cartTotal');
+
+function refresh(){
+  let n = 0, total = 0;
+  for (const k in cart){ n += cart[k].q; total += cart[k].q * cart[k].p; }
+  countEl.textContent = n + (n === 1 ? ' item' : ' items');
+  totalEl.textContent = 'S/ ' + total.toFixed(2);
+  bar.classList.toggle('show', n > 0);
+}
+
+document.querySelectorAll('.dish').forEach(d => {
+  const name = d.dataset.name, price = +d.dataset.price;
+  const qtyB = d.querySelector('.qty b');
+  d.querySelector('.add').onclick = () => {
+    cart[name] = {q:1, p:price}; qtyB.textContent = 1;
+    d.classList.add('picked'); refresh();
+  };
+  d.querySelector('.plus').onclick = () => {
+    cart[name].q++; qtyB.textContent = cart[name].q; refresh();
+  };
+  d.querySelector('.minus').onclick = () => {
+    cart[name].q--;
+    if (cart[name].q <= 0){ delete cart[name]; d.classList.remove('picked'); }
+    else qtyB.textContent = cart[name].q;
+    refresh();
+  };
+});
+
+/* Checkout → seguimiento simulado */
+const overlay = document.getElementById('overlay');
+let etaTimer = null;
+document.getElementById('checkout').onclick = () => {
+  overlay.classList.add('open');
+  let s = 28 * 60;
+  const el = document.getElementById('sheetEta');
+  clearInterval(etaTimer);
+  etaTimer = setInterval(() => {
+    if (s <= 0) return clearInterval(etaTimer);
+    s--;
+    el.textContent = String(Math.floor(s/60)).padStart(2,'0') + ':' + String(s%60).padStart(2,'0');
+  }, 1000);
+};
+document.getElementById('closeSheet').onclick = () => overlay.classList.remove('open');
+overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('open'); });
+</script>
+</body>
+</html>

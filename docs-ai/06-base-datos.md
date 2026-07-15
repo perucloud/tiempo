@@ -59,6 +59,19 @@ Ejemplos:
 - `pagos`
 - `pedido_estados`
 
+## Tablas de geolocalización
+
+- `repartidor_ubicaciones` — log de posiciones GPS del repartidor durante el turno.
+
+Campos de geolocalización en tablas existentes:
+
+- `pedidos`: `latitud_cliente`, `longitud_cliente`, `geolocalizacion_at` (nullable).
+- `repartidores`: `latitud_actual`, `longitud_actual`, `ubicacion_actualizada_at` (nullable).
+
+Coordenadas: `decimal(10,7)` — 7 decimales dan precisión de ~1cm, suficiente para delivery urbano.
+
+Ver especificación completa en `docs-ai/17-geolocalizacion.md`.
+
 ## Modelo multi-rol
 
 Reglas:

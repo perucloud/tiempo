@@ -11,7 +11,12 @@
                 <h2>Equipo de reparto</h2>
                 <p>TIEMPO gestiona la disponibilidad y asignacion de repartidores. Los negocios afiliados no acceden a este modulo.</p>
             </div>
-            <a class="admin-button admin-button-dark" href="{{ route('admin.couriers.create') }}">Nuevo repartidor</a>
+            <div class="admin-filter-actions">
+                <a class="admin-button" href="{{ route('admin.couriers.tracking') }}">
+                    <i class="bi bi-map"></i> Tracking en vivo
+                </a>
+                <a class="admin-button admin-button-dark" href="{{ route('admin.couriers.create') }}">Nuevo repartidor</a>
+            </div>
         </div>
 
         @if (session('status'))
@@ -70,6 +75,9 @@
                             <td>
                                 <div class="admin-row-actions">
                                     <a class="admin-link" href="{{ route('admin.couriers.edit', $courier) }}">Editar</a>
+                                    @if ($courier->estado !== 'inactivo')
+                                        <a class="admin-link" href="{{ route('courier.turno', $courier) }}" target="_blank" title="URL para el celular del repartidor">GPS</a>
+                                    @endif
                                     <form method="POST" action="{{ route('admin.couriers.destroy', $courier) }}">
                                         @csrf
                                         @method('DELETE')

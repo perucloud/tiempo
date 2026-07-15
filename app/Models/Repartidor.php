@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+
+
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Repartidor extends Model
@@ -35,7 +37,19 @@ class Repartidor extends Model
         'vehiculo_tipo',
         'vehiculo_placa',
         'estado',
+        'latitud_actual',
+        'longitud_actual',
+        'ubicacion_actualizada_at',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'latitud_actual'          => 'decimal:7',
+            'longitud_actual'         => 'decimal:7',
+            'ubicacion_actualizada_at' => 'datetime',
+        ];
+    }
 
     public function user(): BelongsTo
     {
@@ -45,6 +59,20 @@ class Repartidor extends Model
     public function pedidos(): HasMany
     {
         return $this->hasMany(Pedido::class);
+    }
+
+    public function ubicaciones(): HasMany
+    {
+        return $this->hasMany(RepartidorUbicacion::class);
+    }
+
+    public function tieneGpsActivo(): bool
+    {
+        if ($this->ubicacion_actualizada_at === null) {
+            return false;
+        }
+
+        return $this->ubicacion_actualizada_at->diffInMinutes(now()) <= 2;
     }
 
     public static function estadoOptions(): array

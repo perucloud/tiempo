@@ -6,9 +6,10 @@
 2. Selecciona negocio afiliado.
 3. Agrega productos.
 4. Confirma direccion.
-5. Sube voucher si aplica.
-6. Crea pedido.
-7. Consulta estado.
+5. **Activa geolocalización** (opcional pero recomendado) — el sistema solicita permiso GPS y guarda coordenadas en el pedido.
+6. Sube voucher si aplica.
+7. Crea pedido.
+8. Consulta estado.
 
 ## Flujo del operador/dashboard
 
@@ -17,17 +18,22 @@
 3. Verifica pago.
 4. Confirma o rechaza pedido.
 5. Asigna repartidor.
-6. Supervisa estados.
-7. Atiende incidencias.
+6. **Hace seguimiento (tracking)** — ve en mapa la posición del repartidor en tiempo real y la ubicación del cliente en el detalle del pedido.
+7. Supervisa estados.
+8. Atiende incidencias.
 
 ## Flujo del repartidor
 
-1. Queda disponible.
-2. Recibe asignacion.
-3. Recoge pedido.
-4. Marca pedido en camino.
-5. Entrega pedido.
-6. Reporta incidencia si aplica.
+1. **Activa turno** — el sistema fuerza activación de GPS; sin GPS no puede operar.
+2. Queda disponible con tracking activo.
+3. Recibe asignación.
+4. Recoge pedido.
+5. Marca pedido en camino — el operador ve su posición en tiempo real.
+6. Entrega pedido.
+7. Reporta incidencia si aplica.
+8. **Termina turno** — el tracking de GPS se detiene.
+
+El tracking envía posición al sistema cada 10 segundos durante el turno activo.
 
 ## Flujo de negocios afiliados
 
