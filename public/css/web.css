@@ -286,29 +286,7 @@ footer { background: var(--ink); color: rgba(255,249,242,.7); padding-block: 3re
     .footer-bottom { flex-direction: row; justify-content: space-between; }
 }
 
-/* ── Pizza cursor ─────────────────────────────────────────── */
-@media (pointer: fine) {
-    body.has-pizza-cursor { cursor: none !important; }
-    body.has-pizza-cursor a,
-    body.has-pizza-cursor button,
-    body.has-pizza-cursor [role="button"],
-    body.has-pizza-cursor input,
-    body.has-pizza-cursor select,
-    body.has-pizza-cursor textarea { cursor: none !important; }
-}
-#pizzaCursor {
-    position: fixed; top: 0; left: 0; width: 44px; height: 44px;
-    pointer-events: none; z-index: 99999;
-    transform: translate(-999px, -999px);
-    will-change: transform; display: none;
-}
-#pizzaCursor img { width: 100%; height: 100%; object-fit: contain; display: block; transform: rotate(35deg); }
-
-@media (pointer: fine) { #pizzaCursor { display: block; } }
-
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; }
     .reveal { opacity: 1; transform: none; }
-    #pizzaCursor { display: none !important; }
-    body.has-pizza-cursor { cursor: auto !important; }
 }

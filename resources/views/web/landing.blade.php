@@ -29,10 +29,6 @@
   </div>
 </header>
 
-<div id="pizzaCursor" aria-hidden="true">
-  <img src="{{ asset('images/ico/pizza-ico.png') }}" alt="" draggable="false">
-</div>
-
 <main id="inicio">
 
   {{-- HERO --}}
@@ -530,5 +526,4 @@ setInterval(() => {
 }, 1000);
 
 </script>
-<script src="{{ asset('js/cursor-pizza.js') }}" defer></script>
 @endpush
