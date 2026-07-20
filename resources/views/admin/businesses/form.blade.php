@@ -5,7 +5,7 @@
 @section('page-title', $business->exists ? 'Editar negocio afiliado' : 'Nuevo negocio afiliado')
 
 @push('styles')
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<link rel="stylesheet" href="{{ asset('vendor/leaflet/leaflet.min.css') }}">
 @endpush
 
 @section('content')
@@ -393,7 +393,7 @@
 @endsection
 
 @push('scripts')
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV/XN/WPeE=" crossorigin=""></script>
+<script src="{{ asset('vendor/leaflet/leaflet.min.js') }}"></script>
 <script>
 (function () {
     /* ─── Wizard navigation ──────────────────────────────── */
@@ -418,7 +418,12 @@
         btnSub.classList.toggle('wizard-hidden',  n !== TOTAL);
         current = n;
         window.scrollTo({ top: 0, behavior: 'smooth' });
-        if (n === 3) setTimeout(initMap, 80);
+        if (n === 3) {
+            /* Esperar a que el panel sea visible antes de init */
+            requestAnimationFrame(() => requestAnimationFrame(() => {
+                setTimeout(initMap, 100);
+            }));
+        }
     }
 
     btnNext.addEventListener('click', () => show(current + 1));
@@ -461,35 +466,72 @@
     let mapMarker = null;
     let mapReady  = false;
 
-    // Valores iniciales (editing con coords existentes)
     const initLat = parseFloat(document.getElementById('latitud')?.value);
     const initLng = parseFloat(document.getElementById('longitud')?.value);
 
+    /* Fijar rutas de iconos (evita autodetección que falla en local) */
+    function fixLeafletIcons() {
+        delete L.Icon.Default.prototype._getIconUrl;
+        L.Icon.Default.mergeOptions({
+            iconUrl:       '{{ asset("vendor/leaflet/images/marker-icon.png") }}',
+            iconRetinaUrl: '{{ asset("vendor/leaflet/images/marker-icon-2x.png") }}',
+            shadowUrl:     '{{ asset("vendor/leaflet/images/marker-shadow.png") }}',
+        });
+    }
+
+    function showMapError(msg) {
+        const el = document.getElementById('mapa-negocio');
+        if (el) {
+            el.style.cssText = 'display:flex;align-items:center;justify-content:center;background:#fef2f2;border:1px solid #fca5a5;border-radius:10px;height:420px;';
+            el.innerHTML = '<div style="text-align:center;color:#dc2626;font-weight:600;padding:2rem">'
+                + '<i class="bi bi-exclamation-triangle" style="font-size:2rem;display:block;margin-bottom:.5rem"></i>'
+                + msg + '</div>';
+        }
+    }
+
     function initMap() {
-        if (mapReady) { mapObj.invalidateSize(); return; }
-
-        const center  = (!isNaN(initLat) && !isNaN(initLng)) ? [initLat, initLng] : [-9.19, -75.01];
-        const zoom    = (!isNaN(initLat) && !isNaN(initLng)) ? 16 : 6;
-
-        mapObj = L.map('mapa-negocio').setView(center, zoom);
-
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© <a href="https://openstreetmap.org">OpenStreetMap</a>',
-            maxZoom: 19,
-        }).addTo(mapObj);
-
-        // Marcador inicial si hay coords
-        if (!isNaN(initLat) && !isNaN(initLng)) {
-            placeMarker(initLat, initLng);
+        if (mapReady) {
+            mapObj.invalidateSize();
+            return;
         }
 
-        // Click en mapa → colocar/mover marcador
-        mapObj.on('click', e => placeMarker(e.latlng.lat, e.latlng.lng));
+        if (typeof L === 'undefined') {
+            showMapError('No se pudo cargar el mapa.<br>Recarga la página.');
+            return;
+        }
 
-        mapReady = true;
+        try {
+            fixLeafletIcons();
+
+            const hasCoords = !isNaN(initLat) && !isNaN(initLng);
+            const center    = hasCoords ? [initLat, initLng] : [-9.19, -75.01];
+            const zoom      = hasCoords ? 16 : 6;
+
+            mapObj = L.map('mapa-negocio', { zoomControl: true }).setView(center, zoom);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>',
+                maxZoom: 19,
+            }).addTo(mapObj);
+
+            if (hasCoords) {
+                placeMarker(initLat, initLng);
+            }
+
+            mapObj.on('click', e => placeMarker(e.latlng.lat, e.latlng.lng));
+
+            mapReady = true;
+
+            /* Segundo invalidate por si el panel aún estaba transitando */
+            setTimeout(() => mapObj.invalidateSize(), 300);
+
+        } catch (err) {
+            showMapError('Error al inicializar el mapa.<br><small>' + err.message + '</small>');
+        }
     }
 
     function placeMarker(lat, lng) {
+        if (!mapObj) return;
         if (mapMarker) {
             mapMarker.setLatLng([lat, lng]);
         } else {
@@ -503,18 +545,23 @@
     }
 
     function fillCoords(lat, lng) {
-        document.getElementById('latitud').value  = lat.toFixed(8);
-        document.getElementById('longitud').value = lng.toFixed(8);
+        const elLat = document.getElementById('latitud');
+        const elLng = document.getElementById('longitud');
+        if (elLat) elLat.value = lat.toFixed(8);
+        if (elLng) elLng.value = lng.toFixed(8);
     }
 
-    // Inputs manuales → mover marcador en el mapa
+    /* Inputs manuales → mover marcador */
     ['latitud', 'longitud'].forEach(id => {
         document.getElementById(id)?.addEventListener('change', () => {
             const lat = parseFloat(document.getElementById('latitud').value);
             const lng = parseFloat(document.getElementById('longitud').value);
-            if (!isNaN(lat) && !isNaN(lng) && mapReady) {
-                placeMarker(lat, lng);
-                mapObj.setView([lat, lng], 16);
+            if (!isNaN(lat) && !isNaN(lng)) {
+                if (!mapReady) initMap();
+                else {
+                    placeMarker(lat, lng);
+                    mapObj.setView([lat, lng], 16);
+                }
             }
         });
     });
@@ -524,7 +571,7 @@
         if (!query.trim()) return;
         const btn = document.getElementById('btnMapSearch');
         btn.disabled = true;
-        btn.textContent = 'Buscando…';
+        btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Buscando…';
         try {
             const url = 'https://nominatim.openstreetmap.org/search?'
                 + new URLSearchParams({ q: query, format: 'json', limit: 1, countrycodes: 'pe' });
@@ -533,14 +580,22 @@
             if (data.length > 0) {
                 const lat = parseFloat(data[0].lat);
                 const lng = parseFloat(data[0].lon);
-                if (!mapReady) initMap();
-                placeMarker(lat, lng);
-                mapObj.setView([lat, lng], 17);
+                if (!mapReady) {
+                    initMap();
+                    /* Esperar init antes de mover */
+                    setTimeout(() => {
+                        placeMarker(lat, lng);
+                        mapObj?.setView([lat, lng], 17);
+                    }, 400);
+                } else {
+                    placeMarker(lat, lng);
+                    mapObj.setView([lat, lng], 17);
+                }
             } else {
-                alert('No se encontró esa dirección. Intenta ser más específico.');
+                alert('No se encontró esa dirección. Intenta con: "Av. Larco 500, Miraflores, Lima"');
             }
-        } catch {
-            alert('Error al buscar. Verifica tu conexión a internet.');
+        } catch (err) {
+            alert('Error al buscar dirección: ' + err.message);
         } finally {
             btn.disabled = false;
             btn.innerHTML = '<i class="bi bi-search"></i> Buscar';
