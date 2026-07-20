@@ -513,6 +513,51 @@ input {
     background: currentColor;
 }
 
+/* ── Carta / Business page ────────────────────────────────── */
+.carta-header {
+    position: relative; min-height: 220px; overflow: hidden;
+    background: var(--brand, #CC3D00);
+}
+.carta-header-img {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; object-position: center;
+}
+.carta-header-overlay {
+    position: relative; z-index: 1; min-height: 220px;
+    background: linear-gradient(160deg, rgba(0,0,0,.08) 0%, var(--brand, #CC3D00) 55%);
+    display: flex; flex-direction: column; justify-content: flex-end; padding: 1rem;
+}
+.carta-back {
+    position: absolute; top: 1rem; left: 1rem;
+    width: 36px; height: 36px; border-radius: 50%;
+    background: rgba(255,255,255,.18); backdrop-filter: blur(8px);
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; text-decoration: none;
+}
+.carta-header-body { color: #fff; }
+.carta-tipo { font-size: .7rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; opacity: .8; }
+.carta-header-body h1 { font-size: 1.6rem; font-weight: 800; margin: .2rem 0 .3rem; line-height: 1.15; }
+.carta-slogan { font-size: .85rem; opacity: .85; margin: 0 0 .5rem; }
+.carta-meta { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; font-size: .75rem; font-weight: 700; opacity: .92; }
+.status-badge.closed { background: #fee2e2; color: #991b1b; }
+
+.product-card-img { width: 64px; height: 64px; border-radius: 10px; object-fit: cover; flex-shrink: 0; }
+.product-card-initial {
+    width: 64px; height: 64px; border-radius: 10px; flex-shrink: 0;
+    display: grid; place-items: center; color: #fff; font-size: 1.4rem; font-weight: 800;
+}
+.product-card-info { flex: 1; }
+.product-card-info h3 { margin: 0 0 .2rem; font-size: .95rem; }
+.product-card-info p  { font-size: .78rem; color: var(--app-muted); margin: 0 0 .3rem; }
+.product-card-info strong { color: var(--app-accent); font-size: 1rem; }
+
+.carta-empty {
+    text-align: center; padding: 3rem 1rem; color: var(--app-muted);
+    display: flex; flex-direction: column; align-items: center; gap: .75rem;
+}
+.carta-empty span { font-size: 2.5rem; }
+.carta-empty p { font-weight: 600; }
+
 @media (min-width: 720px) {
     body {
         padding: 24px 0;

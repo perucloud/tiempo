@@ -76,6 +76,53 @@
     </div>
   </div>
 
+  {{-- BRAND STRIP: negocios reales desde BD, fallback estático si BD vacía --}}
+  @php
+  $fallback = [
+    ['img'=>asset('images/landing/chaufa.png'),      'color'=>'#2D1F0E', 'name'=>'Chifa Suikao',    'slogan'=>'Comida oriental',    'price'=>'12', 'slug'=>null],
+    ['img'=>asset('images/landing/hamburguesa.png'), 'color'=>'#CC3D00', 'name'=>'Burguer Zurdo',   'slogan'=>'Las mejores burgers', 'price'=>'15', 'slug'=>null],
+    ['img'=>asset('images/landing/pollo2.png'),      'color'=>'#5E1A7A', 'name'=>'Pollería Rambo',  'slogan'=>'Los mejores pollos',  'price'=>'18', 'slug'=>null],
+    ['img'=>asset('images/landing/pilsen.png'),      'color'=>'#0E5C1A', 'name'=>'Cervezas Karlo',  'slogan'=>'Deliciosas bebidas',  'price'=>'10', 'slug'=>null],
+    ['img'=>asset('images/landing/chaufa2.png'),     'color'=>'#0A4D6E', 'name'=>'Chifa El Dragón', 'slogan'=>'Sabor auténtico',     'price'=>'13', 'slug'=>null],
+    ['img'=>asset('images/landing/sandwichs.png'),   'color'=>'#8B2500', 'name'=>'Sandwich Bros',   'slogan'=>'Siempre frescos',     'price'=>'14', 'slug'=>null],
+    ['img'=>asset('images/landing/gaseosa.png'),     'color'=>'#8B0000', 'name'=>'Coca-Cola Perú',  'slogan'=>'La chispa de vida',   'price'=>'5',  'slug'=>null],
+  ];
+  $stripItems = $businesses->isNotEmpty()
+    ? $businesses->map(fn($b) => [
+        'img'    => $b->imagen ?? asset('images/landing/chaufa.png'),
+        'color'  => $b->colorEfectivo(),
+        'name'   => $b->nombre_comercial,
+        'slogan' => $b->slogan ?? ucfirst($b->tipo_negocio),
+        'price'  => $b->precio_minimo ? number_format($b->precio_minimo, 0) : '—',
+        'slug'   => $b->slug,
+      ])->all()
+    : $fallback;
+  $stripItems = array_merge($stripItems, $stripItems);
+  @endphp
+  <div class="brand-strip">
+    <div class="brand-track">
+      @foreach($stripItems as $s)
+      @if($s['slug'])
+        <a href="{{ route('app.negocio.show', $s['slug']) }}" class="rest-slide" style="--img:url('{{ $s['img'] }}'); --color:{{ $s['color'] }}">
+      @else
+        <div class="rest-slide" style="--img:url('{{ $s['img'] }}'); --color:{{ $s['color'] }}">
+      @endif
+        <div class="rest-slide-body">
+          <span class="rest-slide-time">25-35 min</span>
+          <img src="{{ asset('images/landing/moto_ico_white.png') }}" class="rest-slide-moto" alt="">
+          <h4>{{ $s['name'] }}</h4>
+          <p>{{ $s['slogan'] }}</p>
+          <strong>S/ {{ $s['price'] }}<sup>.00</sup></strong>
+        </div>
+      @if($s['slug'])
+        </a>
+      @else
+        </div>
+      @endif
+      @endforeach
+    </div>
+  </div>
+
   {{-- CATEGORÍAS --}}
   <section class="section" id="categorias">
     <div class="container">

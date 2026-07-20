@@ -60,10 +60,30 @@ class NegocioAfiliado extends Model
         'email',
         'direccion',
         'descripcion',
+        'imagen',
+        'slogan',
+        'precio_minimo',
+        'color_marca',
         'estado',
         'abierto',
         'horarios',
     ];
+
+    private const TIPO_COLORES = [
+        'restaurante' => '#CC3D00',
+        'cafeteria'   => '#5A3E1B',
+        'polleria'    => '#5E1A7A',
+        'pizzeria'    => '#8B0000',
+        'licoreria'   => '#0E5C1A',
+        'bodega'      => '#0A4D6E',
+        'farmacia'    => '#006B6B',
+        'otro'        => '#2D2D2D',
+    ];
+
+    public function colorEfectivo(): string
+    {
+        return $this->color_marca ?? self::TIPO_COLORES[$this->tipo_negocio] ?? '#CC3D00';
+    }
 
     protected function casts(): array
     {

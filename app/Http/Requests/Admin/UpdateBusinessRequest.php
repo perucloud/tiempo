@@ -38,6 +38,10 @@ class UpdateBusinessRequest extends FormRequest
             'estado' => ['required', Rule::in(NegocioAfiliado::ESTADOS)],
             'abierto' => ['required', 'boolean'],
             'horarios_texto' => ['nullable', 'string', 'max:500'],
+            'imagen'         => ['nullable', 'string', 'max:500'],
+            'slogan'         => ['nullable', 'string', 'max:120'],
+            'precio_minimo'  => ['nullable', 'numeric', 'min:0', 'max:9999'],
+            'color_marca'    => ['nullable', 'string', 'regex:/^#[0-9A-Fa-f]{6}$/'],
         ];
     }
 }

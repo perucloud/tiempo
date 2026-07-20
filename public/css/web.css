@@ -167,6 +167,40 @@ header { position: sticky; top: 0; z-index: 80; background: rgba(255,249,242,.85
 .marquee-track span { display: flex; align-items: center; gap: 2.5rem; }
 @keyframes scrollx { to { transform: translateX(-50%); } }
 
+/* ── BRAND STRIP ──────────────────────────────────────────── */
+.brand-strip { overflow: hidden; background: var(--bg); padding-block: 1.1rem; }
+.brand-track { display: flex; gap: 1rem; width: max-content; animation: scrollx 38s linear infinite; align-items: stretch; }
+
+a.rest-slide { text-decoration: none; cursor: pointer; transition: transform .2s ease, box-shadow .2s ease; }
+a.rest-slide:hover { transform: translateY(-4px) scale(1.03); box-shadow: 0 14px 36px rgba(0,0,0,.38); }
+
+.rest-slide {
+    position: relative; flex-shrink: 0;
+    width: 160px; height: 132px; border-radius: 16px; overflow: hidden;
+    background-image: var(--img); background-size: cover; background-position: center;
+    box-shadow: 0 8px 28px rgba(0,0,0,.32);
+}
+.rest-slide::before {
+    content: ''; position: absolute; inset: 0; border-radius: inherit;
+    background: linear-gradient(100deg, rgba(0,0,0,.12) 0%, var(--color) 52%);
+}
+.rest-slide-body {
+    position: absolute; inset: 0; z-index: 1;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: .6rem .7rem; color: #fff;
+}
+.rest-slide-time {
+    position: absolute; top: .5rem; right: .5rem;
+    background: rgba(255,255,255,.93); color: var(--ink);
+    font-size: .6rem; font-weight: 800; border-radius: 999px; padding: .2rem .55rem;
+    letter-spacing: .02em;
+}
+.rest-slide-moto { width: 40px; height: 40px; object-fit: contain; margin-bottom: .25rem; filter: drop-shadow(0 1px 3px rgba(0,0,0,.3)); }
+.rest-slide-body h4 { font-size: .8rem; font-weight: 800; line-height: 1.2; margin: 0; text-shadow: 0 1px 3px rgba(0,0,0,.3); }
+.rest-slide-body p  { font-size: .6rem; font-weight: 600; opacity: .88; margin: .15rem 0 .3rem; }
+.rest-slide-body strong { font-size: 1rem; font-weight: 800; letter-spacing: -.02em; }
+.rest-slide-body strong sup { font-size: .55rem; vertical-align: super; font-weight: 700; }
+
 /* ── CATEGORÍAS ───────────────────────────────────────────── */
 #categorias { padding-block-start: 2rem; }
 .cats-grid { display: grid; gap: 1.4rem; grid-template-columns: 1fr; perspective: 1200px; }

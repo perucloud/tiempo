@@ -91,6 +91,33 @@
                     <textarea name="descripcion" rows="4">{{ old('descripcion', $business->descripcion) }}</textarea>
                     @error('descripcion') <small>{{ $message }}</small> @enderror
                 </label>
+
+                <label class="admin-field admin-field-wide">
+                    <span>Imagen (URL o ruta)</span>
+                    <input type="text" name="imagen" value="{{ old('imagen', $business->imagen) }}" placeholder="https://... o /images/negocios/foto.jpg">
+                    @error('imagen') <small>{{ $message }}</small> @enderror
+                </label>
+
+                <label class="admin-field">
+                    <span>Slogan <small style="font-weight:400;color:#888">(máx. 3-4 palabras)</small></span>
+                    <input type="text" name="slogan" value="{{ old('slogan', $business->slogan) }}" placeholder="Lo mejor del sabor">
+                    @error('slogan') <small>{{ $message }}</small> @enderror
+                </label>
+
+                <label class="admin-field">
+                    <span>Precio mínimo (S/)</span>
+                    <input type="number" name="precio_minimo" value="{{ old('precio_minimo', $business->precio_minimo) }}" step="0.50" min="0" placeholder="15.00">
+                    @error('precio_minimo') <small>{{ $message }}</small> @enderror
+                </label>
+
+                <label class="admin-field">
+                    <span>Color de marca <small style="font-weight:400;color:#888">(hex)</small></span>
+                    <div style="display:flex;gap:.5rem;align-items:center">
+                        <input type="color" name="color_marca" value="{{ old('color_marca', $business->color_marca ?? '#CC3D00') }}" style="width:48px;height:38px;padding:2px;border-radius:6px;border:1px solid #ddd;cursor:pointer">
+                        <input type="text" name="color_marca_text" value="{{ old('color_marca', $business->color_marca ?? '#CC3D00') }}" placeholder="#CC3D00" style="flex:1" oninput="this.previousElementSibling.value=this.value">
+                    </div>
+                    @error('color_marca') <small>{{ $message }}</small> @enderror
+                </label>
             </div>
 
             <div class="admin-form-actions">

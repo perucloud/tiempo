@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\App\BusinessController;
 use App\Http\Controllers\App\CartController;
 use App\Http\Controllers\App\HomeController;
 use App\Http\Controllers\App\OrderController;
@@ -8,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('app')->name('app.')->group(function (): void {
     Route::get('/', HomeController::class)->name('home');
+    Route::get('negocios/{negocio:slug}', [BusinessController::class, 'show'])->name('negocio.show');
     Route::post('cart', [CartController::class, 'store'])->name('cart.store');
     Route::patch('cart', [CartController::class, 'update'])->name('cart.update');
     Route::patch('cart/address', [CartController::class, 'address'])->name('cart.address');
