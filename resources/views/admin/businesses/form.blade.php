@@ -185,14 +185,26 @@
                     <i class="bi bi-geo-alt"></i> Ubicación del negocio
                 </h3>
 
-                {{-- Buscador de dirección --}}
-                <div class="map-search-row">
-                    <input type="text" id="mapSearchInput"
-                           placeholder="Buscar dirección... Ej: Av. Larco 500, Miraflores, Lima"
-                           autocomplete="off">
-                    <button type="button" id="btnMapSearch">
-                        <i class="bi bi-search"></i> Buscar
-                    </button>
+                {{-- Buscador de dirección con autocompletado --}}
+                <div class="map-search-wrap">
+                    <div class="map-search-row">
+                        <input type="text" id="mapSearchInput"
+                               placeholder="Escribe una dirección, calle o lugar…"
+                               autocomplete="off"
+                               aria-label="Buscar dirección"
+                               aria-autocomplete="list"
+                               aria-controls="map-autocomplete"
+                               role="combobox"
+                               aria-expanded="false">
+                        <button type="button" id="btnMapSearch" title="Buscar primer resultado">
+                            <i class="bi bi-search"></i> Buscar
+                        </button>
+                    </div>
+                    <div id="map-autocomplete"
+                         class="map-autocomplete"
+                         role="listbox"
+                         aria-label="Sugerencias de dirección"
+                         hidden></div>
                 </div>
 
                 <div class="map-hint">
@@ -701,50 +713,226 @@
         }
     }
 
-    /* ─── Búsqueda de dirección (Nominatim forward) ──────── */
-    async function searchAddress(query) {
-        if (!query.trim()) return;
-        const btn = document.getElementById('btnMapSearch');
-        btn.disabled = true;
-        btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Buscando…';
-        try {
-            const url = 'https://nominatim.openstreetmap.org/search?'
-                + new URLSearchParams({ q: query, format: 'json', limit: 1, countrycodes: 'pe' });
-            const res  = await fetch(url, { headers: { 'Accept-Language': 'es' } });
-            const data = await res.json();
-            if (data.length > 0) {
-                const lat = parseFloat(data[0].lat);
-                const lng = parseFloat(data[0].lon);
-                if (!mapReady) {
-                    initMap();
-                    setTimeout(() => {
-                        placeMarker(lat, lng);
-                        mapObj?.setView([lat, lng], 17);
-                        scheduleReverseGeocode(lat, lng);
-                    }, 400);
-                } else {
-                    placeMarker(lat, lng);
-                    mapObj.setView([lat, lng], 17);
-                    scheduleReverseGeocode(lat, lng);
-                }
-            } else {
-                alert('No se encontró esa dirección. Intenta con: "Av. Larco 500, Miraflores, Lima"');
-            }
-        } catch (err) {
-            alert('Error al buscar dirección: ' + err.message);
-        } finally {
-            btn.disabled = false;
-            btn.innerHTML = '<i class="bi bi-search"></i> Buscar';
+    /* ══════════════════════════════════════════════════════════
+       AUTOCOMPLETADO — configuración centralizada
+    ══════════════════════════════════════════════════════════ */
+    const NOM = {
+        base:        'https://nominatim.openstreetmap.org',
+        country:     'pe',
+        /* Viewbox centrado en Junín/Satipo como hint de prioridad (bounded=0) */
+        viewbox:     '-76.5,-13.0,-73.0,-10.5',
+        bounded:     0,
+        limit:       7,
+        minChars:    3,
+        debounceMs:  400,
+    };
+
+    const acEl        = document.getElementById('map-autocomplete');
+    const searchInput = document.getElementById('mapSearchInput');
+
+    let _acTimer      = null;
+    let _acController = null;
+    let _acResults    = [];
+    let _acFocusIdx   = -1;
+    let _acLastQuery  = '';
+
+    /* ─── Renderizar dropdown ──────────────────────────────── */
+    function acShow(results) {
+        _acResults  = results;
+        _acFocusIdx = -1;
+        acEl.innerHTML = '';
+
+        if (results.length === 0) {
+            acEl.innerHTML =
+                '<div class="map-ac-empty">'
+                + '<i class="bi bi-geo-alt"></i> Sin resultados — intenta con otro término'
+                + '</div>';
+        } else {
+            results.forEach((r, i) => {
+                const parts  = r.display_name.split(',');
+                const title  = parts.slice(0, 2).join(',').trim();
+                const sub    = parts.slice(2, 5).join(',').trim();
+                const item   = document.createElement('div');
+                item.className = 'map-ac-item';
+                item.setAttribute('role', 'option');
+                item.dataset.idx = i;
+                item.innerHTML   =
+                    `<i class="bi bi-geo-alt-fill"></i>`
+                    + `<div><strong>${escHtml(title)}</strong>`
+                    + (sub ? `<small>${escHtml(sub)}</small>` : '')
+                    + `</div>`;
+                /* mousedown para evitar que blur del input se dispare antes del click */
+                item.addEventListener('mousedown', e => { e.preventDefault(); acSelect(i); });
+                acEl.appendChild(item);
+            });
+            acEl.insertAdjacentHTML('beforeend',
+                '<div class="map-ac-attr">'
+                + '© <a href="https://www.openstreetmap.org/copyright" target="_blank" tabindex="-1">OpenStreetMap</a>'
+                + '</div>');
+        }
+
+        acEl.removeAttribute('hidden');
+        searchInput?.setAttribute('aria-expanded', 'true');
+    }
+
+    function acHide() {
+        acEl.setAttribute('hidden', '');
+        searchInput?.setAttribute('aria-expanded', 'false');
+        _acFocusIdx  = -1;
+        _acLastQuery = ''; /* reset para permitir re-buscar la misma query */
+    }
+
+    function acSetFocus(idx) {
+        const items = acEl.querySelectorAll('.map-ac-item');
+        items.forEach(el => el.classList.remove('is-focused'));
+        _acFocusIdx = Math.max(0, Math.min(items.length - 1, idx));
+        items[_acFocusIdx]?.classList.add('is-focused');
+        items[_acFocusIdx]?.scrollIntoView({ block: 'nearest' });
+    }
+
+    /* ─── Seleccionar sugerencia ───────────────────────────── */
+    function acSelect(idx) {
+        const r = _acResults[idx];
+        if (!r) return;
+
+        const lat = parseFloat(r.lat);
+        const lng = parseFloat(r.lon);
+
+        /* Actualizar texto del input al nombre corto */
+        if (searchInput) {
+            searchInput.value = r.display_name.split(',').slice(0, 2).join(',').trim();
+        }
+        acHide();
+
+        /* Centrar mapa + marcador + coordenadas */
+        if (!mapReady) {
+            initMap();
+            setTimeout(() => {
+                placeMarker(lat, lng);
+                mapObj?.setView([lat, lng], 17);
+                scheduleReverseGeocode(lat, lng);
+            }, 400);
+        } else {
+            placeMarker(lat, lng);
+            mapObj.setView([lat, lng], 17);
+            scheduleReverseGeocode(lat, lng);
         }
     }
 
-    document.getElementById('btnMapSearch')?.addEventListener('click', () => {
-        searchAddress(document.getElementById('mapSearchInput').value);
+    /* ─── Consulta a Nominatim con debounce + AbortController ─ */
+    async function acFetch(query) {
+        if (query.length < NOM.minChars) { acHide(); return; }
+        if (query === _acLastQuery) return;   /* evitar llamada duplicada */
+        _acLastQuery = query;
+
+        clearTimeout(_acTimer);
+        if (_acController) { _acController.abort(); _acController = null; }
+
+        _acTimer = setTimeout(async () => {
+            _acController = new AbortController();
+            try {
+                const params = new URLSearchParams({
+                    q:              query,
+                    format:         'json',
+                    limit:          NOM.limit,
+                    countrycodes:   NOM.country,
+                    addressdetails: 1,
+                    viewbox:        NOM.viewbox,
+                    bounded:        NOM.bounded,
+                });
+                const res = await fetch(`${NOM.base}/search?${params}`, {
+                    signal:  _acController.signal,
+                    headers: { 'Accept-Language': 'es' },
+                });
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                acShow(await res.json());
+            } catch (err) {
+                if (err.name !== 'AbortError') acHide();
+            } finally {
+                _acController = null;
+            }
+        }, NOM.debounceMs);
+    }
+
+    /* ─── Búsqueda directa (botón / Enter sin selección) ──── */
+    async function searchAddress(query) {
+        if (!query.trim()) return;
+        acHide();
+        const btn = document.getElementById('btnMapSearch');
+        if (btn) { btn.disabled = true; btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Buscando…'; }
+        try {
+            const params = new URLSearchParams({
+                q:            query,
+                format:       'json',
+                limit:        1,
+                countrycodes: NOM.country,
+            });
+            const res  = await fetch(`${NOM.base}/search?${params}`, { headers: { 'Accept-Language': 'es' } });
+            const data = await res.json();
+            if (data.length > 0) {
+                _acResults = data;
+                acSelect(0);
+            } else {
+                /* Mostrar "sin resultados" en el dropdown en lugar de alert */
+                acShow([]);
+            }
+        } catch (err) {
+            acShow([]);
+        } finally {
+            if (btn) { btn.disabled = false; btn.innerHTML = '<i class="bi bi-search"></i> Buscar'; }
+        }
+    }
+
+    /* ─── Eventos del input ────────────────────────────────── */
+    searchInput?.addEventListener('input', e => {
+        const q = e.target.value.trim();
+        if (!q) { acHide(); return; }
+        acFetch(q);
     });
 
-    document.getElementById('mapSearchInput')?.addEventListener('keydown', e => {
-        if (e.key === 'Enter') { e.preventDefault(); searchAddress(e.target.value); }
+    searchInput?.addEventListener('keydown', e => {
+        const open = !acEl.hasAttribute('hidden');
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            if (!open && searchInput.value.trim().length >= NOM.minChars) {
+                acFetch(searchInput.value.trim());
+            } else {
+                acSetFocus(_acFocusIdx + 1);
+            }
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            acSetFocus(_acFocusIdx - 1);
+        } else if (e.key === 'Enter') {
+            e.preventDefault();
+            if (open && _acFocusIdx >= 0) {
+                acSelect(_acFocusIdx);
+            } else {
+                searchAddress(searchInput.value);
+            }
+        } else if (e.key === 'Escape') {
+            acHide();
+        }
     });
+
+    searchInput?.addEventListener('blur', () => {
+        /* Delay para que mousedown en item se procese antes del cierre */
+        setTimeout(acHide, 150);
+    });
+
+    document.getElementById('btnMapSearch')?.addEventListener('click', () => {
+        searchAddress(searchInput?.value ?? '');
+    });
+
+    /* Cerrar al hacer clic fuera del buscador */
+    document.addEventListener('click', e => {
+        if (!e.target.closest('.map-search-wrap')) acHide();
+    });
+
+    /* ─── Utilidad ─────────────────────────────────────────── */
+    function escHtml(str) {
+        return str.replace(/[&<>"']/g, c =>
+            ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+    }
 
 })();
 </script>
