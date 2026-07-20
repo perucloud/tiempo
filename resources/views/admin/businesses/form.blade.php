@@ -4,12 +4,16 @@
 @section('eyebrow', 'Red comercial')
 @section('page-title', $business->exists ? 'Editar negocio afiliado' : 'Nuevo negocio afiliado')
 
+@push('styles')
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+@endpush
+
 @section('content')
     <section class="admin-panel">
         <div class="admin-panel-header">
             <div>
                 <h2>{{ $business->exists ? 'Actualizar información comercial' : 'Crear negocio afiliado' }}</h2>
-                <p>Completa los 4 pasos para registrar toda la información del negocio.</p>
+                <p>Completa los 5 pasos para registrar toda la información del negocio.</p>
             </div>
             <a class="admin-button" href="{{ route('admin.businesses.index') }}">Volver</a>
         </div>
@@ -17,24 +21,25 @@
         {{-- Wizard nav --}}
         <div class="wizard-nav" id="wizardNav">
             <div class="wizard-step active" data-step="1">
-                <span class="ws-num">1</span><span>Datos básicos</span>
+                <span class="ws-num">1</span><span>Básicos</span>
             </div>
             <div class="wizard-step" data-step="2">
-                <span class="ws-num">2</span><span>Identidad visual</span>
+                <span class="ws-num">2</span><span>Visual</span>
             </div>
             <div class="wizard-step" data-step="3">
-                <span class="ws-num">3</span><span>Ubicación y contacto</span>
+                <span class="ws-num">3</span><span>Ubicación</span>
             </div>
             <div class="wizard-step" data-step="4">
-                <span class="ws-num">4</span><span>Redes sociales</span>
+                <span class="ws-num">4</span><span>Contacto</span>
+            </div>
+            <div class="wizard-step" data-step="5">
+                <span class="ws-num">5</span><span>Social</span>
             </div>
         </div>
 
         <form class="admin-form" method="POST" action="{{ $action }}" id="wizardForm">
             @csrf
-            @if ($method === 'PUT')
-                @method('PUT')
-            @endif
+            @if ($method === 'PUT') @method('PUT') @endif
 
             @if($errors->any())
                 <div class="admin-alert admin-alert-error">
@@ -42,14 +47,13 @@
                 </div>
             @endif
 
-            {{-- ══════════════════════════════════════════════
+            {{-- ═══════════════════════════════════════
                  PASO 1 — Datos básicos
-            ══════════════════════════════════════════════════ --}}
+            ═══════════════════════════════════════════ --}}
             <div class="wizard-panel active" id="step-1">
                 <h3 class="wizard-section-title">
                     <i class="bi bi-shop"></i> Datos del negocio
                 </h3>
-
                 <div class="admin-form-grid">
                     <label class="admin-field">
                         <span>Nombre comercial *</span>
@@ -71,7 +75,9 @@
 
                     <label class="admin-field">
                         <span>RUC</span>
-                        <input type="text" name="ruc" value="{{ old('ruc', $business->ruc) }}" placeholder="20123456789">
+                        <input type="text" name="ruc"
+                               value="{{ old('ruc', $business->ruc) }}"
+                               placeholder="20123456789">
                         @error('ruc') <small>{{ $message }}</small> @enderror
                     </label>
 
@@ -95,7 +101,7 @@
                     </label>
 
                     <label class="admin-field">
-                        <span>Tiempo estimado de preparación (min)</span>
+                        <span>Tiempo de preparación (min)</span>
                         <input type="number" name="tiempo_preparacion" min="0" max="240"
                                value="{{ old('tiempo_preparacion', $business->tiempo_preparacion) }}"
                                placeholder="20">
@@ -103,14 +109,14 @@
                     </label>
 
                     <label class="admin-field">
-                        <span>Hora de apertura</span>
+                        <span>Hora apertura</span>
                         <input type="time" name="hora_apertura"
                                value="{{ old('hora_apertura', $business->hora_apertura) }}">
                         @error('hora_apertura') <small>{{ $message }}</small> @enderror
                     </label>
 
                     <label class="admin-field">
-                        <span>Hora de cierre</span>
+                        <span>Hora cierre</span>
                         <input type="time" name="hora_cierre"
                                value="{{ old('hora_cierre', $business->hora_cierre) }}">
                         @error('hora_cierre') <small>{{ $message }}</small> @enderror
@@ -118,14 +124,13 @@
                 </div>
             </div>
 
-            {{-- ══════════════════════════════════════════════
+            {{-- ═══════════════════════════════════════
                  PASO 2 — Identidad visual
-            ══════════════════════════════════════════════════ --}}
+            ═══════════════════════════════════════════ --}}
             <div class="wizard-panel" id="step-2">
                 <h3 class="wizard-section-title">
                     <i class="bi bi-palette"></i> Identidad visual
                 </h3>
-
                 <div class="admin-form-grid">
                     <label class="admin-field admin-field-wide">
                         <span>Imagen principal (URL o ruta)</span>
@@ -172,14 +177,61 @@
                 </div>
             </div>
 
-            {{-- ══════════════════════════════════════════════
-                 PASO 3 — Ubicación y contacto
-            ══════════════════════════════════════════════════ --}}
+            {{-- ═══════════════════════════════════════
+                 PASO 3 — Ubicación (mapa)
+            ═══════════════════════════════════════════ --}}
             <div class="wizard-panel" id="step-3">
                 <h3 class="wizard-section-title">
-                    <i class="bi bi-geo-alt"></i> Ubicación
+                    <i class="bi bi-geo-alt"></i> Ubicación del negocio
                 </h3>
 
+                {{-- Buscador de dirección --}}
+                <div class="map-search-row">
+                    <input type="text" id="mapSearchInput"
+                           placeholder="Buscar dirección... Ej: Av. Larco 500, Miraflores, Lima"
+                           autocomplete="off">
+                    <button type="button" id="btnMapSearch">
+                        <i class="bi bi-search"></i> Buscar
+                    </button>
+                </div>
+
+                <div class="map-hint">
+                    <i class="bi bi-hand-index-thumb"></i>
+                    Haz clic en el mapa para marcar la ubicación exacta del negocio. También puedes arrastrar el marcador.
+                </div>
+
+                {{-- Mapa --}}
+                <div id="mapa-negocio"></div>
+
+                {{-- Coordenadas capturadas --}}
+                <div class="map-coords-row">
+                    <label class="admin-field">
+                        <span>Latitud</span>
+                        <input type="number" id="latitud" name="latitud" step="0.00000001"
+                               value="{{ old('latitud', $business->latitud) }}"
+                               placeholder="-12.046374">
+                        @error('latitud') <small>{{ $message }}</small> @enderror
+                    </label>
+                    <label class="admin-field">
+                        <span>Longitud</span>
+                        <input type="number" id="longitud" name="longitud" step="0.00000001"
+                               value="{{ old('longitud', $business->longitud) }}"
+                               placeholder="-77.042793">
+                        @error('longitud') <small>{{ $message }}</small> @enderror
+                    </label>
+                </div>
+
+                @if(!$business->latitud)
+                    <p class="map-no-coords">
+                        <i class="bi bi-info-circle"></i>
+                        Sin coordenadas aún — haz clic en el mapa o escribe los valores manualmente.
+                    </p>
+                @endif
+
+                {{-- Campos de dirección --}}
+                <h3 class="wizard-section-title" style="margin-top:1.75rem">
+                    <i class="bi bi-signpost"></i> Dirección
+                </h3>
                 <div class="admin-form-grid">
                     <label class="admin-field">
                         <span>Departamento</span>
@@ -220,28 +272,16 @@
                                placeholder="Al frente del parque, local rojo">
                         @error('referencia') <small>{{ $message }}</small> @enderror
                     </label>
-
-                    <label class="admin-field">
-                        <span>Latitud</span>
-                        <input type="number" name="latitud" step="0.00000001"
-                               value="{{ old('latitud', $business->latitud) }}"
-                               placeholder="-12.046374">
-                        @error('latitud') <small>{{ $message }}</small> @enderror
-                    </label>
-
-                    <label class="admin-field">
-                        <span>Longitud</span>
-                        <input type="number" name="longitud" step="0.00000001"
-                               value="{{ old('longitud', $business->longitud) }}"
-                               placeholder="-77.042793">
-                        @error('longitud') <small>{{ $message }}</small> @enderror
-                    </label>
                 </div>
+            </div>
 
-                <h3 class="wizard-section-title" style="margin-top:1.75rem">
-                    <i class="bi bi-telephone"></i> Contacto
+            {{-- ═══════════════════════════════════════
+                 PASO 4 — Contacto
+            ═══════════════════════════════════════════ --}}
+            <div class="wizard-panel" id="step-4">
+                <h3 class="wizard-section-title">
+                    <i class="bi bi-telephone"></i> Información de contacto
                 </h3>
-
                 <div class="admin-form-grid">
                     <label class="admin-field">
                         <span>Celular</span>
@@ -293,14 +333,13 @@
                 </div>
             </div>
 
-            {{-- ══════════════════════════════════════════════
-                 PASO 4 — Redes sociales
-            ══════════════════════════════════════════════════ --}}
-            <div class="wizard-panel" id="step-4">
+            {{-- ═══════════════════════════════════════
+                 PASO 5 — Redes sociales
+            ═══════════════════════════════════════════ --}}
+            <div class="wizard-panel" id="step-5">
                 <h3 class="wizard-section-title">
                     <i class="bi bi-share"></i> Redes sociales
                 </h3>
-
                 <div class="admin-form-grid">
                     <label class="admin-field">
                         <span>Facebook</span>
@@ -327,9 +366,9 @@
                     </label>
                 </div>
 
-                {{-- Resumen visual --}}
                 <div class="admin-alert" style="margin-top:1.5rem;background:#eff6ff;border-color:#bfdbfe;color:#1e40af">
-                    <strong>¡Todo listo!</strong> Revisa la información y guarda el negocio.
+                    <strong>¡Todo listo!</strong>
+                    Revisa la información y guarda el negocio.
                     Los campos vacíos se pueden completar más adelante desde <em>Editar</em>.
                 </div>
             </div>
@@ -354,48 +393,49 @@
 @endsection
 
 @push('scripts')
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV/XN/WPeE=" crossorigin=""></script>
 <script>
 (function () {
-    const TOTAL = 4;
-    let current = 1;
+    /* ─── Wizard navigation ──────────────────────────────── */
+    const TOTAL   = 5;
+    let current   = 1;
 
-    const steps   = document.querySelectorAll('.wizard-step');
-    const panels  = document.querySelectorAll('.wizard-panel');
+    const wSteps  = document.querySelectorAll('.wizard-step');
+    const wPanels = document.querySelectorAll('.wizard-panel');
     const btnPrev = document.getElementById('btn-prev');
     const btnNext = document.getElementById('btn-next');
     const btnSub  = document.getElementById('btn-submit');
 
     function show(n) {
         n = Math.max(1, Math.min(TOTAL, n));
-        steps.forEach((s, i) => {
+        wSteps.forEach((s, i) => {
             s.classList.toggle('active', i + 1 === n);
-            s.classList.toggle('done', i + 1 < n);
+            s.classList.toggle('done',   i + 1 < n);
         });
-        panels.forEach((p, i) => p.classList.toggle('active', i + 1 === n));
+        wPanels.forEach((p, i) => p.classList.toggle('active', i + 1 === n));
         btnPrev.style.visibility = n === 1 ? 'hidden' : 'visible';
         btnNext.classList.toggle('wizard-hidden', n === TOTAL);
-        btnSub.classList.toggle('wizard-hidden', n !== TOTAL);
+        btnSub.classList.toggle('wizard-hidden',  n !== TOTAL);
         current = n;
         window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (n === 3) setTimeout(initMap, 80);
     }
 
     btnNext.addEventListener('click', () => show(current + 1));
     btnPrev.addEventListener('click', () => show(current - 1));
-    steps.forEach((s, i) => s.addEventListener('click', () => show(i + 1)));
+    wSteps.forEach((s, i) => s.addEventListener('click', () => show(i + 1)));
 
-    /* Auto-jump to first step that has a server-side error */
+    /* ─── Auto-jump al paso con errores ─────────────────── */
     const stepFields = {
         1: ['nombre_comercial','tipo_negocio','ruc','estado','abierto','hora_apertura','hora_cierre','tiempo_preparacion'],
         2: ['imagen','slogan','precio_minimo','color_marca','descripcion'],
-        3: ['departamento','provincia','distrito','direccion','referencia','latitud','longitud',
-            'celular','whatsapp','telefono_fijo','telefono','email','pagina_web'],
-        4: ['facebook','instagram','tiktok'],
+        3: ['departamento','provincia','distrito','direccion','referencia','latitud','longitud'],
+        4: ['celular','whatsapp','telefono_fijo','telefono','email','pagina_web'],
+        5: ['facebook','instagram','tiktok'],
     };
-
     let jumpTo = null;
     document.querySelectorAll('[name]').forEach(el => {
-        const hasError = el.closest('.admin-field')?.querySelector('small');
-        if (!hasError) return;
+        if (!el.closest('.admin-field')?.querySelector('small')) return;
         for (const [step, fields] of Object.entries(stepFields)) {
             if (fields.includes(el.name)) {
                 const s = parseInt(step);
@@ -406,15 +446,115 @@
     });
     show(jumpTo || 1);
 
-    /* Color picker sync */
+    /* ─── Color picker sync ──────────────────────────────── */
     const picker = document.getElementById('color_marca_picker');
-    const text   = document.getElementById('color_marca_text');
-    if (picker && text) {
-        picker.addEventListener('input', () => { text.value = picker.value; });
-        text.addEventListener('input', () => {
-            if (/^#[0-9A-Fa-f]{6}$/.test(text.value)) picker.value = text.value;
+    const cText  = document.getElementById('color_marca_text');
+    if (picker && cText) {
+        picker.addEventListener('input', () => { cText.value = picker.value; });
+        cText.addEventListener('input', () => {
+            if (/^#[0-9A-Fa-f]{6}$/.test(cText.value)) picker.value = cText.value;
         });
     }
+
+    /* ─── Mapa Leaflet ───────────────────────────────────── */
+    let mapObj    = null;
+    let mapMarker = null;
+    let mapReady  = false;
+
+    // Valores iniciales (editing con coords existentes)
+    const initLat = parseFloat(document.getElementById('latitud')?.value);
+    const initLng = parseFloat(document.getElementById('longitud')?.value);
+
+    function initMap() {
+        if (mapReady) { mapObj.invalidateSize(); return; }
+
+        const center  = (!isNaN(initLat) && !isNaN(initLng)) ? [initLat, initLng] : [-9.19, -75.01];
+        const zoom    = (!isNaN(initLat) && !isNaN(initLng)) ? 16 : 6;
+
+        mapObj = L.map('mapa-negocio').setView(center, zoom);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© <a href="https://openstreetmap.org">OpenStreetMap</a>',
+            maxZoom: 19,
+        }).addTo(mapObj);
+
+        // Marcador inicial si hay coords
+        if (!isNaN(initLat) && !isNaN(initLng)) {
+            placeMarker(initLat, initLng);
+        }
+
+        // Click en mapa → colocar/mover marcador
+        mapObj.on('click', e => placeMarker(e.latlng.lat, e.latlng.lng));
+
+        mapReady = true;
+    }
+
+    function placeMarker(lat, lng) {
+        if (mapMarker) {
+            mapMarker.setLatLng([lat, lng]);
+        } else {
+            mapMarker = L.marker([lat, lng], { draggable: true }).addTo(mapObj);
+            mapMarker.on('dragend', () => {
+                const pos = mapMarker.getLatLng();
+                fillCoords(pos.lat, pos.lng);
+            });
+        }
+        fillCoords(lat, lng);
+    }
+
+    function fillCoords(lat, lng) {
+        document.getElementById('latitud').value  = lat.toFixed(8);
+        document.getElementById('longitud').value = lng.toFixed(8);
+    }
+
+    // Inputs manuales → mover marcador en el mapa
+    ['latitud', 'longitud'].forEach(id => {
+        document.getElementById(id)?.addEventListener('change', () => {
+            const lat = parseFloat(document.getElementById('latitud').value);
+            const lng = parseFloat(document.getElementById('longitud').value);
+            if (!isNaN(lat) && !isNaN(lng) && mapReady) {
+                placeMarker(lat, lng);
+                mapObj.setView([lat, lng], 16);
+            }
+        });
+    });
+
+    /* ─── Búsqueda de dirección (Nominatim) ─────────────── */
+    async function searchAddress(query) {
+        if (!query.trim()) return;
+        const btn = document.getElementById('btnMapSearch');
+        btn.disabled = true;
+        btn.textContent = 'Buscando…';
+        try {
+            const url = 'https://nominatim.openstreetmap.org/search?'
+                + new URLSearchParams({ q: query, format: 'json', limit: 1, countrycodes: 'pe' });
+            const res  = await fetch(url, { headers: { 'Accept-Language': 'es' } });
+            const data = await res.json();
+            if (data.length > 0) {
+                const lat = parseFloat(data[0].lat);
+                const lng = parseFloat(data[0].lon);
+                if (!mapReady) initMap();
+                placeMarker(lat, lng);
+                mapObj.setView([lat, lng], 17);
+            } else {
+                alert('No se encontró esa dirección. Intenta ser más específico.');
+            }
+        } catch {
+            alert('Error al buscar. Verifica tu conexión a internet.');
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bi bi-search"></i> Buscar';
+        }
+    }
+
+    document.getElementById('btnMapSearch')?.addEventListener('click', () => {
+        searchAddress(document.getElementById('mapSearchInput').value);
+    });
+
+    document.getElementById('mapSearchInput')?.addEventListener('keydown', e => {
+        if (e.key === 'Enter') { e.preventDefault(); searchAddress(e.target.value); }
+    });
+
 })();
 </script>
 @endpush
