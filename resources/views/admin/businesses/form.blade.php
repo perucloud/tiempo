@@ -221,52 +221,79 @@
                     </label>
                 </div>
 
+                {{-- Estado de geocodificación inversa --}}
+                <div id="geocode-status" class="geocode-status">
+                    <span class="gs-loading"><i class="bi bi-arrow-repeat"></i> Obteniendo dirección…</span>
+                    <span class="gs-done"><i class="bi bi-check-circle"></i> Dirección actualizada — puedes editarla</span>
+                    <span class="gs-error"><i class="bi bi-exclamation-circle"></i> No se pudo obtener la dirección</span>
+                </div>
+
                 @if(!$business->latitud)
-                    <p class="map-no-coords">
+                    <p class="map-no-coords" id="map-no-coords-hint">
                         <i class="bi bi-info-circle"></i>
                         Sin coordenadas aún — haz clic en el mapa o escribe los valores manualmente.
                     </p>
                 @endif
 
-                {{-- Campos de dirección --}}
+                {{-- Campos de dirección — autocompletables por geocodificación inversa --}}
                 <h3 class="wizard-section-title" style="margin-top:1.75rem">
                     <i class="bi bi-signpost"></i> Dirección
+                    <small style="font-size:.72rem;font-weight:400;color:var(--admin-muted);margin-left:.5rem">
+                        Se completa automáticamente al marcar en el mapa
+                    </small>
                 </h3>
                 <div class="admin-form-grid">
                     <label class="admin-field">
-                        <span>Departamento</span>
-                        <input type="text" name="departamento"
-                               value="{{ old('departamento', $business->departamento) }}"
-                               placeholder="Lima">
-                        @error('departamento') <small>{{ $message }}</small> @enderror
-                    </label>
-
-                    <label class="admin-field">
-                        <span>Provincia</span>
-                        <input type="text" name="provincia"
-                               value="{{ old('provincia', $business->provincia) }}"
-                               placeholder="Lima">
-                        @error('provincia') <small>{{ $message }}</small> @enderror
+                        <span>Dirección</span>
+                        <input type="text" id="gc-direccion" name="direccion"
+                               value="{{ old('direccion', $business->direccion) }}"
+                               placeholder="Av. Principal 123">
+                        @error('direccion') <small>{{ $message }}</small> @enderror
                     </label>
 
                     <label class="admin-field">
                         <span>Distrito</span>
-                        <input type="text" name="distrito"
+                        <input type="text" id="gc-distrito" name="distrito"
                                value="{{ old('distrito', $business->distrito) }}"
                                placeholder="Miraflores">
                         @error('distrito') <small>{{ $message }}</small> @enderror
                     </label>
 
                     <label class="admin-field">
-                        <span>Dirección</span>
-                        <input type="text" name="direccion"
-                               value="{{ old('direccion', $business->direccion) }}"
-                               placeholder="Av. Principal 123">
-                        @error('direccion') <small>{{ $message }}</small> @enderror
+                        <span>Provincia</span>
+                        <input type="text" id="gc-provincia" name="provincia"
+                               value="{{ old('provincia', $business->provincia) }}"
+                               placeholder="Lima">
+                        @error('provincia') <small>{{ $message }}</small> @enderror
                     </label>
 
+                    <label class="admin-field">
+                        <span>Departamento</span>
+                        <input type="text" id="gc-departamento" name="departamento"
+                               value="{{ old('departamento', $business->departamento) }}"
+                               placeholder="Lima">
+                        @error('departamento') <small>{{ $message }}</small> @enderror
+                    </label>
+
+                    <label class="admin-field">
+                        <span>Código postal</span>
+                        <input type="text" id="gc-codigo_postal" name="codigo_postal"
+                               value="{{ old('codigo_postal', $business->codigo_postal) }}"
+                               placeholder="15074">
+                        @error('codigo_postal') <small>{{ $message }}</small> @enderror
+                    </label>
+
+                    <label class="admin-field">
+                        <span>País</span>
+                        <input type="text" id="gc-pais" name="pais"
+                               value="{{ old('pais', $business->pais ?? 'Perú') }}"
+                               placeholder="Perú">
+                        @error('pais') <small>{{ $message }}</small> @enderror
+                    </label>
+
+                    {{-- Referencia: siempre manual, nunca autocompletada --}}
                     <label class="admin-field admin-field-wide">
-                        <span>Referencia</span>
+                        <span>Referencia <small style="font-weight:400;color:#888">(manual)</small></span>
                         <input type="text" name="referencia"
                                value="{{ old('referencia', $business->referencia) }}"
                                placeholder="Al frente del parque, local rojo">
@@ -518,7 +545,10 @@
                 placeMarker(initLat, initLng);
             }
 
-            mapObj.on('click', e => placeMarker(e.latlng.lat, e.latlng.lng));
+            mapObj.on('click', e => {
+                placeMarker(e.latlng.lat, e.latlng.lng);
+                scheduleReverseGeocode(e.latlng.lat, e.latlng.lng);
+            });
 
             mapReady = true;
 
@@ -539,6 +569,7 @@
             mapMarker.on('dragend', () => {
                 const pos = mapMarker.getLatLng();
                 fillCoords(pos.lat, pos.lng);
+                scheduleReverseGeocode(pos.lat, pos.lng);
             });
         }
         fillCoords(lat, lng);
@@ -549,6 +580,9 @@
         const elLng = document.getElementById('longitud');
         if (elLat) elLat.value = lat.toFixed(8);
         if (elLng) elLng.value = lng.toFixed(8);
+        /* Ocultar hint "sin coordenadas" */
+        const hint = document.getElementById('map-no-coords-hint');
+        if (hint) hint.style.display = 'none';
     }
 
     /* Inputs manuales → mover marcador */
@@ -557,16 +591,117 @@
             const lat = parseFloat(document.getElementById('latitud').value);
             const lng = parseFloat(document.getElementById('longitud').value);
             if (!isNaN(lat) && !isNaN(lng)) {
-                if (!mapReady) initMap();
-                else {
+                if (!mapReady) {
+                    initMap();
+                    setTimeout(() => {
+                        placeMarker(lat, lng);
+                        mapObj?.setView([lat, lng], 16);
+                        scheduleReverseGeocode(lat, lng);
+                    }, 400);
+                } else {
                     placeMarker(lat, lng);
                     mapObj.setView([lat, lng], 16);
+                    scheduleReverseGeocode(lat, lng);
                 }
             }
         });
     });
 
-    /* ─── Búsqueda de dirección (Nominatim) ─────────────── */
+    /* ─── Geocodificación inversa ────────────────────────── */
+    let _gcTimer      = null;
+    let _gcController = null;
+
+    /* Mapa click → disparar geocodificación con debounce */
+    /* (el click del mapa llega a placeMarker → fillCoords, luego llamamos esto) */
+
+    function scheduleReverseGeocode(lat, lng) {
+        clearTimeout(_gcTimer);
+        if (_gcController) { _gcController.abort(); _gcController = null; }
+        _gcTimer = setTimeout(() => reverseGeocode(lat, lng), 600);
+    }
+
+    async function reverseGeocode(lat, lng) {
+        setGeocodeStatus('loading');
+        _gcController = new AbortController();
+
+        try {
+            const url = 'https://nominatim.openstreetmap.org/reverse?'
+                + new URLSearchParams({ lat, lon: lng, format: 'json' });
+
+            const res = await fetch(url, {
+                signal:  _gcController.signal,
+                headers: { 'Accept-Language': 'es' },
+            });
+
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+
+            const data = await res.json();
+            if (!data || !data.address) throw new Error('Sin dirección');
+
+            applyReverseResult(data);
+            setGeocodeStatus('done');
+
+        } catch (err) {
+            if (err.name !== 'AbortError') {
+                setGeocodeStatus('error');
+            }
+        } finally {
+            _gcController = null;
+        }
+    }
+
+    /**
+     * Mapeo del JSON de Nominatim a los campos del formulario.
+     * Jerarquía Perú: state=Departamento | county=Provincia | city_district=Distrito
+     * Maneja respuestas parciales (campos ausentes → cadena vacía).
+     */
+    function applyReverseResult(data) {
+        const a = data.address ?? {};
+
+        const road     = a.road ?? a.pedestrian ?? a.footway ?? a.path ?? '';
+        const houseNum = a.house_number ?? '';
+        const calle    = [road, houseNum].filter(Boolean).join(' ');
+
+        const distrito    = a.city_district ?? a.suburb ?? a.municipality ?? a.town ?? a.village ?? '';
+        const provincia   = a.county ?? a.city ?? '';
+        const departamento = a.state ?? '';
+        const codPostal   = a.postcode ?? '';
+        const pais        = a.country ?? '';
+
+        gcSetField('gc-direccion',    calle);
+        gcSetField('gc-distrito',     distrito);
+        gcSetField('gc-provincia',    provincia);
+        gcSetField('gc-departamento', departamento);
+        gcSetField('gc-codigo_postal', codPostal);
+        gcSetField('gc-pais',         pais);
+    }
+
+    /** Sobreescribe el campo y añade clase visual "geocoded"; el usuario puede editar libremente. */
+    function gcSetField(id, value) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.value = value;
+        if (value) {
+            el.classList.add('geocoded');
+            /* Quitar resaltado al primer keypress del usuario */
+            el.addEventListener('input', () => el.classList.remove('geocoded'), { once: true });
+        }
+    }
+
+    function setGeocodeStatus(state) {
+        const el = document.getElementById('geocode-status');
+        if (!el) return;
+        el.dataset.state = state;
+        el.classList.add('is-visible');
+        if (state === 'done') {
+            /* Ocultar mensaje de éxito después de 4 s */
+            setTimeout(() => {
+                if (el.dataset.state === 'done') el.classList.remove('is-visible');
+            }, 4000);
+        }
+    }
+
+    /* ─── Búsqueda de dirección (Nominatim forward) ──────── */
     async function searchAddress(query) {
         if (!query.trim()) return;
         const btn = document.getElementById('btnMapSearch');
@@ -582,14 +717,15 @@
                 const lng = parseFloat(data[0].lon);
                 if (!mapReady) {
                     initMap();
-                    /* Esperar init antes de mover */
                     setTimeout(() => {
                         placeMarker(lat, lng);
                         mapObj?.setView([lat, lng], 17);
+                        scheduleReverseGeocode(lat, lng);
                     }, 400);
                 } else {
                     placeMarker(lat, lng);
                     mapObj.setView([lat, lng], 17);
+                    scheduleReverseGeocode(lat, lng);
                 }
             } else {
                 alert('No se encontró esa dirección. Intenta con: "Av. Larco 500, Miraflores, Lima"');

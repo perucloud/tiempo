@@ -1231,6 +1231,37 @@ a {
     font-style: italic;
 }
 
+/* Geocodificación inversa — indicador de estado */
+.geocode-status {
+    display: none;
+    align-items: center;
+    gap: .4rem;
+    margin-top: .6rem;
+    font-size: .8rem;
+    font-weight: 600;
+    min-height: 1.5rem;
+}
+
+.geocode-status.is-visible { display: flex; }
+
+.geocode-status .gs-loading,
+.geocode-status .gs-done,
+.geocode-status .gs-error { display: none; align-items: center; gap: .35rem; }
+
+.geocode-status[data-state="loading"] .gs-loading { display: flex; color: var(--admin-blue); }
+.geocode-status[data-state="done"]    .gs-done    { display: flex; color: var(--admin-green); }
+.geocode-status[data-state="error"]   .gs-error   { display: flex; color: var(--admin-red); }
+
+@keyframes spin-geocode { to { transform: rotate(360deg); } }
+.gs-loading i { display: inline-block; animation: spin-geocode .7s linear infinite; }
+
+/* Campos autocompletados — borde sutil */
+.admin-field input.geocoded {
+    border-color: #93c5fd;
+    background: #f0f9ff;
+    transition: background .4s, border-color .4s;
+}
+
 /* ============================================================
    RESPONSIVE
    ============================================================ */

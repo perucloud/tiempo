@@ -82,6 +82,8 @@ class NegocioAfiliado extends Model
         'departamento',
         'provincia',
         'distrito',
+        'codigo_postal',
+        'pais',
         'referencia',
         'latitud',
         'longitud',

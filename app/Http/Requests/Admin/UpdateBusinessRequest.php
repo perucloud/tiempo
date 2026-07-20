@@ -48,6 +48,8 @@ class UpdateBusinessRequest extends FormRequest
             'departamento'        => ['nullable', 'string', 'max:80'],
             'provincia'           => ['nullable', 'string', 'max:80'],
             'distrito'            => ['nullable', 'string', 'max:80'],
+            'codigo_postal'       => ['nullable', 'string', 'max:10'],
+            'pais'                => ['nullable', 'string', 'max:80'],
             'referencia'          => ['nullable', 'string', 'max:255'],
             'latitud'             => ['nullable', 'numeric', 'between:-90,90'],
             'longitud'            => ['nullable', 'numeric', 'between:-180,180'],
