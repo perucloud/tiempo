@@ -106,7 +106,13 @@ class BusinessController extends Controller
 
     private function payload(array $data): array
     {
-        $data['horarios'] = $this->parseSchedule($data['horarios_texto'] ?? null);
+        $text = $data['horarios_texto'] ?? null;
+        if (blank($text) && (!blank($data['hora_apertura'] ?? null) || !blank($data['hora_cierre'] ?? null))) {
+            $open  = $data['hora_apertura'] ?? '—';
+            $close = $data['hora_cierre']   ?? '—';
+            $text  = "{$open} – {$close}";
+        }
+        $data['horarios'] = $this->parseSchedule($text);
         unset($data['horarios_texto']);
 
         return $data;

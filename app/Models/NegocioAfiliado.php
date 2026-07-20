@@ -16,6 +16,12 @@ class NegocioAfiliado extends Model
 
     public const ESTADO_INACTIVO = 'inactivo';
 
+    public const ESTADO_SUSPENDIDO = 'suspendido';
+
+    public const ESTADO_VACACIONES = 'vacaciones';
+
+    public const ESTADO_CERRADO_TEMP = 'cerrado_temporalmente';
+
     public const TIPO_RESTAURANTE = 'restaurante';
 
     public const TIPO_CAFETERIA = 'cafeteria';
@@ -35,6 +41,9 @@ class NegocioAfiliado extends Model
     public const ESTADOS = [
         self::ESTADO_ACTIVO,
         self::ESTADO_INACTIVO,
+        self::ESTADO_SUSPENDIDO,
+        self::ESTADO_VACACIONES,
+        self::ESTADO_CERRADO_TEMP,
     ];
 
     public const TIPOS = [
@@ -67,6 +76,22 @@ class NegocioAfiliado extends Model
         'estado',
         'abierto',
         'horarios',
+        'hora_apertura',
+        'hora_cierre',
+        'tiempo_preparacion',
+        'departamento',
+        'provincia',
+        'distrito',
+        'referencia',
+        'latitud',
+        'longitud',
+        'celular',
+        'whatsapp',
+        'telefono_fijo',
+        'pagina_web',
+        'facebook',
+        'instagram',
+        'tiktok',
     ];
 
     private const TIPO_COLORES = [
@@ -88,16 +113,22 @@ class NegocioAfiliado extends Model
     protected function casts(): array
     {
         return [
-            'abierto' => 'boolean',
-            'horarios' => 'array',
+            'abierto'            => 'boolean',
+            'horarios'           => 'array',
+            'latitud'            => 'float',
+            'longitud'           => 'float',
+            'tiempo_preparacion' => 'integer',
         ];
     }
 
     public static function estadoOptions(): array
     {
         return [
-            self::ESTADO_ACTIVO => 'Activo',
-            self::ESTADO_INACTIVO => 'Inactivo',
+            self::ESTADO_ACTIVO       => 'Activo',
+            self::ESTADO_INACTIVO     => 'Inactivo',
+            self::ESTADO_SUSPENDIDO   => 'Suspendido',
+            self::ESTADO_VACACIONES   => 'Vacaciones',
+            self::ESTADO_CERRADO_TEMP => 'Cerrado temporalmente',
         ];
     }
 

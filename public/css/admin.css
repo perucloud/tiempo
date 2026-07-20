@@ -1031,6 +1031,122 @@ a {
 .dot-gray   { background: #94a3b8; }
 
 /* ============================================================
+   WIZARD MULTI-PASO
+   ============================================================ */
+
+.wizard-nav {
+    display: flex;
+    margin-bottom: 2rem;
+    border-radius: var(--admin-radius);
+    overflow: hidden;
+    border: 1px solid var(--admin-line);
+}
+
+.wizard-step {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .45rem;
+    padding: .85rem .75rem;
+    font-size: .78rem;
+    font-weight: 700;
+    text-align: center;
+    color: var(--admin-muted);
+    background: #f8fafc;
+    border-right: 1px solid var(--admin-line);
+    cursor: pointer;
+    transition: background .18s, color .18s;
+    line-height: 1.25;
+    user-select: none;
+}
+
+.wizard-step:last-child { border-right: 0; }
+
+.wizard-step .ws-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid currentColor;
+    font-size: .72rem;
+    font-weight: 800;
+    flex-shrink: 0;
+}
+
+.wizard-step.active {
+    background: var(--admin-blue);
+    color: #fff;
+}
+
+.wizard-step.done {
+    background: #f0fdf4;
+    color: var(--admin-green);
+}
+
+.wizard-step.done .ws-num {
+    background: var(--admin-green);
+    border-color: var(--admin-green);
+    color: #fff;
+}
+
+.wizard-panel { display: none; }
+.wizard-panel.active { display: block; }
+
+.wizard-section-title {
+    margin: 0 0 1.25rem;
+    padding-bottom: .75rem;
+    border-bottom: 1px solid var(--admin-line);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--admin-text);
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+.wizard-section-title i { color: var(--admin-blue); font-size: 1.1rem; }
+
+.wizard-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 1.5rem;
+    margin-top: 1.25rem;
+    border-top: 1px solid var(--admin-line);
+    gap: .75rem;
+}
+
+.wizard-footer-right {
+    display: flex;
+    gap: .75rem;
+}
+
+.wizard-hidden { display: none !important; }
+
+.wizard-color-row {
+    display: flex;
+    gap: .5rem;
+    align-items: center;
+}
+
+.wizard-color-row input[type="color"] {
+    width: 48px;
+    min-height: 42px;
+    padding: 2px 4px;
+    border-radius: 8px;
+    border: 1px solid var(--admin-line);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.wizard-color-row input[type="text"] {
+    flex: 1;
+}
+
+/* ============================================================
    RESPONSIVE
    ============================================================ */
 
