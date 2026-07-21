@@ -78,12 +78,6 @@
         </div>
     </div>
 
-    {{-- Recordar sesión ─────────────────────────────────────────────── --}}
-    <label class="al-remember">
-        <input name="remember" type="checkbox" value="1" {{ old('remember') ? 'checked' : '' }}>
-        <span>Mantener sesión iniciada</span>
-    </label>
-
     {{-- reCAPTCHA ───────────────────────────────────────────────────── --}}
     @if(config('services.recaptcha.key'))
         <div class="al-captcha-wrap">
@@ -99,6 +93,12 @@
         <i class="bi bi-box-arrow-in-right"></i>
         Ingresar al panel
     </button>
+
+    {{-- Recordar sesión — debajo del botón ─────────────────────────── --}}
+    <label class="al-remember" style="justify-content: center; margin-top: 18px; margin-bottom: 0;">
+        <input name="remember" type="checkbox" value="1" {{ old('remember') ? 'checked' : '' }}>
+        <span>Mantener sesión iniciada</span>
+    </label>
 
 </form>
 

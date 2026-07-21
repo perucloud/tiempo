@@ -372,17 +372,64 @@
         }
         .al-back-link:hover { color: #1d4ed8; text-decoration: underline; }
 
+        /* ── Header móvil ── */
+        .al-mobile-header {
+            display: none;
+        }
+
         /* ── Responsive ── */
         @media (max-width: 900px) {
+            /* Mostrar header oscuro con logo en blanco */
+            .al-mobile-header {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: #0f172a;
+                padding: 28px 24px 32px;
+                width: 100%;
+                position: relative;
+                overflow: hidden;
+            }
+            .al-mobile-header::before {
+                content: '';
+                position: absolute;
+                width: 300px; height: 300px;
+                border-radius: 50%;
+                background: radial-gradient(circle, rgba(37,99,235,.20) 0%, transparent 70%);
+                top: -80px; left: -80px;
+                pointer-events: none;
+            }
+            .al-mobile-header img {
+                height: 54px;
+                width: auto;
+                max-width: 240px;
+                object-fit: contain;
+                filter: brightness(0) invert(1);
+                user-select: none;
+                position: relative;
+                z-index: 1;
+            }
+
             .al-shell { grid-template-columns: 1fr; }
             .al-brand { display: none; }
             .al-form-panel {
                 background: #fff;
-                padding: 40px 24px;
+                padding: 36px 24px 52px;
                 align-items: flex-start;
-                padding-top: 64px;
             }
             .al-form-wrap { max-width: 100%; }
+
+            /* Ocultar logo del formulario en móvil (ya está en el header) */
+            .al-login-logo { display: none; }
+
+            /* Botón más redondeado en móvil */
+            .al-btn-submit {
+                border-radius: 50px;
+                padding: 15px;
+            }
+
+            /* Inputs ligeramente más redondeados */
+            .al-input { border-radius: 12px; }
         }
 
         @media (max-width: 1200px) and (min-width: 901px) {
@@ -393,6 +440,11 @@
     </style>
 </head>
 <body>
+{{-- Header móvil — solo visible en pantallas ≤ 900px --}}
+<div class="al-mobile-header">
+    <img src="{{ asset('images/dashboard/tiempologo.png') }}" alt="TIEMPO Delivery" draggable="false">
+</div>
+
 <div class="al-shell">
 
     {{-- ── Panel izquierdo: marca ── --}}
