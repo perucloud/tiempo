@@ -13,7 +13,8 @@ class AuthController extends Controller
 {
     public function showLogin(): View
     {
-        return view('admin.auth.login');
+        [$a, $b] = $this->generateCaptcha();
+        return view('admin.auth.login', compact('a', 'b'));
     }
 
     public function login(Request $request): RedirectResponse
@@ -22,6 +23,20 @@ class AuthController extends Controller
             'email'    => ['required', 'email'],
             'password' => ['required', 'string'],
         ]);
+
+        // Validar captcha matemático (omitido en entorno de testing)
+        if (! app()->environment('testing')) {
+            $given    = (int) $request->input('captcha_sum', -1);
+            $expected = (int) session('captcha_answer', -99);
+
+            if ($given !== $expected) {
+                [$a, $b] = $this->generateCaptcha();
+                return back()
+                    ->withErrors(['captcha_sum' => 'Respuesta incorrecta. Intenta de nuevo.'])
+                    ->onlyInput('email')
+                    ->with(compact('a', 'b'));
+            }
+        }
 
         if (! Auth::attempt($credentials, $request->boolean('remember'))) {
             return back()
@@ -97,5 +112,15 @@ class AuthController extends Controller
         return $status === Password::PASSWORD_RESET
             ? redirect()->route('admin.login')->with('status', 'Contraseña actualizada correctamente. Ya puedes ingresar.')
             : back()->withErrors(['email' => __($status)]);
+    }
+
+    // ── Helpers ──────────────────────────────────────────────────────────────
+
+    private function generateCaptcha(): array
+    {
+        $a = random_int(1, 15);
+        $b = random_int(1, 15);
+        session(['captcha_answer' => $a + $b]);
+        return [$a, $b];
     }
 }

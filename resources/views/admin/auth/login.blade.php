@@ -84,8 +84,33 @@
         Ingresar al panel
     </button>
 
-    {{-- Recordar sesión — debajo del botón ─────────────────────────── --}}
-    <label class="al-remember" style="justify-content: center; margin-top: 18px; margin-bottom: 0;">
+    {{-- Captcha matemático ──────────────────────────────────────────── --}}
+    <div class="al-captcha-math">
+        <p class="al-captcha-question">
+            <i class="bi bi-shield-lock"></i>
+            Verificación: ¿Cuánto es
+            <strong>{{ $a ?? session('captcha_a', '?') }} + {{ $b ?? session('captcha_b', '?') }}</strong>?
+        </p>
+        <div class="al-input-wrap">
+            <i class="bi bi-calculator al-input-icon"></i>
+            <input
+                id="captcha_sum"
+                name="captcha_sum"
+                type="number"
+                class="al-input al-captcha-input {{ $errors->has('captcha_sum') ? 'has-error' : '' }}"
+                placeholder="Escribe el resultado"
+                min="0"
+                max="30"
+                autocomplete="off"
+            >
+        </div>
+        @error('captcha_sum')
+            <p class="al-error-msg"><i class="bi bi-exclamation-circle"></i> {{ $message }}</p>
+        @enderror
+    </div>
+
+    {{-- Recordar sesión — debajo del captcha ───────────────────────── --}}
+    <label class="al-remember" style="justify-content: center; margin-top: 4px; margin-bottom: 0;">
         <input name="remember" type="checkbox" value="1" {{ old('remember') ? 'checked' : '' }}>
         <span>Mantener sesión iniciada</span>
     </label>

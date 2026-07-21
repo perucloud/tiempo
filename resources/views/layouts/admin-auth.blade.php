@@ -360,6 +360,39 @@
             }
         }
 
+        /* ── Captcha matemático ── */
+        .al-captcha-math {
+            margin-top: 20px;
+            background: #f8fafc;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px 18px;
+        }
+        .al-captcha-question {
+            font-size: 13px;
+            color: #475569;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            flex-wrap: wrap;
+        }
+        .al-captcha-question i {
+            color: #2563eb;
+            font-size: 15px;
+            flex-shrink: 0;
+        }
+        .al-captcha-question strong {
+            color: #0f172a;
+            font-size: 17px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+        .al-captcha-input {
+            padding-left: 42px;
+            border-radius: 10px;
+        }
+
         /* ── Back link ── */
         .al-back-link {
             display: inline-flex;
