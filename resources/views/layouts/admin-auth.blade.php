@@ -58,38 +58,18 @@
 
         /* Logo */
         .al-logo {
-            display: flex;
-            align-items: center;
-            gap: 14px;
             position: relative;
             z-index: 1;
         }
-        .al-logo-mark {
-            width: 44px;
-            height: 44px;
-            background: #2563eb;
-            border-radius: 12px;
-            display: grid;
-            place-items: center;
-            font-size: 22px;
-            font-weight: 800;
-            color: #fff;
-            letter-spacing: -1px;
-            flex-shrink: 0;
-        }
-        .al-logo-text strong {
-            display: block;
-            font-size: 20px;
-            font-weight: 800;
-            color: #fff;
-            letter-spacing: -0.5px;
-        }
-        .al-logo-text small {
-            font-size: 12px;
-            color: #64748b;
-            font-weight: 400;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
+        .al-logo img {
+            height: 48px;
+            width: auto;
+            max-width: 260px;
+            object-fit: contain;
+            /* Convierte el logo negro/naranja a blanco sobre fondo oscuro */
+            filter: brightness(0) invert(1);
+            user-select: none;
+            draggable: none;
         }
 
         /* Centro — claim */
@@ -325,12 +305,13 @@
         /* ── Logo en formulario ── */
         .al-login-logo {
             display: flex;
-            justify-content: center;
-            margin-bottom: 32px;
+            justify-content: flex-start;
+            margin-bottom: 28px;
         }
         .al-login-logo img {
-            height: 52px;
+            height: 46px;
             width: auto;
+            max-width: 220px;
             object-fit: contain;
             user-select: none;
         }
@@ -417,11 +398,7 @@
     {{-- ── Panel izquierdo: marca ── --}}
     <div class="al-brand">
         <div class="al-logo">
-            <div class="al-logo-mark">T</div>
-            <div class="al-logo-text">
-                <strong>TIEMPO</strong>
-                <small>Delivery Platform</small>
-            </div>
+            <img src="{{ asset('images/dashboard/tiempologo.png') }}" alt="TIEMPO Delivery" draggable="false">
         </div>
 
         <div class="al-brand-body">
