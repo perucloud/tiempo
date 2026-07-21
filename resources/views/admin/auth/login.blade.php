@@ -1,46 +1,100 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Admin | TIEMPO Delivery</title>
-    <style>
-        body { margin: 0; min-height: 100vh; display: grid; place-items: center; font-family: Arial, sans-serif; background: #f6f7fb; color: #111827; }
-        main { width: min(92vw, 380px); background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 28px; box-shadow: 0 16px 40px rgba(15, 23, 42, .08); }
-        h1 { margin: 0 0 6px; font-size: 24px; }
-        p { margin: 0 0 22px; color: #6b7280; }
-        label { display: block; margin: 14px 0 6px; font-weight: 700; font-size: 14px; }
-        input[type="email"], input[type="password"] { box-sizing: border-box; width: 100%; padding: 12px 13px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 15px; }
-        .row { display: flex; align-items: center; gap: 8px; margin: 14px 0 18px; color: #374151; }
-        button { width: 100%; border: 0; border-radius: 6px; padding: 12px 14px; background: #111827; color: #fff; font-weight: 700; cursor: pointer; }
-        .error { margin: 12px 0 0; color: #b91c1c; font-size: 14px; }
-    </style>
-</head>
-<body>
-    <main>
-        <h1>TIEMPO Admin</h1>
-        <p>Acceso para operadores y administradores.</p>
+@extends('layouts.admin-auth')
 
-        <form method="POST" action="{{ route('admin.login.store') }}">
-            @csrf
+@section('title', 'Iniciar sesión')
 
-            <label for="email">Correo</label>
-            <input id="email" name="email" type="email" value="{{ old('email') }}" autocomplete="email" required autofocus>
+@section('content')
 
-            <label for="password">Contrasena</label>
-            <input id="password" name="password" type="password" autocomplete="current-password" required>
+<div class="al-form-header">
+    <h1>Bienvenido de nuevo</h1>
+    <p>Ingresa tus credenciales para acceder al panel.</p>
+</div>
 
-            <label class="row">
-                <input name="remember" type="checkbox" value="1">
-                Recordar sesion
-            </label>
+@if ($errors->any())
+    <div class="al-alert-error" role="alert">
+        <i class="bi bi-exclamation-circle-fill"></i>
+        <span>{{ $errors->first() }}</span>
+    </div>
+@endif
 
-            <button type="submit">Ingresar</button>
+<form method="POST" action="{{ route('admin.login.store') }}" novalidate>
+    @csrf
 
-            @if ($errors->any())
-                <div class="error">{{ $errors->first() }}</div>
-            @endif
-        </form>
-    </main>
-</body>
-</html>
+    {{-- Email ──────────────────────────────────────────────────── --}}
+    <div class="al-field">
+        <label class="al-label" for="email">Correo electrónico</label>
+        <div class="al-input-wrap">
+            <i class="bi bi-envelope al-input-icon"></i>
+            <input
+                id="email"
+                name="email"
+                type="email"
+                class="al-input {{ $errors->has('email') ? 'has-error' : '' }}"
+                value="{{ old('email') }}"
+                autocomplete="email"
+                placeholder="superadmin@tiempo.com.pe"
+                required
+                autofocus
+            >
+        </div>
+        @error('email')
+            <p class="al-error-msg"><i class="bi bi-exclamation-circle"></i> {{ $message }}</p>
+        @enderror
+    </div>
+
+    {{-- Contraseña ──────────────────────────────────────────────── --}}
+    <div class="al-field">
+        <label class="al-label" for="password">Contraseña</label>
+        <div class="al-input-wrap">
+            <i class="bi bi-lock al-input-icon"></i>
+            <input
+                id="password"
+                name="password"
+                type="password"
+                class="al-input {{ $errors->has('password') ? 'has-error' : '' }}"
+                autocomplete="current-password"
+                placeholder="••••••••"
+                required
+            >
+            <button type="button" class="al-eye-btn" id="toggle-password" aria-label="Mostrar contraseña">
+                <i class="bi bi-eye" id="eye-icon"></i>
+            </button>
+        </div>
+        @error('password')
+            <p class="al-error-msg"><i class="bi bi-exclamation-circle"></i> {{ $message }}</p>
+        @enderror
+    </div>
+
+    {{-- Recordar sesión ─────────────────────────────────────────── --}}
+    <label class="al-remember">
+        <input name="remember" type="checkbox" value="1" {{ old('remember') ? 'checked' : '' }}>
+        <span>Mantener sesión iniciada</span>
+    </label>
+
+    {{-- Submit ──────────────────────────────────────────────────── --}}
+    <button type="submit" class="al-btn-submit">
+        <i class="bi bi-box-arrow-in-right"></i>
+        Ingresar al panel
+    </button>
+
+</form>
+
+<div class="al-form-footer">
+    ¿Problemas para ingresar? Contacta al administrador del sistema.
+</div>
+
+<script>
+(function () {
+    const btn  = document.getElementById('toggle-password');
+    const inp  = document.getElementById('password');
+    const icon = document.getElementById('eye-icon');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+        const show = inp.type === 'password';
+        inp.type   = show ? 'text' : 'password';
+        icon.className = show ? 'bi bi-eye-slash' : 'bi bi-eye';
+        btn.setAttribute('aria-label', show ? 'Ocultar contraseña' : 'Mostrar contraseña');
+    });
+})();
+</script>
+
+@endsection
