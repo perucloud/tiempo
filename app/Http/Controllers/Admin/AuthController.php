@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Password;
 use Illuminate\View\View;
 
@@ -23,30 +22,6 @@ class AuthController extends Controller
             'email'    => ['required', 'email'],
             'password' => ['required', 'string'],
         ]);
-
-        // Validar reCAPTCHA si está configurado (se omite en testing)
-        if (config('services.recaptcha.secret') && ! app()->environment('testing')) {
-            $siteSecret = config('services.recaptcha.secret');
-            $captcha = $request->input('g-recaptcha-response', '');
-
-            if (blank($captcha)) {
-                return back()
-                    ->withErrors(['captcha' => 'Por favor completa el captcha.'])
-                    ->onlyInput('email');
-            }
-
-            $verify = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
-                'secret'   => $siteSecret,
-                'response' => $captcha,
-                'remoteip' => $request->ip(),
-            ]);
-
-            if (! ($verify->json('success') ?? false)) {
-                return back()
-                    ->withErrors(['captcha' => 'Captcha inválido. Intenta de nuevo.'])
-                    ->onlyInput('email');
-            }
-        }
 
         if (! Auth::attempt($credentials, $request->boolean('remember'))) {
             return back()

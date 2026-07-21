@@ -16,10 +16,10 @@
 </div>
 
 {{-- Alert de error general ──────────────────────────────────────────── --}}
-@if ($errors->has('email') || $errors->has('captcha'))
+@if ($errors->has('email'))
     <div class="al-alert-error" role="alert">
         <i class="bi bi-exclamation-circle-fill"></i>
-        <span>{{ $errors->first('email') ?: $errors->first('captcha') }}</span>
+        <span>{{ $errors->first('email') }}</span>
     </div>
 @endif
 
@@ -78,16 +78,6 @@
         </div>
     </div>
 
-    {{-- reCAPTCHA ───────────────────────────────────────────────────── --}}
-    @if(config('services.recaptcha.key'))
-        <div class="al-captcha-wrap">
-            <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.key') }}"></div>
-            @error('captcha')
-                <p class="al-error-msg"><i class="bi bi-exclamation-circle"></i> {{ $message }}</p>
-            @enderror
-        </div>
-    @endif
-
     {{-- Submit ──────────────────────────────────────────────────────── --}}
     <button type="submit" class="al-btn-submit">
         <i class="bi bi-box-arrow-in-right"></i>
@@ -105,10 +95,6 @@
 <div class="al-form-footer">
     ¿Problemas para ingresar? Contacta al administrador del sistema.
 </div>
-
-@if(config('services.recaptcha.key'))
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-@endif
 
 <script>
 (function () {
