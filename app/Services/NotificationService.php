@@ -9,6 +9,8 @@ use App\Models\Repartidor;
 
 class NotificationService
 {
+    public function __construct(private readonly WebPushService $push) {}
+
     public function paymentReviewed(Pago $payment): void
     {
         $payment->loadMissing('pedido.cliente');
@@ -30,6 +32,10 @@ class NotificationService
             'mensaje' => $message,
         ]);
 
+        $this->push->sendToCustomer($order->cliente_id, $title, $message, [
+            'url' => route('app.orders.show', $order->codigo), 'pedido' => $order->codigo,
+        ]);
+
         $this->create([
             'tipo' => $type,
             'destinatario_tipo' => Notificacion::DESTINATARIO_ADMIN,
@@ -44,7 +50,7 @@ class NotificationService
     {
         $order->loadMissing('cliente');
 
-        $this->create([
+        $notification = $this->create([
             'tipo' => Notificacion::TIPO_PEDIDO_ESTADO,
             'destinatario_tipo' => Notificacion::DESTINATARIO_CLIENTE,
             'cliente_id' => $order->cliente_id,
@@ -55,6 +61,10 @@ class NotificationService
                 'estado_anterior' => $previousState,
                 'estado_nuevo' => $order->estado,
             ],
+        ]);
+
+        $this->push->sendToCustomer($order->cliente_id, $notification->titulo, $notification->mensaje, [
+            'url' => route('app.orders.show', $order->codigo), 'pedido' => $order->codigo,
         ]);
     }
 
@@ -67,6 +77,10 @@ class NotificationService
             'pedido_id' => $order->id,
             'titulo' => 'Nuevo pedido asignado',
             'mensaje' => "Tienes asignado el pedido {$order->codigo}.",
+        ]);
+
+        $this->push->sendToCourier($courier->id, 'Nuevo pedido asignado', "Tienes asignado el pedido {$order->codigo}.", [
+            'url' => route('courier.turno', $courier), 'pedido' => $order->codigo,
         ]);
 
         $this->create([

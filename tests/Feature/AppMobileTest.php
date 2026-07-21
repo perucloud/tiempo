@@ -16,8 +16,8 @@ class AppMobileTest extends TestCase
             ->assertSee('TIEMPO App')
             ->assertSee('Negocios afiliados')
             ->assertSee('Carrito')
-            ->assertSee('Seguimiento')
-            ->assertSee('Perfil cliente')
+            ->assertSee('Seguir pedido')
+            ->assertSee('Mis pedidos')
             ->assertDontSee('Dashboard administrativo');
     }
 
@@ -39,5 +39,8 @@ class AppMobileTest extends TestCase
             ->assertSee('/css/app-mobile.css')
             ->assertSee('/js/app-mobile.js')
             ->assertSee('No cachear datos de clientes, pedidos, pagos ni sesiones');
+        $this->get('/app/service-worker.js')
+            ->assertSee("self.addEventListener('push'", false)
+            ->assertSee("self.addEventListener('notificationclick'", false);
     }
 }

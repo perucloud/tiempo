@@ -20,8 +20,8 @@ class OrderController extends Controller
             'email'            => ['nullable', 'email', 'max:255'],
             'documento'        => ['nullable', 'string', 'max:30'],
             'notas'            => ['nullable', 'string', 'max:500'],
-            'latitud_cliente'  => ['nullable', 'numeric', 'between:-90,90'],
-            'longitud_cliente' => ['nullable', 'numeric', 'between:-180,180'],
+            'latitud_cliente'  => ['required', 'numeric', 'between:-90,90'],
+            'longitud_cliente' => ['required', 'numeric', 'between:-180,180'],
         ]);
 
         $latitud  = isset($data['latitud_cliente'])  ? (float) $data['latitud_cliente']  : null;
@@ -35,8 +35,6 @@ class OrderController extends Controller
                 ->withErrors(['order' => $exception->getMessage()]);
         }
 
-        return redirect()
-            ->to(route('app.home').'#pedidos')
-            ->with('order_status', "Pedido {$pedido->codigo} creado correctamente.");
+        return redirect()->route('app.orders.show', $pedido->codigo);
     }
 }

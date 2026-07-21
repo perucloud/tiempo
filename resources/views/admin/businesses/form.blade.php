@@ -432,6 +432,7 @@
 @endsection
 
 @push('scripts')
+<script>window.GeoConfig = @json($geoConfig);</script>
 <script src="{{ asset('vendor/leaflet/leaflet.min.js') }}"></script>
 <script>
 (function () {
@@ -637,7 +638,7 @@
         _gcController = new AbortController();
 
         try {
-            const url = 'https://nominatim.openstreetmap.org/reverse?'
+            const url = window.GeoConfig.geocodingBase + '/reverse?'
                 + new URLSearchParams({ lat, lon: lng, format: 'json' });
 
             const res = await fetch(url, {
@@ -717,8 +718,8 @@
        AUTOCOMPLETADO — configuración centralizada
     ══════════════════════════════════════════════════════════ */
     const NOM = {
-        base:        'https://nominatim.openstreetmap.org',
-        country:     'pe',
+        base:        window.GeoConfig.geocodingBase,
+        country:     window.GeoConfig.countryCode,
         /* Viewbox centrado en Junín/Satipo como hint de prioridad (bounded=0) */
         viewbox:     '-76.5,-13.0,-73.0,-10.5',
         bounded:     0,

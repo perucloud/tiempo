@@ -82,6 +82,10 @@ class Pedido extends Model
         'confirmado_at',
         'entregado_at',
         'cancelado_at',
+        'zona_delivery_id',
+        'distance_km',
+        'delivery_duration_minutes',
+        'delivery_pricing_snapshot',
     ];
 
     protected function casts(): array
@@ -95,7 +99,10 @@ class Pedido extends Model
             'confirmado_at'     => 'datetime',
             'entregado_at'      => 'datetime',
             'cancelado_at'      => 'datetime',
-            'geolocalizacion_at' => 'datetime',
+            'geolocalizacion_at'        => 'datetime',
+            'distance_km'               => 'decimal:3',
+            'delivery_duration_minutes' => 'integer',
+            'delivery_pricing_snapshot' => 'array',
         ];
     }
 
@@ -142,6 +149,23 @@ class Pedido extends Model
     public function detalles(): HasMany
     {
         return $this->hasMany(PedidoDetalle::class);
+    }
+
+    public function zonaDelivery(): BelongsTo
+    {
+        return $this->belongsTo(ZonaDelivery::class, 'zona_delivery_id');
+    }
+
+    public function asignaciones(): HasMany
+    {
+        return $this->hasMany(PedidoAsignacion::class);
+    }
+
+    public function asignacionActiva(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(PedidoAsignacion::class)
+            ->where('status', PedidoAsignacion::STATUS_ACTIVO)
+            ->latest('assigned_at');
     }
 
     public function pagos(): HasMany

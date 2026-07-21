@@ -14,16 +14,48 @@ class Repartidor extends Model
 {
     use HasFactory, SoftDeletes;
 
+    /* ── Estado de disponibilidad (campo legacy) ── */
     public const ESTADO_DISPONIBLE = 'disponible';
-
-    public const ESTADO_OCUPADO = 'ocupado';
-
-    public const ESTADO_INACTIVO = 'inactivo';
+    public const ESTADO_OCUPADO    = 'ocupado';
+    public const ESTADO_INACTIVO   = 'inactivo';
 
     public const ESTADOS = [
         self::ESTADO_DISPONIBLE,
         self::ESTADO_OCUPADO,
         self::ESTADO_INACTIVO,
+    ];
+
+    /* ── Estado operativo granular (campo estado_operativo) ── */
+    public const OP_OFFLINE            = 'offline';
+    public const OP_AVAILABLE          = 'available';
+    public const OP_ASSIGNED           = 'assigned';
+    public const OP_GOING_TO_BUSINESS  = 'going_to_business';
+    public const OP_AT_BUSINESS        = 'at_business';
+    public const OP_PICKED_UP          = 'picked_up';
+    public const OP_GOING_TO_CUSTOMER  = 'going_to_customer';
+    public const OP_DELIVERED          = 'delivered';
+
+    public const ESTADOS_OPERATIVOS = [
+        self::OP_OFFLINE,
+        self::OP_AVAILABLE,
+        self::OP_ASSIGNED,
+        self::OP_GOING_TO_BUSINESS,
+        self::OP_AT_BUSINESS,
+        self::OP_PICKED_UP,
+        self::OP_GOING_TO_CUSTOMER,
+        self::OP_DELIVERED,
+    ];
+
+    /* Transiciones permitidas: estado_actual → [estados_destino] */
+    public const TRANSICIONES_OPERATIVAS = [
+        self::OP_OFFLINE            => [],              // solo el sistema puede activarlo (iniciar turno)
+        self::OP_AVAILABLE          => [],              // admin asigna
+        self::OP_ASSIGNED           => [self::OP_GOING_TO_BUSINESS],
+        self::OP_GOING_TO_BUSINESS  => [self::OP_AT_BUSINESS],
+        self::OP_AT_BUSINESS        => [self::OP_PICKED_UP],
+        self::OP_PICKED_UP          => [self::OP_GOING_TO_CUSTOMER],
+        self::OP_GOING_TO_CUSTOMER  => [self::OP_DELIVERED],
+        self::OP_DELIVERED          => [self::OP_AVAILABLE],
     ];
 
     protected $table = 'repartidores';
@@ -37,6 +69,7 @@ class Repartidor extends Model
         'vehiculo_tipo',
         'vehiculo_placa',
         'estado',
+        'estado_operativo',
         'latitud_actual',
         'longitud_actual',
         'ubicacion_actualizada_at',
@@ -61,9 +94,43 @@ class Repartidor extends Model
         return $this->hasMany(Pedido::class);
     }
 
+    public function asignaciones(): HasMany
+    {
+        return $this->hasMany(PedidoAsignacion::class);
+    }
+
+    public function asignacionActiva(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(PedidoAsignacion::class)
+            ->where('status', PedidoAsignacion::STATUS_ACTIVO)
+            ->latest('assigned_at');
+    }
+
     public function ubicaciones(): HasMany
     {
         return $this->hasMany(RepartidorUbicacion::class);
+    }
+
+    public function puedeTransicionar(string $nuevoEstado): bool
+    {
+        $actual = $this->estado_operativo ?? self::OP_OFFLINE;
+
+        return in_array($nuevoEstado, self::TRANSICIONES_OPERATIVAS[$actual] ?? [], true);
+    }
+
+    public static function estadoOperativoLabel(string $estado): string
+    {
+        return match ($estado) {
+            self::OP_OFFLINE            => 'Desconectado',
+            self::OP_AVAILABLE          => 'Disponible',
+            self::OP_ASSIGNED           => 'Pedido asignado',
+            self::OP_GOING_TO_BUSINESS  => 'Yendo al negocio',
+            self::OP_AT_BUSINESS        => 'En el negocio',
+            self::OP_PICKED_UP          => 'Pedido recogido',
+            self::OP_GOING_TO_CUSTOMER  => 'En camino al cliente',
+            self::OP_DELIVERED          => 'Entregado',
+            default                     => $estado,
+        };
     }
 
     public function tieneGpsActivo(): bool

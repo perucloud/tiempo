@@ -70,6 +70,11 @@ class ShoppingCart
         $productIds = array_keys($cart['items'] ?? []);
         $products = Producto::query()
             ->with('negocioAfiliado')
+            ->whereHas('negocioAfiliado', fn ($query) => $query
+                ->where('estado', \App\Models\NegocioAfiliado::ESTADO_ACTIVO)
+                ->where('abierto', true))
+            ->where('estado', Producto::ESTADO_ACTIVO)
+            ->where('disponible', true)
             ->whereIn('id', $productIds)
             ->get()
             ->keyBy('id');
@@ -96,7 +101,7 @@ class ShoppingCart
             ->values();
 
         $subtotal = $items->sum('subtotal');
-        $delivery = $items->isEmpty() ? 0.0 : 5.0;
+        $delivery = 0.0;
 
         return [
             'items' => $items,

@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\BusinessController;
+use App\Http\Controllers\Admin\DiagnosticoRutasController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ClientController;
+use App\Http\Controllers\Admin\AsignacionController;
 use App\Http\Controllers\Admin\CourierAssignmentController;
 use App\Http\Controllers\Admin\CourierController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -39,8 +41,18 @@ Route::prefix('admin')->name('admin.')->group(function (): void {
                 ->name('couriers.tracking');
             Route::get('couriers-ubicaciones', [CourierController::class, 'ubicaciones'])
                 ->name('couriers.ubicaciones');
+
+            /* Asignación clásica (desde edit de pedido) */
             Route::patch('orders/{order}/courier', [CourierAssignmentController::class, 'update'])
                 ->name('orders.courier.update');
+
+            /* Asignación con mapa */
+            Route::get('orders/{order}/asignar', [AsignacionController::class, 'show'])
+                ->name('orders.asignar');
+            Route::get('orders/{order}/candidatos', [AsignacionController::class, 'candidatos'])
+                ->name('orders.candidatos');
+            Route::post('orders/{order}/asignar', [AsignacionController::class, 'asignar'])
+                ->name('orders.asignar.store');
         });
 
         Route::middleware('admin.payments')->group(function (): void {
@@ -86,6 +98,13 @@ Route::prefix('admin')->name('admin.')->group(function (): void {
         Route::middleware('admin.users')->group(function (): void {
             Route::resource('users', UserController::class)
                 ->except(['show', 'destroy']);
+        });
+
+        Route::middleware('admin.settings')->group(function (): void {
+            Route::get('diagnostico/rutas', [DiagnosticoRutasController::class, 'show'])
+                ->name('diagnostico.rutas');
+            Route::post('diagnostico/rutas', [DiagnosticoRutasController::class, 'calcular'])
+                ->name('diagnostico.rutas.calcular');
         });
     });
 });

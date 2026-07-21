@@ -11,6 +11,10 @@ use RuntimeException;
 
 class OrderCreator
 {
+    public function __construct(
+        private readonly DeliveryPricingService $pricing,
+    ) {}
+
     public function createFromCart(ShoppingCart $cart, array $customerData, ?float $latitud = null, ?float $longitud = null): Pedido
     {
         $summary = $cart->summary();
@@ -23,7 +27,26 @@ class OrderCreator
             throw new RuntimeException('La direccion de entrega es obligatoria.');
         }
 
-        return DB::transaction(function () use ($cart, $summary, $customerData, $latitud, $longitud): Pedido {
+        if ($latitud === null || $longitud === null) {
+            throw new RuntimeException('Comparte tu ubicación para validar cobertura y calcular el delivery.');
+        }
+
+        $business = $summary['items']->first()['product']->negocioAfiliado;
+        $quote = $this->pricing->calculate(
+            $business,
+            $latitud,
+            $longitud,
+            number_format((float) $summary['subtotal'], 2, '.', ''),
+        );
+
+        if (! $quote->available) {
+            throw new RuntimeException($quote->unavailableReason ?? 'No hay cobertura para tu ubicación.');
+        }
+
+        $delivery = (float) $quote->finalDeliveryPrice;
+        $total = (float) $summary['subtotal'] + $delivery;
+
+        return DB::transaction(function () use ($cart, $summary, $customerData, $latitud, $longitud, $quote, $delivery, $total): Pedido {
             $client = Cliente::query()->updateOrCreate(
                 ['telefono' => $customerData['telefono']],
                 [
@@ -46,9 +69,13 @@ class OrderCreator
                 'longitud_cliente'    => $longitud,
                 'geolocalizacion_at'  => ($latitud !== null && $longitud !== null) ? now() : null,
                 'subtotal'            => $summary['subtotal'],
-                'costo_delivery'      => $summary['delivery'],
-                'total'               => $summary['total'],
+                'costo_delivery'      => $delivery,
+                'total'               => $total,
                 'notas'               => $customerData['notas'] ?? null,
+                'zona_delivery_id'    => $quote->zoneId,
+                'distance_km'         => $quote->distanceKm,
+                'delivery_duration_minutes' => (int) round($quote->routeDurationMinutes),
+                'delivery_pricing_snapshot' => $quote->pricingSnapshot(),
             ]);
 
             foreach ($summary['items'] as $item) {
@@ -69,6 +96,9 @@ class OrderCreator
             ]);
 
             $cart->clear();
+
+            session()->put('app_customer_phone', $client->telefono);
+            session()->push('app_order_ids', $pedido->id);
 
             return $pedido->load(['cliente', 'negocioAfiliado', 'detalles', 'estados']);
         });

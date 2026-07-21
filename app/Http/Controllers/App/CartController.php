@@ -18,6 +18,9 @@ class CartController extends Controller
         ]);
 
         $product = Producto::query()
+            ->whereHas('negocioAfiliado', fn ($query) => $query
+                ->where('estado', \App\Models\NegocioAfiliado::ESTADO_ACTIVO)
+                ->where('abierto', true))
             ->where('estado', Producto::ESTADO_ACTIVO)
             ->where('disponible', true)
             ->findOrFail($data['product_id']);

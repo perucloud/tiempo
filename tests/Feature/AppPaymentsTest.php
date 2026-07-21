@@ -16,13 +16,14 @@ class AppPaymentsTest extends TestCase
     public function test_customer_can_register_payment_for_order(): void
     {
         $order = $this->makeOrder();
+        $this->withSession(['app_order_ids' => [$order->id]]);
 
         $this->post('/app/payments', [
             'codigo' => $order->codigo,
             'metodo' => Pago::METODO_YAPE,
             'codigo_operacion' => 'OP123',
             'voucher_path' => 'https://example.com/voucher.jpg',
-        ])->assertRedirect('/app#pedidos');
+        ])->assertRedirect(route('app.orders.show', $order->codigo));
 
         $this->assertDatabaseHas('pagos', [
             'pedido_id' => $order->id,

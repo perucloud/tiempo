@@ -5,6 +5,7 @@ use App\Http\Middleware\EnsureBusinessManagementAccess;
 use App\Http\Middleware\EnsureCategoryManagementAccess;
 use App\Http\Middleware\EnsureClientManagementAccess;
 use App\Http\Middleware\EnsureCourierManagementAccess;
+use App\Http\Middleware\EnsureCourierAccess;
 use App\Http\Middleware\EnsureNotificationManagementAccess;
 use App\Http\Middleware\EnsureOrderManagementAccess;
 use App\Http\Middleware\EnsurePaymentManagementAccess;
@@ -27,7 +28,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->redirectGuestsTo(fn () => route('admin.login'));
+        $middleware->redirectGuestsTo(
+            fn (Request $request) => $request->is('repartidor/*') ? route('courier.login') : route('admin.login')
+        );
 
         $middleware->alias([
             'admin.access' => EnsureAdminAccess::class,
@@ -35,6 +38,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin.categories' => EnsureCategoryManagementAccess::class,
             'admin.clients' => EnsureClientManagementAccess::class,
             'admin.couriers' => EnsureCourierManagementAccess::class,
+            'courier.access' => EnsureCourierAccess::class,
             'admin.notifications' => EnsureNotificationManagementAccess::class,
             'admin.orders' => EnsureOrderManagementAccess::class,
             'admin.payments' => EnsurePaymentManagementAccess::class,
@@ -46,7 +50,7 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
-            fn (Request $request) => $request->is('api/*'),
+            fn (Request $request) => $request->is('api/*') || $request->expectsJson(),
         );
 
         $exceptions->render(function (NotFoundHttpException $exception, Request $request) {

@@ -1,8 +1,9 @@
-const CACHE_NAME = 'tiempo-app-shell-v2';
+const CACHE_NAME = 'tiempo-app-shell-v3';
 const STATIC_ASSETS = [
     '/app/manifest.webmanifest',
     '/css/app-mobile.css',
     '/js/app-mobile.js',
+    '/js/push-notifications.js',
     '/app/icon.svg',
 ];
 
@@ -38,4 +39,17 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
         caches.match(event.request).then((cached) => cached || fetch(event.request)),
     );
+});
+
+self.addEventListener('push', (event) => {
+    const payload = event.data ? event.data.json() : {};
+    event.waitUntil(self.registration.showNotification(payload.title || 'TIEMPO Delivery', {
+        body: payload.body || 'Tienes una actualización.', icon: '/app/icon.svg',
+        badge: '/app/icon.svg', data: payload.data || {},
+    }));
+});
+
+self.addEventListener('notificationclick', (event) => {
+    event.notification.close();
+    event.waitUntil(clients.openWindow(event.notification.data?.url || '/app'));
 });

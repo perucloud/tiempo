@@ -1,73 +1,87 @@
 @extends('layouts.app-mobile')
 
-@section('title', 'TIEMPO App | Pedidos rapidos')
-@section('description', 'App movil de TIEMPO Delivery para explorar negocios afiliados, comprar y seguir pedidos.')
+@section('title', 'TIEMPO App | Pedidos rápidos')
+@section('description', 'App móvil de TIEMPO Delivery para explorar negocios afiliados, comprar y seguir pedidos.')
 
 @section('content')
+
+    {{-- ── Hero ── --}}
     <section class="app-hero">
         <div>
             <p class="app-kicker">Entrega en tu zona</p>
-            <h1>Que necesitas ahora?</h1>
+            <h1>¿Qué necesitas ahora?</h1>
         </div>
-        <a class="profile-button" href="#perfil" aria-label="Abrir perfil">T</a>
+        <a class="profile-button" href="#perfil" aria-label="Mi perfil">T</a>
     </section>
 
-    <section id="buscar" class="search-panel" aria-label="Buscar productos o negocios">
-        <label for="app-search">Buscar</label>
-        <input id="app-search" type="search" placeholder="Restaurante, producto o categoria">
+    {{-- ── Búsqueda ── --}}
+    <section id="buscar" class="search-panel" aria-label="Buscar">
+        <label for="app-search" class="sr-only">Buscar</label>
+        <input id="app-search" type="search" placeholder="Restaurante, producto o categoría…" autocomplete="off">
     </section>
 
-    <section class="category-strip" aria-label="Categorias">
+    {{-- Alerta de pedido no encontrado --}}
+    @if(session('order_error'))
+        <div class="app-alert app-alert-err">{{ session('order_error') }}</div>
+    @endif
+
+    {{-- ── Categorías (filtro JS) ── --}}
+    <nav class="category-strip" aria-label="Categorías">
+        <a href="#negocios" class="cat-all active" data-tipo="">Todos</a>
         @forelse ($categories as $category)
-            <a href="#negocios">{{ $category }}</a>
+            <a href="#negocios" data-tipo="{{ $category }}">{{ ucfirst($category) }}</a>
         @empty
-            <a href="#negocios">Comidas</a>
-            <a href="#negocios">Bebidas</a>
+            <a href="#negocios" data-tipo="restaurante">Restaurantes</a>
         @endforelse
-    </section>
+    </nav>
 
+    {{-- ── Negocios ── --}}
     <section id="negocios" class="content-section">
         <div class="section-heading">
             <h2>Negocios afiliados</h2>
-            <a href="#buscar">Ver todos</a>
+            <span id="negocios-count" class="section-count">{{ $businesses->count() }}</span>
         </div>
 
-        <div class="business-list">
+        <div class="business-list" id="business-list">
             @forelse ($businesses as $business)
-                <article class="business-card">
-                    <div class="business-visual">
+                <a class="business-card" href="{{ route('app.negocio.show', $business->slug) }}"
+                   data-tipo="{{ $business->tipo_negocio }}"
+                   data-search="{{ strtolower($business->nombre_comercial . ' ' . $business->tipo_negocio) }}">
+                    <div class="business-visual" style="background:{{ $business->colorEfectivo() }}">
                         <span>{{ mb_substr($business->nombre_comercial, 0, 1) }}</span>
                     </div>
                     <div>
-                        <span class="status-badge">{{ $business->abierto ? 'Abierto' : 'Cerrado' }}</span>
+                        <span class="status-badge {{ $business->abierto ? '' : 'closed' }}">
+                            {{ $business->abierto ? 'Abierto' : 'Cerrado' }}
+                        </span>
                         <h3>{{ $business->nombre_comercial }}</h3>
-                        <p>{{ ucfirst($business->tipo_negocio) }} afiliado</p>
-                        <small>25-40 min</small>
+                        <p>{{ ucfirst($business->tipo_negocio) }}</p>
+                        @if($business->tiempo_preparacion)
+                            <small>~{{ $business->tiempo_preparacion }} min</small>
+                        @else
+                            <small>25–40 min</small>
+                        @endif
                     </div>
-                </article>
+                </a>
             @empty
-                <article class="business-card">
-                    <div class="business-visual"><span>T</span></div>
-                    <div>
-                        <span class="status-badge">Pronto</span>
-                        <h3>Negocios en preparacion</h3>
-                        <p>TIEMPO esta afiliando comercios para tu zona.</p>
-                        <small>Catalogo inicial</small>
-                    </div>
-                </article>
+                <div class="business-empty">
+                    <p>Próximamente habrá negocios disponibles en tu zona.</p>
+                </div>
             @endforelse
         </div>
     </section>
 
+    {{-- ── Populares ── --}}
     <section class="content-section">
         <div class="section-heading">
             <h2>Populares</h2>
             <a href="#carrito">Carrito</a>
         </div>
 
-        <div class="product-list">
+        <div class="product-list" id="product-list">
             @forelse ($products as $product)
-                <article class="product-card">
+                <article class="product-card"
+                         data-search="{{ strtolower($product->nombre . ' ' . ($product->negocioAfiliado?->nombre_comercial ?? '')) }}">
                     <div>
                         <h3>{{ $product->nombre }}</h3>
                         <p>{{ $product->negocioAfiliado?->nombre_comercial }}</p>
@@ -77,30 +91,25 @@
                         @csrf
                         <input type="hidden" name="product_id" value="{{ $product->id }}">
                         <input type="hidden" name="quantity" value="1">
-                        <button type="submit">Agregar</button>
+                        <button type="submit" aria-label="Agregar {{ $product->nombre }}">+</button>
                     </form>
                 </article>
             @empty
-                <article class="product-card">
-                    <div>
-                        <h3>Catalogo en preparacion</h3>
-                        <p>Los productos activos apareceran aqui.</p>
-                        <strong>S/ 0.00</strong>
-                    </div>
-                    <button type="button" disabled>Pronto</button>
-                </article>
+                <p class="cart-empty">Cargando productos…</p>
             @endforelse
         </div>
     </section>
 
+    {{-- ── Carrito preview ── --}}
     <section id="carrito" class="cart-preview">
         <div>
             <span>Carrito</span>
             <strong>{{ $cart['count'] }} {{ $cart['count'] === 1 ? 'producto' : 'productos' }}</strong>
         </div>
-        <a class="cart-continue" href="#checkout">Continuar</a>
+        <a class="cart-continue" href="#checkout">Ver carrito</a>
     </section>
 
+    {{-- ── Checkout ── --}}
     <section id="checkout" class="cart-detail">
         <div class="section-heading">
             <h2>Tu carrito</h2>
@@ -111,10 +120,6 @@
 
         @if (session('cart_status'))
             <p class="cart-status">{{ session('cart_status') }}</p>
-        @endif
-
-        @if (session('order_status'))
-            <p class="cart-status">{{ session('order_status') }}</p>
         @endif
 
         @error('order')
@@ -131,9 +136,9 @@
                     @csrf
                     @method('PATCH')
                     <input type="hidden" name="product_id" value="{{ $item['product']->id }}">
-                    <button type="submit" name="quantity" value="{{ $item['quantity'] - 1 }}" aria-label="Quitar uno">-</button>
+                    <button type="submit" name="quantity" value="{{ $item['quantity'] - 1 }}" aria-label="Quitar">−</button>
                     <span>{{ $item['quantity'] }}</span>
-                    <button type="submit" name="quantity" value="{{ $item['quantity'] + 1 }}" aria-label="Agregar uno">+</button>
+                    <button type="submit" name="quantity" value="{{ $item['quantity'] + 1 }}" aria-label="Agregar">+</button>
                 </form>
             </article>
         @empty
@@ -143,15 +148,17 @@
         <form class="delivery-form" method="POST" action="{{ route('app.cart.address') }}">
             @csrf
             @method('PATCH')
-            <label for="delivery-address">Direccion de entrega</label>
-            <input id="delivery-address" name="delivery_address" type="text" value="{{ $cart['delivery_address'] }}" placeholder="Calle, numero, referencia">
-            <button type="submit">Guardar direccion</button>
+            <label for="delivery-address">Dirección de entrega *</label>
+            <input id="delivery-address" name="delivery_address" type="text"
+                   value="{{ $cart['delivery_address'] }}"
+                   placeholder="Calle, número, referencia" required>
+            <button type="submit">Guardar dirección</button>
         </form>
 
         <div class="cart-totals">
             <span>Subtotal <strong>S/ {{ number_format($cart['subtotal'], 2) }}</strong></span>
-            <span>Delivery <strong>S/ {{ number_format($cart['delivery'], 2) }}</strong></span>
-            <span>Total <strong>S/ {{ number_format($cart['total'], 2) }}</strong></span>
+            <span>Delivery <strong id="delivery-price">Por calcular</strong></span>
+            <span>Total <strong id="order-total">S/ {{ number_format($cart['subtotal'], 2) }}</strong></span>
         </div>
 
         @if ($cart['count'] > 0)
@@ -160,33 +167,35 @@
                 <input type="hidden" name="latitud_cliente"  id="geo-lat">
                 <input type="hidden" name="longitud_cliente" id="geo-lng">
 
-                <label for="customer-names">Nombres</label>
-                <input id="customer-names" name="nombres" type="text" value="{{ old('nombres') }}" placeholder="Tu nombre" required>
+                <label for="customer-names">Nombre *</label>
+                <input id="customer-names" name="nombres" type="text"
+                       value="{{ old('nombres') }}" placeholder="Tu nombre completo" required>
 
-                <label for="customer-phone">Telefono</label>
-                <input id="customer-phone" name="telefono" type="text" value="{{ old('telefono') }}" placeholder="Numero de contacto" required>
+                <label for="customer-phone">Teléfono *</label>
+                <input id="customer-phone" name="telefono" type="tel"
+                       value="{{ old('telefono') }}" placeholder="9XXXXXXXX" required>
 
-                <label for="customer-email">Email opcional</label>
-                <input id="customer-email" name="email" type="email" value="{{ old('email') }}" placeholder="correo@ejemplo.com">
+                <label for="customer-email">Email (opcional)</label>
+                <input id="customer-email" name="email" type="email"
+                       value="{{ old('email') }}" placeholder="correo@ejemplo.com">
 
-                <label for="order-notes">Notas opcionales</label>
-                <input id="order-notes" name="notas" type="text" value="{{ old('notas') }}" placeholder="Referencia o indicaciones">
+                <label for="order-notes">Notas (opcional)</label>
+                <input id="order-notes" name="notas" type="text"
+                       value="{{ old('notas') }}" placeholder="Referencia, instrucciones…">
 
-                {{-- Geolocalización: complementaria, no bloqueante --}}
                 <div class="geo-section" id="geo-section">
                     <button class="geo-btn" type="button" id="geo-btn">
-                        <i class="geo-icon">📍</i>
-                        <span id="geo-label">Compartir mi ubicacion (recomendado)</span>
+                        <span class="geo-icon">📍</span>
+                        <span id="geo-label">Compartir ubicación para calcular delivery</span>
                     </button>
                     <small id="geo-hint">Ayuda al repartidor a encontrarte con exactitud.</small>
+                    <small id="delivery-quote-status" aria-live="polite"></small>
                 </div>
 
-                <button type="submit" class="order-submit-btn">Crear pedido</button>
+                <button type="submit" class="order-submit-btn" id="order-submit" disabled>Calcula el delivery para continuar</button>
             </form>
-        @endif
 
-        @if ($cart['count'] > 0)
-            <form method="POST" action="{{ route('app.cart.destroy') }}">
+            <form method="POST" action="{{ route('app.cart.destroy') }}" style="margin-top:8px">
                 @csrf
                 @method('DELETE')
                 <button class="clear-cart-button" type="submit">Vaciar carrito</button>
@@ -194,43 +203,175 @@
         @endif
     </section>
 
+    {{-- ── Seguimiento ── --}}
     <section id="pedidos" class="order-status">
-        <h2>Seguimiento</h2>
-        <form class="delivery-form payment-form" method="POST" action="{{ route('app.payments.store') }}">
-            @csrf
-            <label for="payment-code">Codigo de pedido</label>
-            <input id="payment-code" name="codigo" type="text" value="{{ old('codigo') }}" placeholder="PED-YYYYMMDD-00001" required>
+        <h2>Seguir pedido</h2>
+        <p class="tracking-hint">¿Ya tienes un pedido? Ingresa tu código para ver el estado en tiempo real.</p>
+        <form class="tracking-code-form" method="GET" action="" id="track-form">
+            <input id="track-input" name="codigo" type="text"
+                   placeholder="PED-AAAAMMDD-00001" autocomplete="off"
+                   pattern="PED-\d{8}-\d{5}"
+                   title="Formato: PED-AAAAMMDD-00001">
+            <button type="submit">Ver pedido →</button>
+        </form>
+    </section>
 
-            <label for="payment-method">Metodo de pago</label>
-            <select id="payment-method" name="metodo" required>
-                <option value="yape">Yape</option>
-                <option value="plin">Plin</option>
-            </select>
+    {{-- ── Perfil / Historial ── --}}
+    <section id="perfil" class="profile-panel">
+        <h2>Mis pedidos</h2>
+        <p class="profile-hint">Verifica tu teléfono para recuperar tus pedidos de forma segura.</p>
 
-            <label for="payment-operation">Codigo de operacion</label>
-            <input id="payment-operation" name="codigo_operacion" type="text" value="{{ old('codigo_operacion') }}" placeholder="Operacion o referencia">
-
-            <label for="payment-voucher">Voucher URL</label>
-            <input id="payment-voucher" name="voucher_path" type="url" value="{{ old('voucher_path') }}" placeholder="https://...">
-
-            <button type="submit">Enviar pago</button>
+        <form class="profile-search-form" id="profile-form">
+            <input id="profile-phone" name="telefono" type="tel"
+                   placeholder="9XXXXXXXX" maxlength="15">
+            <button type="submit">Enviar código</button>
         </form>
 
-        <ol>
-            <li class="is-current">Pendiente de pago</li>
-            <li>Pago en revision</li>
-            <li>Pedido aprobado</li>
-            <li>En camino</li>
-        </ol>
+        <form class="profile-search-form hidden" id="profile-otp-form">
+            <input id="profile-otp" name="codigo" type="text" inputmode="numeric"
+                   placeholder="Código de 6 dígitos" maxlength="6" pattern="[0-9]{6}">
+            <button type="submit">Verificar</button>
+        </form>
+
+        <p id="profile-message" class="profile-hint" aria-live="polite"></p>
+        <button type="button" id="push-enable" class="order-submit-btn">Activar notificaciones</button>
+
+        <div id="profile-results" class="profile-results hidden"></div>
+
+        <a class="profile-back-link" href="{{ route('home') }}">← Volver a la landing</a>
     </section>
 
-    <section id="perfil" class="profile-panel">
-        <h2>Perfil cliente</h2>
-        <p>Inicia sesion para guardar direcciones, consultar historial y seguir tus pedidos.</p>
-        <a href="{{ route('home') }}">Volver a la landing</a>
-    </section>
 @endsection
 
 @push('app_scripts')
 <script src="{{ asset('js/geolocalizacion-cliente.js') }}"></script>
+<script>
+(function () {
+    /* ── Búsqueda en tiempo real ── */
+    const searchInput = document.getElementById('app-search');
+    if (searchInput) {
+        searchInput.addEventListener('input', function () {
+            const q = this.value.toLowerCase().trim();
+            let visibleNegocios = 0;
+
+            document.querySelectorAll('#business-list .business-card').forEach(card => {
+                const match = !q || card.dataset.search.includes(q);
+                card.style.display = match ? '' : 'none';
+                if (match) visibleNegocios++;
+            });
+
+            document.querySelectorAll('#product-list .product-card').forEach(card => {
+                card.style.display = (!q || card.dataset.search.includes(q)) ? '' : 'none';
+            });
+
+            const cnt = document.getElementById('negocios-count');
+            if (cnt) cnt.textContent = visibleNegocios;
+        });
+    }
+
+    /* ── Filtro por categoría ── */
+    document.querySelectorAll('.category-strip a').forEach(link => {
+        link.addEventListener('click', function () {
+            document.querySelectorAll('.category-strip a').forEach(l => l.classList.remove('active'));
+            this.classList.add('active');
+
+            const tipo = this.dataset.tipo;
+            let visible = 0;
+
+            document.querySelectorAll('#business-list .business-card').forEach(card => {
+                const match = !tipo || card.dataset.tipo === tipo;
+                card.style.display = match ? '' : 'none';
+                if (match) visible++;
+            });
+
+            const cnt = document.getElementById('negocios-count');
+            if (cnt) cnt.textContent = visible;
+        });
+    });
+
+    /* ── Formulario de seguimiento ── */
+    const trackForm = document.getElementById('track-form');
+    if (trackForm) {
+        trackForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const codigo = document.getElementById('track-input').value.trim();
+            if (codigo) {
+                window.location.href = '/app/pedidos/' + encodeURIComponent(codigo);
+            }
+        });
+    }
+
+    /* ── Perfil: acceso OTP e historial ── */
+    const profileForm = document.getElementById('profile-form');
+    const profileOtpForm = document.getElementById('profile-otp-form');
+    const profileMessage = document.getElementById('profile-message');
+    const profileResults = document.getElementById('profile-results');
+    const escapeHtml = value => String(value ?? '').replace(/[&<>'"]/g, char => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#039;', '"': '&quot;',
+    })[char]);
+
+    const jsonPost = async (url, payload) => {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json', 'Accept': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content ?? '',
+            },
+            body: JSON.stringify(payload),
+        });
+        const json = await response.json();
+        if (!response.ok) throw new Error(json.message || 'No se pudo completar la solicitud.');
+        return json;
+    };
+
+    const renderOrders = pedidos => {
+        profileResults.classList.remove('hidden');
+        profileResults.innerHTML = pedidos.length === 0
+            ? '<p class="profile-empty">Sin pedidos registrados para ese número.</p>'
+            : pedidos.map(p => `
+                <a class="profile-order-item" href="${p.url}">
+                    <div class="profile-order-main"><strong>${escapeHtml(p.codigo)}</strong><span>${escapeHtml(p.negocio)}</span></div>
+                    <div class="profile-order-meta"><span class="profile-estado">${escapeHtml(p.estado)}</span><span>${escapeHtml(p.total)} · ${escapeHtml(p.hace)}</span></div>
+                </a>`).join('');
+    };
+
+    if (profileForm && profileOtpForm) {
+        profileForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const telefono = document.getElementById('profile-phone').value.trim();
+            if (!telefono) return;
+            profileMessage.textContent = 'Solicitando código...';
+
+            try {
+                const json = await jsonPost('{{ route("app.perfil.codigo") }}', { telefono });
+                profileOtpForm.classList.remove('hidden');
+                profileMessage.textContent = json.debug_code
+                    ? `${json.message} Código de prueba: ${json.debug_code}`
+                    : json.message;
+                document.getElementById('profile-otp').focus();
+            } catch (error) {
+                profileMessage.textContent = error.message;
+            }
+        });
+    }
+
+    if (profileOtpForm && profileResults) {
+        profileOtpForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const telefono = document.getElementById('profile-phone').value.trim();
+            const codigo = document.getElementById('profile-otp').value.trim();
+            profileMessage.textContent = 'Verificando...';
+
+            try {
+                const verification = await jsonPost('{{ route("app.perfil.verificar") }}', { telefono, codigo });
+                const history = await jsonPost('{{ route("app.perfil.buscar") }}', { telefono });
+                profileMessage.textContent = verification.message;
+                renderOrders(history.pedidos || []);
+            } catch (error) {
+                profileMessage.textContent = error.message;
+            }
+        });
+    }
+})();
+</script>
 @endpush

@@ -159,6 +159,11 @@ class NegocioAfiliado extends Model
             ->implode(' | ');
     }
 
+    public function deliveryConfig(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(NegocioDeliveryConfig::class);
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

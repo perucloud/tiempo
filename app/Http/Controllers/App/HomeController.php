@@ -28,6 +28,9 @@ class HomeController extends Controller
                 ->get(),
             'products' => Producto::query()
                 ->with(['negocioAfiliado', 'categoria'])
+                ->whereHas('negocioAfiliado', fn ($query) => $query
+                    ->where('estado', NegocioAfiliado::ESTADO_ACTIVO)
+                    ->where('abierto', true))
                 ->where('estado', Producto::ESTADO_ACTIVO)
                 ->where('disponible', true)
                 ->orderBy('nombre')

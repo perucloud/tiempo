@@ -3,6 +3,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="vapid-public-key" content="{{ config('webpush.public_key') }}">
+    <meta name="push-subscribe-url" content="{{ route('courier.push.subscribe', $repartidor) }}">
+    <meta name="push-worker-url" content="{{ route('courier.service-worker') }}">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#0f172a">
@@ -23,6 +27,7 @@
         </header>
 
         <main class="courier-main">
+            <button type="button" id="push-enable" class="courier-push-button">Activar notificaciones</button>
             @yield('content')
         </main>
 
@@ -32,5 +37,6 @@
     </div>
 
     @stack('courier_scripts')
+    <script src="{{ asset('js/push-notifications.js') }}" defer></script>
 </body>
 </html>

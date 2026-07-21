@@ -349,3 +349,155 @@ html, body {
     color: var(--text-muted);
     margin-bottom: .2rem;
 }
+
+/* ============================================================
+   PEDIDO ACTIVO + ESTADOS OPERATIVOS — Courier App
+   ============================================================ */
+
+.courier-instrucciones {
+    cursor: pointer;
+}
+
+.courier-pedido-card {
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.15);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+}
+
+.courier-pedido-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.courier-pedido-codigo {
+    font-family: monospace;
+    font-weight: 700;
+    font-size: 1rem;
+    color: #fff;
+    background: rgba(255,255,255,.15);
+    padding: 3px 10px;
+    border-radius: 6px;
+    letter-spacing: .05em;
+}
+
+.courier-op-badge {
+    font-size: .7rem;
+    font-weight: 600;
+    background: var(--teal);
+    color: #fff;
+    padding: 3px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+}
+
+.courier-pedido-info {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.courier-dest {
+    display: flex;
+    align-items: flex-start;
+    gap: .6rem;
+}
+
+.courier-dest-icon {
+    font-size: 1.1rem;
+    line-height: 1;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.courier-dest strong {
+    display: block;
+    font-size: .85rem;
+    color: #fff;
+}
+
+.courier-dest small {
+    display: block;
+    font-size: .73rem;
+    color: rgba(255,255,255,.6);
+}
+
+/* Botones de transición de estado */
+.courier-estado-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.btn-estado-op {
+    width: 100%;
+    padding: .75rem;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: var(--teal);
+    color: #fff;
+    font-size: .9rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    transition: background .15s, transform .1s;
+}
+
+.btn-estado-op:active { transform: scale(.97); }
+.btn-estado-op:hover  { background: #0f9679; }
+.btn-estado-op:disabled { opacity: .5; cursor: not-allowed; }
+
+/* Navegación externa */
+.courier-nav-links {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .4rem;
+}
+
+.courier-nav-btn {
+    padding: .55rem .4rem;
+    border-radius: var(--radius-sm);
+    font-size: .72rem;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    transition: opacity .15s;
+}
+
+.courier-nav-btn:active { opacity: .7; }
+.courier-nav-gmaps { background: #1a73e8; color: #fff; }
+.courier-nav-waze  { background: #33ccff; color: #0d1b2a; }
+
+.courier-sin-pedido {
+    text-align: center;
+    padding: 2rem 1rem;
+    background: rgba(255,255,255,.05);
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: var(--radius-md);
+    color: rgba(255,255,255,.6);
+}
+
+.courier-sin-pedido p { font-size: 1.1rem; margin-bottom: .4rem; color: #fff; }
+.courier-sin-pedido small { font-size: .78rem; }
+.courier-login {
+    width: min(92vw, 390px);
+    margin: 8vh auto;
+    padding: 24px;
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: 0 18px 50px rgba(15, 23, 42, .12);
+}
+
+.courier-login label { display: block; margin: 14px 0 6px; font-weight: 700; }
+.courier-login input { box-sizing: border-box; width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 10px; }
+.courier-login button { width: 100%; margin-top: 18px; padding: 13px; border: 0; border-radius: 10px; background: #0f766e; color: #fff; font-weight: 800; }
+.courier-push-button {
+    width: 100%; margin-bottom: 12px; padding: 11px; border: 1px solid #0f766e;
+    border-radius: 10px; background: #ecfdf5; color: #0f766e; font-weight: 800;
+}
