@@ -322,6 +322,75 @@
             color: #94a3b8;
         }
 
+        /* ── Logo en formulario ── */
+        .al-login-logo {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 32px;
+        }
+        .al-login-logo img {
+            height: 52px;
+            width: auto;
+            object-fit: contain;
+            user-select: none;
+        }
+
+        /* ── Label row (label + forgot link) ── */
+        .al-label-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 7px;
+        }
+        .al-label-row .al-label { margin-bottom: 0; }
+        .al-forgot-link {
+            font-size: 12px;
+            color: #2563eb;
+            font-weight: 500;
+            transition: color .15s;
+        }
+        .al-forgot-link:hover { color: #1d4ed8; text-decoration: underline; }
+
+        /* ── Alert success ── */
+        .al-alert-success {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin-bottom: 24px;
+            font-size: 14px;
+            color: #166534;
+        }
+        .al-alert-success i { font-size: 18px; color: #16a34a; flex-shrink: 0; margin-top: 1px; }
+
+        /* ── reCAPTCHA ── */
+        .al-captcha-wrap {
+            margin-bottom: 24px;
+        }
+        .al-captcha-wrap .g-recaptcha {
+            transform-origin: left top;
+        }
+        @media (max-width: 400px) {
+            .al-captcha-wrap .g-recaptcha {
+                transform: scale(.85);
+            }
+        }
+
+        /* ── Back link ── */
+        .al-back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: #2563eb;
+            font-weight: 500;
+            transition: color .15s;
+        }
+        .al-back-link:hover { color: #1d4ed8; text-decoration: underline; }
+
         /* ── Responsive ── */
         @media (max-width: 900px) {
             .al-shell { grid-template-columns: 1fr; }

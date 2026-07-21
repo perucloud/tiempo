@@ -22,7 +22,12 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('admin')->name('admin.')->group(function (): void {
     Route::middleware('guest')->group(function (): void {
         Route::get('login', [AuthController::class, 'showLogin'])->name('login');
-        Route::post('login', [AuthController::class, 'login'])->name('login.store');
+        Route::post('login', [AuthController::class, 'login'])->middleware('throttle:10,1')->name('login.store');
+
+        Route::get('recuperar', [AuthController::class, 'showRecover'])->name('password.request');
+        Route::post('recuperar', [AuthController::class, 'sendResetLink'])->middleware('throttle:5,1')->name('password.email');
+        Route::get('reset-password/{token}', [AuthController::class, 'showReset'])->name('password.reset');
+        Route::post('reset-password', [AuthController::class, 'resetPassword'])->middleware('throttle:5,1')->name('password.update');
     });
 
     Route::middleware(['auth', 'admin.access'])->group(function (): void {

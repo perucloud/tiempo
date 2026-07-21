@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Password;
 use Illuminate\View\View;
 
 class AuthController extends Controller
@@ -18,13 +20,37 @@ class AuthController extends Controller
     public function login(Request $request): RedirectResponse
     {
         $credentials = $request->validate([
-            'email' => ['required', 'email'],
+            'email'    => ['required', 'email'],
             'password' => ['required', 'string'],
         ]);
 
+        // Validar reCAPTCHA si está configurado (se omite en testing)
+        if (config('services.recaptcha.secret') && ! app()->environment('testing')) {
+            $siteSecret = config('services.recaptcha.secret');
+            $captcha = $request->input('g-recaptcha-response', '');
+
+            if (blank($captcha)) {
+                return back()
+                    ->withErrors(['captcha' => 'Por favor completa el captcha.'])
+                    ->onlyInput('email');
+            }
+
+            $verify = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+                'secret'   => $siteSecret,
+                'response' => $captcha,
+                'remoteip' => $request->ip(),
+            ]);
+
+            if (! ($verify->json('success') ?? false)) {
+                return back()
+                    ->withErrors(['captcha' => 'Captcha inválido. Intenta de nuevo.'])
+                    ->onlyInput('email');
+            }
+        }
+
         if (! Auth::attempt($credentials, $request->boolean('remember'))) {
             return back()
-                ->withErrors(['email' => 'Las credenciales no son validas.'])
+                ->withErrors(['email' => 'Las credenciales no son válidas.'])
                 ->onlyInput('email');
         }
 
@@ -46,10 +72,55 @@ class AuthController extends Controller
     public function logout(Request $request): RedirectResponse
     {
         Auth::logout();
-
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
         return redirect()->route('admin.login');
+    }
+
+    // ── Recuperar contraseña ──────────────────────────────────────────────
+
+    public function showRecover(): View
+    {
+        return view('admin.auth.recuperar');
+    }
+
+    public function sendResetLink(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'email' => ['required', 'email'],
+        ]);
+
+        $status = Password::sendResetLink($request->only('email'));
+
+        return $status === Password::RESET_LINK_SENT
+            ? back()->with('status', 'Te enviamos el enlace de recuperación. Revisa tu correo.')
+            : back()->withErrors(['email' => 'No encontramos una cuenta con ese correo.']);
+    }
+
+    public function showReset(string $token): View
+    {
+        return view('admin.auth.reset', ['token' => $token]);
+    }
+
+    public function resetPassword(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'token'                 => ['required'],
+            'email'                 => ['required', 'email'],
+            'password'              => ['required', 'min:8', 'confirmed'],
+            'password_confirmation' => ['required'],
+        ]);
+
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user, $password): void {
+                $user->forceFill(['password' => $password])->save();
+            }
+        );
+
+        return $status === Password::PASSWORD_RESET
+            ? redirect()->route('admin.login')->with('status', 'Contraseña actualizada correctamente. Ya puedes ingresar.')
+            : back()->withErrors(['email' => __($status)]);
     }
 }

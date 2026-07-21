@@ -4,22 +4,37 @@
 
 @section('content')
 
+{{-- Logo ──────────────────────────────────────────────────────────── --}}
+<div class="al-login-logo">
+    <img src="{{ asset('images/dashboard/tiempologo.png') }}" alt="TIEMPO Delivery" draggable="false">
+</div>
+
+{{-- Cabecera ────────────────────────────────────────────────────────── --}}
 <div class="al-form-header">
     <h1>Bienvenido de nuevo</h1>
     <p>Ingresa tus credenciales para acceder al panel.</p>
 </div>
 
-@if ($errors->any())
+{{-- Alert de error general ──────────────────────────────────────────── --}}
+@if ($errors->has('email') || $errors->has('captcha'))
     <div class="al-alert-error" role="alert">
         <i class="bi bi-exclamation-circle-fill"></i>
-        <span>{{ $errors->first() }}</span>
+        <span>{{ $errors->first('email') ?: $errors->first('captcha') }}</span>
+    </div>
+@endif
+
+{{-- Flash (reset password exitoso) ─────────────────────────────────── --}}
+@if (session('status'))
+    <div class="al-alert-success" role="alert">
+        <i class="bi bi-check-circle-fill"></i>
+        <span>{{ session('status') }}</span>
     </div>
 @endif
 
 <form method="POST" action="{{ route('admin.login.store') }}" novalidate>
     @csrf
 
-    {{-- Email ──────────────────────────────────────────────────── --}}
+    {{-- Email ──────────────────────────────────────────────────────── --}}
     <div class="al-field">
         <label class="al-label" for="email">Correo electrónico</label>
         <div class="al-input-wrap">
@@ -36,14 +51,16 @@
                 autofocus
             >
         </div>
-        @error('email')
-            <p class="al-error-msg"><i class="bi bi-exclamation-circle"></i> {{ $message }}</p>
-        @enderror
     </div>
 
-    {{-- Contraseña ──────────────────────────────────────────────── --}}
+    {{-- Contraseña ──────────────────────────────────────────────────── --}}
     <div class="al-field">
-        <label class="al-label" for="password">Contraseña</label>
+        <div class="al-label-row">
+            <label class="al-label" for="password">Contraseña</label>
+            <a href="{{ route('admin.password.request') }}" class="al-forgot-link">
+                ¿Olvidaste tu contraseña?
+            </a>
+        </div>
         <div class="al-input-wrap">
             <i class="bi bi-lock al-input-icon"></i>
             <input
@@ -59,18 +76,25 @@
                 <i class="bi bi-eye" id="eye-icon"></i>
             </button>
         </div>
-        @error('password')
-            <p class="al-error-msg"><i class="bi bi-exclamation-circle"></i> {{ $message }}</p>
-        @enderror
     </div>
 
-    {{-- Recordar sesión ─────────────────────────────────────────── --}}
+    {{-- Recordar sesión ─────────────────────────────────────────────── --}}
     <label class="al-remember">
         <input name="remember" type="checkbox" value="1" {{ old('remember') ? 'checked' : '' }}>
         <span>Mantener sesión iniciada</span>
     </label>
 
-    {{-- Submit ──────────────────────────────────────────────────── --}}
+    {{-- reCAPTCHA ───────────────────────────────────────────────────── --}}
+    @if(config('services.recaptcha.key'))
+        <div class="al-captcha-wrap">
+            <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.key') }}"></div>
+            @error('captcha')
+                <p class="al-error-msg"><i class="bi bi-exclamation-circle"></i> {{ $message }}</p>
+            @enderror
+        </div>
+    @endif
+
+    {{-- Submit ──────────────────────────────────────────────────────── --}}
     <button type="submit" class="al-btn-submit">
         <i class="bi bi-box-arrow-in-right"></i>
         Ingresar al panel
@@ -82,6 +106,10 @@
     ¿Problemas para ingresar? Contacta al administrador del sistema.
 </div>
 
+@if(config('services.recaptcha.key'))
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+@endif
+
 <script>
 (function () {
     const btn  = document.getElementById('toggle-password');
@@ -90,7 +118,7 @@
     if (!btn) return;
     btn.addEventListener('click', function () {
         const show = inp.type === 'password';
-        inp.type   = show ? 'text' : 'password';
+        inp.type       = show ? 'text' : 'password';
         icon.className = show ? 'bi bi-eye-slash' : 'bi bi-eye';
         btn.setAttribute('aria-label', show ? 'Ocultar contraseña' : 'Mostrar contraseña');
     });
