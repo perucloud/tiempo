@@ -32,6 +32,8 @@ class OrderTrackingTest extends TestCase
         session()->put('app_customer_phone', $cliente->telefono);
         session()->push('app_order_ids', $pedido->id);
 
+        $this->actingAs($cliente, 'cliente');
+
         return $pedido;
     }
 
@@ -114,6 +116,8 @@ class OrderTrackingTest extends TestCase
 
     public function test_buscar_por_telefono_returns_empty_for_unknown_client(): void
     {
+        $pedido = $this->makePedido();
+
         $response = $this->postJson(route('app.perfil.buscar'), ['telefono' => '000000000']);
 
         $response->assertOk()
@@ -132,6 +136,8 @@ class OrderTrackingTest extends TestCase
 
     public function test_buscar_por_telefono_validates_telefono_required(): void
     {
+        $pedido = $this->makePedido();
+
         $this->postJson(route('app.perfil.buscar'), [])
              ->assertUnprocessable()
              ->assertJsonValidationErrors(['telefono']);
@@ -147,6 +153,7 @@ class OrderTrackingTest extends TestCase
         ]);
 
         session()->put('app_customer_phone', $cliente->telefono);
+        $this->actingAs($cliente, 'cliente');
 
         $response = $this->postJson(route('app.perfil.buscar'), ['telefono' => '988777666']);
 

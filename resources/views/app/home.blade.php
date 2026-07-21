@@ -166,22 +166,24 @@
                 @csrf
                 <input type="hidden" name="latitud_cliente"  id="geo-lat">
                 <input type="hidden" name="longitud_cliente" id="geo-lng">
+                {{-- Datos del cliente autenticado (ocultos) --}}
+                <input type="hidden" name="nombres"   value="{{ $cliente->nombres }}">
+                <input type="hidden" name="telefono"  value="{{ $cliente->telefono }}">
+                <input type="hidden" name="email"     value="{{ $cliente->email }}">
 
-                <label for="customer-names">Nombre *</label>
-                <input id="customer-names" name="nombres" type="text"
-                       value="{{ old('nombres') }}" placeholder="Tu nombre completo" required>
+                {{-- Resumen del cliente --}}
+                <div class="checkout-cliente-info">
+                    <div class="checkout-cliente-avatar">{{ $cliente->iniciales() }}</div>
+                    <div>
+                        <strong>{{ $cliente->nombreCompleto() }}</strong>
+                        <span>{{ $cliente->telefono }}</span>
+                    </div>
+                    <a href="{{ route('app.perfil') }}" class="checkout-edit-link">Editar</a>
+                </div>
 
-                <label for="customer-phone">Teléfono *</label>
-                <input id="customer-phone" name="telefono" type="tel"
-                       value="{{ old('telefono') }}" placeholder="9XXXXXXXX" required>
-
-                <label for="customer-email">Email (opcional)</label>
-                <input id="customer-email" name="email" type="email"
-                       value="{{ old('email') }}" placeholder="correo@ejemplo.com">
-
-                <label for="order-notes">Notas (opcional)</label>
+                <label for="order-notes">Notas para el repartidor (opcional)</label>
                 <input id="order-notes" name="notas" type="text"
-                       value="{{ old('notas') }}" placeholder="Referencia, instrucciones…">
+                       value="{{ old('notas') }}" placeholder="La casa verde, portón azul…">
 
                 <div class="geo-section" id="geo-section">
                     <button class="geo-btn" type="button" id="geo-btn">

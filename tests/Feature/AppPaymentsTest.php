@@ -13,17 +13,26 @@ class AppPaymentsTest extends TestCase
 {
     use RefreshDatabase;
 
+    private Cliente $authCliente;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->authCliente = Cliente::factory()->create();
+        $this->actingAs($this->authCliente, 'cliente');
+    }
+
     public function test_customer_can_register_payment_for_order(): void
     {
         $order = $this->makeOrder();
-        $this->withSession(['app_order_ids' => [$order->id]]);
 
-        $this->post('/app/payments', [
-            'codigo' => $order->codigo,
-            'metodo' => Pago::METODO_YAPE,
-            'codigo_operacion' => 'OP123',
-            'voucher_path' => 'https://example.com/voucher.jpg',
-        ])->assertRedirect(route('app.orders.show', $order->codigo));
+        $this->withSession(['app_order_ids' => [$order->id]])
+            ->post('/app/payments', [
+                'codigo' => $order->codigo,
+                'metodo' => Pago::METODO_YAPE,
+                'codigo_operacion' => 'OP123',
+                'voucher_path' => 'https://example.com/voucher.jpg',
+            ])->assertRedirect(route('app.orders.show', $order->codigo));
 
         $this->assertDatabaseHas('pagos', [
             'pedido_id' => $order->id,

@@ -27,9 +27,8 @@ class CustomerOtpTest extends TestCase
             'codigo' => $code,
         ])->assertOk()->assertJsonPath('telefono', $cliente->telefono);
 
+        // OTP verification grants access to tracking pages via app_order_ids in session
         $this->get(route('app.orders.show', $pedido->codigo))->assertOk();
-        $this->postJson(route('app.perfil.buscar'), ['telefono' => $cliente->telefono])
-            ->assertOk()->assertJsonFragment(['codigo' => $pedido->codigo]);
     }
 
     public function test_invalid_otp_does_not_grant_access(): void

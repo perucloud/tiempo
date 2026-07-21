@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Contracts\Geo\RoutingProviderInterface;
 use App\DTOs\Geo\RouteResult;
+use App\Models\Cliente;
 use App\Models\Pedido;
 use App\Models\Producto;
 use App\Models\ZonaDelivery;
@@ -14,9 +15,17 @@ class AppOrdersTest extends TestCase
 {
     use RefreshDatabase;
 
+    private Cliente $cliente;
+
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this->cliente = Cliente::factory()->create([
+            'telefono' => '999888777',
+            'email'    => 'cliente@tiempo.test',
+        ]);
+        $this->actingAs($this->cliente, 'cliente');
 
         $this->app->instance(RoutingProviderInterface::class, new class implements RoutingProviderInterface {
             public function route(float $originLat, float $originLng, float $destinationLat, float $destinationLng): RouteResult
@@ -97,7 +106,7 @@ class AppOrdersTest extends TestCase
             'telefono' => '999888777',
             'latitud_cliente' => -12.10,
             'longitud_cliente' => -77.03,
-        ])->assertRedirect('/app#checkout')->assertSessionHasErrors('order');
+        ])->assertRedirect('/app/inicio#checkout')->assertSessionHasErrors('order');
 
         $this->assertDatabaseCount('pedidos', 0);
     }
@@ -128,7 +137,7 @@ class AppOrdersTest extends TestCase
             'telefono' => '999888777',
             'latitud_cliente' => -11.255,
             'longitud_cliente' => -74.635,
-        ])->assertRedirect('/app#checkout')
+        ])->assertRedirect('/app/inicio#checkout')
             ->assertSessionHasErrors('order');
 
         $this->assertDatabaseCount('pedidos', 0);
@@ -143,7 +152,7 @@ class AppOrdersTest extends TestCase
             'telefono' => '999888777',
             'latitud_cliente' => -11.255,
             'longitud_cliente' => -74.635,
-        ])->assertRedirect('/app#checkout')
+        ])->assertRedirect('/app/inicio#checkout')
             ->assertSessionHasErrors('order');
 
         $this->assertDatabaseCount('pedidos', 0);

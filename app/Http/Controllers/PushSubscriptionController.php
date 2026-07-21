@@ -11,8 +11,9 @@ class PushSubscriptionController extends Controller
 {
     public function customer(Request $request): JsonResponse
     {
-        $phone = (string) $request->session()->get('app_customer_phone', '');
-        $customer = Cliente::query()->where('telefono', $phone)->firstOrFail();
+        /** @var \App\Models\Cliente $customer */
+        $customer = auth()->guard('cliente')->user();
+        abort_unless($customer, 404);
         return $this->store($request, ['cliente_id' => $customer->id, 'repartidor_id' => null]);
     }
 

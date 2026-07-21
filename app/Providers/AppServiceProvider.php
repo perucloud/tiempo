@@ -3,11 +3,17 @@
 namespace App\Providers;
 
 use App\Contracts\Geo\GeocodingProviderInterface;
+use App\Models\Cliente;
+use App\Models\Pedido;
+use App\Observers\ClienteObserver;
+use App\Observers\PedidoObserver;
 use App\Contracts\Geo\RoutingProviderInterface;
 use App\Services\DeliveryPricingService;
 use App\Services\Geo\MapConfigurationService;
 use App\Services\Geo\NominatimProvider;
 use App\Services\Geo\OsrmRoutingProvider;
+use Illuminate\Auth\Middleware\RedirectIfAuthenticated;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -40,6 +46,16 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        Cliente::observe(ClienteObserver::class);
+        Pedido::observe(PedidoObserver::class);
+
+        RedirectIfAuthenticated::redirectUsing(function (Request $request): string {
+            if (auth()->guard('cliente')->check()) {
+                return route('app.inicio');
+            }
+            return url('/');
+        });
+
         $geoViews = [
             'admin.businesses.form',
             'admin.settings.zone-form',

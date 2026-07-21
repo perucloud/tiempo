@@ -20,18 +20,21 @@ class PushSubscriptionTest extends TestCase
 
     public function test_verified_customer_can_store_push_subscription(): void
     {
-        $customer = Cliente::factory()->create(['telefono' => '999111222']);
+        $customer = Cliente::factory()->create();
 
-        $this->withSession(['app_customer_phone' => $customer->telefono])
+        $this->actingAs($customer, 'cliente')
             ->postJson(route('app.push.subscribe'), $this->subscription)
             ->assertOk();
 
-        $this->assertDatabaseHas('push_subscriptions', ['cliente_id' => $customer->id, 'endpoint_hash' => hash('sha256', $this->subscription['endpoint'])]);
+        $this->assertDatabaseHas('push_subscriptions', [
+            'cliente_id'    => $customer->id,
+            'endpoint_hash' => hash('sha256', $this->subscription['endpoint']),
+        ]);
     }
 
-    public function test_unverified_customer_cannot_store_push_subscription(): void
+    public function test_unauthenticated_customer_cannot_store_push_subscription(): void
     {
-        $this->postJson(route('app.push.subscribe'), $this->subscription)->assertNotFound();
+        $this->postJson(route('app.push.subscribe'), $this->subscription)->assertUnauthorized();
         $this->assertDatabaseCount('push_subscriptions', 0);
     }
 

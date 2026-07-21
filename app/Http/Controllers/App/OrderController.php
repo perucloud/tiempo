@@ -31,7 +31,7 @@ class OrderController extends Controller
             $pedido = $creator->createFromCart($cart, $data, $latitud, $longitud);
         } catch (RuntimeException $exception) {
             return redirect()
-                ->to(route('app.home').'#checkout')
+                ->to(route('app.inicio').'#checkout')
                 ->withErrors(['order' => $exception->getMessage()]);
         }
 

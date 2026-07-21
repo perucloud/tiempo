@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\EnsureClienteIsAuthenticated;
 use App\Http\Middleware\EnsureAdminAccess;
 use App\Http\Middleware\EnsureBusinessManagementAccess;
 use App\Http\Middleware\EnsureCategoryManagementAccess;
@@ -33,6 +34,7 @@ return Application::configure(basePath: dirname(__DIR__))
         );
 
         $middleware->alias([
+            'cliente.auth' => EnsureClienteIsAuthenticated::class,
             'admin.access' => EnsureAdminAccess::class,
             'admin.businesses' => EnsureBusinessManagementAccess::class,
             'admin.categories' => EnsureCategoryManagementAccess::class,

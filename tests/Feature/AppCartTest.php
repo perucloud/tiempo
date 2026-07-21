@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Categoria;
+use App\Models\Cliente;
 use App\Models\NegocioAfiliado;
 use App\Models\Producto;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -12,6 +13,15 @@ class AppCartTest extends TestCase
 {
     use RefreshDatabase;
 
+    private Cliente $cliente;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->cliente = Cliente::factory()->create();
+        $this->actingAs($this->cliente, 'cliente');
+    }
+
     public function test_customer_can_add_product_to_cart(): void
     {
         $product = Producto::factory()->create(['nombre' => 'Combo familiar', 'precio' => 40]);
@@ -19,9 +29,9 @@ class AppCartTest extends TestCase
         $this->post('/app/cart', [
             'product_id' => $product->id,
             'quantity' => 2,
-        ])->assertRedirect('/app#carrito');
+        ])->assertRedirect('/app/inicio#carrito');
 
-        $this->get('/app')
+        $this->get('/app/inicio')
             ->assertOk()
             ->assertSee('2 productos')
             ->assertSee('Combo familiar')
@@ -37,9 +47,9 @@ class AppCartTest extends TestCase
         $this->patch('/app/cart', [
             'product_id' => $product->id,
             'quantity' => 3,
-        ])->assertRedirect('/app#carrito');
+        ])->assertRedirect('/app/inicio#carrito');
 
-        $this->get('/app')
+        $this->get('/app/inicio')
             ->assertSee('3 productos')
             ->assertSee('S/ 36.00');
     }
@@ -69,9 +79,9 @@ class AppCartTest extends TestCase
     {
         $this->patch('/app/cart/address', [
             'delivery_address' => 'Av. Siempre Viva 123',
-        ])->assertRedirect('/app#carrito');
+        ])->assertRedirect('/app/inicio#carrito');
 
-        $this->get('/app')
+        $this->get('/app/inicio')
             ->assertSee('Av. Siempre Viva 123');
     }
 
@@ -82,9 +92,9 @@ class AppCartTest extends TestCase
         $this->post('/app/cart', ['product_id' => $product->id, 'quantity' => 1]);
 
         $this->delete('/app/cart')
-            ->assertRedirect('/app');
+            ->assertRedirect('/app/inicio');
 
-        $this->get('/app')
+        $this->get('/app/inicio')
             ->assertSee('0 productos')
             ->assertSee('Agrega productos para preparar tu pedido.');
     }
@@ -112,7 +122,7 @@ class AppCartTest extends TestCase
             'categoria_id' => $category->id,
         ]);
 
-        $this->get('/app')
+        $this->get('/app/inicio')
             ->assertOk()
             ->assertSee('Promos')
             ->assertSee('Cafe Centro')

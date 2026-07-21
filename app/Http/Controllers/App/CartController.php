@@ -28,7 +28,7 @@ class CartController extends Controller
         $cart->add($product, (int) ($data['quantity'] ?? 1));
 
         return redirect()
-            ->to(route('app.home').'#carrito')
+            ->to(route('app.inicio').'#carrito')
             ->with('cart_status', 'Producto agregado al carrito.');
     }
 
@@ -42,7 +42,7 @@ class CartController extends Controller
         $cart->update((int) $data['product_id'], (int) $data['quantity']);
 
         return redirect()
-            ->to(route('app.home').'#carrito')
+            ->to(route('app.inicio').'#carrito')
             ->with('cart_status', 'Carrito actualizado.');
     }
 
@@ -55,7 +55,7 @@ class CartController extends Controller
         $cart->setAddress($data['delivery_address'] ?? null);
 
         return redirect()
-            ->to(route('app.home').'#carrito')
+            ->to(route('app.inicio').'#carrito')
             ->with('cart_status', 'Direccion de entrega guardada.');
     }
 
@@ -64,7 +64,7 @@ class CartController extends Controller
         $cart->clear();
 
         return redirect()
-            ->route('app.home')
+            ->route('app.inicio')
             ->with('cart_status', 'Carrito vaciado.');
     }
 }
