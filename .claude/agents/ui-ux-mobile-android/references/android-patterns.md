@@ -395,6 +395,211 @@
 }
 ```
 
+## Formularios móvil
+
+```css
+/* Input base móvil */
+.field { margin-bottom: 18px; }
+.field-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 6px;
+}
+.field-input {
+    width: 100%;
+    padding: 14px 16px 14px 44px; /* con ícono */
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 16px; /* mínimo para evitar zoom iOS */
+    font-family: inherit;
+    color: #0f172a;
+    background: #fff;
+    outline: none;
+    transition: border-color .15s, box-shadow .15s;
+    -webkit-appearance: none;
+}
+.field-input:focus {
+    border-color: var(--color-brand);
+    box-shadow: 0 0 0 3px rgba(37,99,235,.12);
+}
+.field-input.has-error {
+    border-color: #dc2626;
+    box-shadow: 0 0 0 3px rgba(220,38,38,.10);
+}
+.field-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 18px;
+    pointer-events: none;
+}
+.field-error {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 6px;
+    font-size: 12px;
+    color: #dc2626;
+    font-weight: 500;
+}
+```
+
+## Modales y Bottom Sheets pro
+
+```css
+/* Overlay */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15,23,42,.55);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 200;
+    display: flex;
+    align-items: flex-end; /* bottom sheet en móvil */
+    animation: overlay-in .2s ease;
+}
+@keyframes overlay-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Modal como bottom sheet en móvil */
+.modal {
+    background: var(--color-surface);
+    border-radius: 20px 20px 0 0;
+    width: 100%;
+    max-height: 85dvh;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: env(safe-area-inset-bottom);
+    animation: sheet-in .22s ease-out;
+    overflow: hidden;
+}
+@keyframes sheet-in {
+    from { transform: translateY(40px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+}
+
+/* Handle de arrastre */
+.modal-handle {
+    width: 36px; height: 4px;
+    background: #cbd5e1;
+    border-radius: 2px;
+    margin: 12px auto 0;
+    flex-shrink: 0;
+}
+
+/* Header del modal */
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--color-border);
+    flex-shrink: 0;
+}
+.modal-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #0f172a;
+}
+.modal-close {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: #f1f5f9;
+    border: none;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    color: #475569;
+    cursor: pointer;
+    min-width: 44px; min-height: 44px; /* área táctil */
+}
+
+/* Body scrollable */
+.modal-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+}
+
+/* Footer con acciones */
+.modal-footer {
+    padding: 14px 20px;
+    border-top: 1px solid var(--color-border);
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    background: #f8fafc;
+    flex-shrink: 0;
+    padding-bottom: calc(14px + env(safe-area-inset-bottom));
+}
+```
+
+## Badges de estado — 8 variantes
+
+```css
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+    letter-spacing: .01em;
+}
+/* Punto de estado (para estados activos/en curso) */
+.badge--dot::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    flex-shrink: 0;
+}
+
+/* ── Modo suave (pastel) ── */
+.badge-activo     { background: #dcfce7; color: #15803d; }
+.badge-pendiente  { background: #fef9c3; color: #854d0e; }
+.badge-en-camino  { background: #dbeafe; color: #1d4ed8; }
+.badge-entregado  { background: #d1fae5; color: #047857; }
+.badge-cancelado  { background: #fee2e2; color: #b91c1c; }
+.badge-rechazado  { background: #fce7f3; color: #9d174d; }
+.badge-inactivo   { background: #f1f5f9; color: #475569; }
+.badge-revision   { background: #ede9fe; color: #6d28d9; }
+
+/* ── Modo sólido (fondo lleno + texto blanco) ── */
+.badge-activo.badge--solid     { background: #16a34a; color: #fff; }
+.badge-pendiente.badge--solid  { background: #ca8a04; color: #fff; }
+.badge-en-camino.badge--solid  { background: #2563eb; color: #fff; }
+.badge-entregado.badge--solid  { background: #059669; color: #fff; }
+.badge-cancelado.badge--solid  { background: #dc2626; color: #fff; }
+.badge-rechazado.badge--solid  { background: #db2777; color: #fff; }
+.badge-inactivo.badge--solid   { background: #64748b; color: #fff; }
+.badge-revision.badge--solid   { background: #7c3aed; color: #fff; }
+```
+
+**Uso:**
+```html
+<!-- Modo suave (en tablas, listas) -->
+<span class="badge badge-activo badge--dot">Activo</span>
+<span class="badge badge-pendiente badge--dot">Pendiente</span>
+<span class="badge badge-en-camino badge--dot">En camino</span>
+
+<!-- Modo sólido (estado principal del registro) -->
+<span class="badge badge-entregado badge--solid">Entregado</span>
+<span class="badge badge-cancelado badge--solid">Cancelado</span>
+<span class="badge badge-revision badge--solid">En revisión</span>
+```
+
 ## Estado vacío
 
 ```html

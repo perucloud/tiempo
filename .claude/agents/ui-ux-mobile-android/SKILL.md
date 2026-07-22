@@ -61,7 +61,11 @@ Reglas de código:
 - **Unidades**: `rem` para tipografía, `px` solo para bordes y shadows, `%` / `dvh` para alturas de pantalla.
 - **Touch targets mínimo 44px** de alto en cualquier elemento interactivo (botón, ítem de lista, tab).
 - **Bottom navigation**: `position: fixed; bottom: 0; padding-bottom: env(safe-area-inset-bottom)` — siempre con safe area.
-- **Cards**: `border-radius: 16px` base, `24px` para cards hero. `box-shadow` sutil, nunca pesado.
+- **Cards**: `border-radius: 16px` base, `24px` para cards hero. `box-shadow` sutil, nunca pesado. Usar variantes pasteles del sistema: blue/orange/green/purple/rose/amber — nunca colores ad-hoc.
+- **Inputs**: borde `1.5px solid #e2e8f0` visible en reposo, borde brand + sombra `0 0 0 3px rgba(37,99,235,.12)` en focus. Font-size mínimo `16px`. Label real siempre visible sobre el campo. Ver patrón completo en `references/android-patterns.md → Formularios móvil`.
+- **Modales**: en móvil siempre como bottom sheet (`border-radius: 20px 20px 0 0`), con handle de arrastre, header/body/footer diferenciados, `overscroll-behavior: contain`. Ver patrón completo en `references/android-patterns.md → Modales y Bottom Sheets pro`.
+- **Badges de estado**: usar exclusivamente las 8 variantes del sistema (activo/pendiente/en-camino/entregado/cancelado/rechazado/inactivo/revisión). Modo suave en listas, modo sólido para el estado principal. CSS completo en `references/android-patterns.md → Badges de estado`.
+- **Botones — sistema de 6 roles**: Primary `#2563eb` · Success `#16a34a` · Danger `#dc2626` · Warning `#d97706` · Neutral `#475569` · Ghost (transparente + borde brand). Máximo 2 botones juntos; un solo Primary por pantalla.
 - **Header hero**: fondo de color brand, texto blanco, padding-top con `env(safe-area-inset-top)` o mínimo `44px` para cubrir status bar.
 - **Scroll**: `overflow-y: auto; -webkit-overflow-scrolling: touch` en contenedores scrollables.
 - **Listas**: ítem mínimo 56px de alto. Ícono 40×40px a la izquierda con radio 12px. Texto en el centro. Valor/acción a la derecha.

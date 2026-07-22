@@ -53,6 +53,19 @@ Recorrer cada punto antes de entregar. Marcar ✅ o indicar qué se ajustó.
 - [ ] Botones tienen estado `disabled` y `:active` (presionado) visualmente distintos.
 - [ ] Formularios muestran errores inline junto al campo, no solo al enviar.
 
+## Formularios, Cards, Modales y Badges
+
+- [ ] Inputs con borde visible `1.5px` en reposo — no bordes invisibles ni solo underline.
+- [ ] Focus muestra borde brand + sombra `0 0 0 3px rgba(brand,.12)`.
+- [ ] Label real visible encima de cada campo (no solo placeholder).
+- [ ] Cards usan variante pastel del sistema (blue/orange/green/purple/rose/amber) — no colores inventados.
+- [ ] Modales en móvil son bottom sheets con handle visible y `overscroll-behavior: contain`.
+- [ ] Modal footer tiene máximo 2 botones, acciones a la derecha, fondo `#f8fafc`.
+- [ ] Badges usan las 8 variantes del sistema — no colores ad-hoc por pantalla.
+- [ ] Modo suave (pastel) en tablas/listas; modo sólido en estado principal del registro.
+- [ ] Punto `::before` solo en badges de estado activo/en curso, no en terminales.
+- [ ] Sistema de 6 botones respetado: un solo Primary por pantalla, ghost para alternativa sin riesgo.
+
 ## Coherencia visual
 
 - [ ] Solo un CTA principal por pantalla — el único con color sólido brand.

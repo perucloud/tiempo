@@ -16,11 +16,10 @@ class UserController extends Controller
     public function index(): View
     {
         return view('admin.users.index', [
-            'adminModules' => AdminNavigation::for('usuarios'),
-            'users' => User::query()
-                ->with('roleRecord')
-                ->latest()
-                ->paginate(10),
+            'adminModules'  => AdminNavigation::for('usuarios'),
+            'users'         => User::query()->with('roleRecord')->latest()->paginate(10),
+            'roleOptions'   => User::roleOptions(),
+            'statusOptions' => User::statusOptions(),
         ]);
     }
 
