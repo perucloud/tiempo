@@ -2206,6 +2206,66 @@ select.adm-modal-input {
 }
 
 /* ============================================================
+   MODAL DE CONFIRMACIÓN — adm-confirm-*
+   ============================================================ */
+
+.adm-confirm-modal { max-width: 400px; }
+
+.adm-confirm-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 32px 28px 20px;
+}
+
+.adm-confirm-icon-wrap {
+    width: 68px;
+    height: 68px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    margin-bottom: 20px;
+    flex-shrink: 0;
+}
+.adm-confirm-icon-wrap--amber { background: #fffbeb; color: #d97706; }
+.adm-confirm-icon-wrap--red   { background: #fef2f2; color: #dc2626; }
+.adm-confirm-icon-wrap--green { background: #f0fdf4; color: #16a34a; }
+
+.adm-confirm-title {
+    font-size: 19px;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -.4px;
+    margin-bottom: 10px;
+}
+.adm-confirm-desc {
+    font-size: 14px;
+    color: #64748b;
+    line-height: 1.65;
+    max-width: 300px;
+}
+.adm-confirm-desc strong { color: #0f172a; font-weight: 700; }
+
+.adm-confirm-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 16px 24px 24px;
+}
+
+/* Botón confirm dinámico */
+.adm-confirm-btn--amber { background: #d97706; color: #fff; }
+.adm-confirm-btn--amber:hover { background: #b45309; opacity: 1; box-shadow: 0 4px 14px rgba(217,119,6,.35); }
+.adm-confirm-btn--red   { background: #dc2626; color: #fff; }
+.adm-confirm-btn--red:hover   { background: #b91c1c; opacity: 1; box-shadow: 0 4px 14px rgba(220,38,38,.35); }
+.adm-confirm-btn--green { background: #16a34a; color: #fff; }
+.adm-confirm-btn--green:hover { background: #15803d; opacity: 1; box-shadow: 0 4px 14px rgba(22,163,74,.35); }
+
+/* ============================================================
    BOTONES DE ACCIÓN — icono sólido con color lleno
    ============================================================ */
 

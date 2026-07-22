@@ -58,11 +58,14 @@
                                 {{-- Bloquear / Activar --}}
                                 <form method="POST"
                                       action="{{ route('admin.users.toggle-status', $user) }}"
-                                      style="margin:0;">
+                                      style="margin:0;"
+                                      data-type="{{ $user->status === 'activo' ? 'block' : 'unblock' }}"
+                                      data-user="{{ $user->name }}">
                                     @csrf @method('PATCH')
-                                    <button type="submit"
+                                    <button type="button"
                                             class="adm-action-btn {{ $user->status === 'activo' ? 'adm-action-block' : 'adm-action-unblock' }}"
-                                            title="{{ $user->status === 'activo' ? 'Bloquear usuario' : 'Activar usuario' }}">
+                                            title="{{ $user->status === 'activo' ? 'Bloquear usuario' : 'Activar usuario' }}"
+                                            onclick="openConfirmModal(this.closest('form'))">
                                         <i class="bi {{ $user->status === 'activo' ? 'bi-slash-circle-fill' : 'bi-check-circle-fill' }}"></i>
                                     </button>
                                 </form>
@@ -71,11 +74,13 @@
                                 <form method="POST"
                                       action="{{ route('admin.users.destroy', $user) }}"
                                       style="margin:0;"
-                                      data-confirm="¿Eliminar a {{ addslashes($user->name) }}? Esta acción no se puede deshacer.">
+                                      data-type="delete"
+                                      data-user="{{ $user->name }}">
                                     @csrf @method('DELETE')
-                                    <button type="submit"
+                                    <button type="button"
                                             class="adm-action-btn adm-action-delete"
-                                            title="Eliminar usuario">
+                                            title="Eliminar usuario"
+                                            onclick="openConfirmModal(this.closest('form'))">
                                         <i class="bi bi-trash3-fill"></i>
                                     </button>
                                 </form>
@@ -292,6 +297,40 @@
     </div>{{-- /.adm-modal --}}
 </div>{{-- /.adm-modal-overlay --}}
 
+{{-- ── Modal: Confirmación de acción ────────────────────────────────── --}}
+<div class="adm-modal-overlay"
+     id="confirmModal"
+     style="display:none;"
+     role="dialog"
+     aria-modal="true"
+     aria-labelledby="confirmModalTitle">
+
+    <div class="adm-modal adm-confirm-modal">
+
+        {{-- Sin header: el ícono y título van en el body --}}
+        <div class="adm-confirm-body">
+            <div class="adm-confirm-icon-wrap" id="confirmIconWrap">
+                <i class="bi" id="confirmIconEl"></i>
+            </div>
+            <p class="adm-confirm-title" id="confirmModalTitle"></p>
+            <p class="adm-confirm-desc" id="confirmDescEl"></p>
+        </div>
+
+        <div class="adm-confirm-footer">
+            <button type="button"
+                    class="admin-button admin-button-logout"
+                    id="confirmCancelBtn">
+                <i class="bi bi-x"></i> Cancelar
+            </button>
+            <button type="button"
+                    class="admin-button"
+                    id="confirmActionBtn">
+            </button>
+        </div>
+
+    </div>
+</div>
+
 @endsection
 
 @push('scripts')
@@ -299,61 +338,143 @@
 (function () {
     'use strict';
 
-    var overlay  = document.getElementById('userModal');
-    var hasErrors = {{ $errors->any() ? 'true' : 'false' }};
+    /* ── Modal: Nuevo usuario ──────────────────────────────────────── */
+
+    var userOverlay = document.getElementById('userModal');
+    var hasErrors   = {{ $errors->any() ? 'true' : 'false' }};
 
     function openUserModal() {
-        overlay.style.display = 'flex';
+        userOverlay.style.display = 'flex';
         document.body.style.overflow = 'hidden';
-        // Foco al primer campo con error, o al nombre
-        var firstError = overlay.querySelector('.has-error');
+        var firstError = userOverlay.querySelector('.has-error');
         setTimeout(function () {
             (firstError || document.getElementById('u-name')).focus();
         }, 50);
     }
-
     function closeUserModal() {
-        overlay.style.display = 'none';
+        userOverlay.style.display = 'none';
         document.body.style.overflow = '';
     }
-
-    // Auto-abrir si hay errores de validación (store falló)
     if (hasErrors) openUserModal();
 
-    // Cerrar al clic en el overlay (fuera del modal)
-    overlay.addEventListener('click', function (e) {
-        if (e.target === overlay) closeUserModal();
+    userOverlay.addEventListener('click', function (e) {
+        if (e.target === userOverlay) closeUserModal();
     });
 
-    // Cerrar con Esc
-    document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && overlay.style.display === 'flex') closeUserModal();
-    });
-
-    // Toggle mostrar/ocultar contraseña
     var eyeBtn  = document.getElementById('u-eye-btn');
     var pwdInp  = document.getElementById('u-password');
     var eyeIcon = document.getElementById('u-eye-icon');
     if (eyeBtn) {
         eyeBtn.addEventListener('click', function () {
             var show = pwdInp.type === 'password';
-            pwdInp.type      = show ? 'text' : 'password';
+            pwdInp.type       = show ? 'text' : 'password';
             eyeIcon.className = show ? 'bi bi-eye-slash' : 'bi bi-eye';
             eyeBtn.setAttribute('aria-label', show ? 'Ocultar contraseña' : 'Mostrar contraseña');
         });
     }
 
-    // Exponer al scope global para los atributos onclick del HTML
     window.openUserModal  = openUserModal;
     window.closeUserModal = closeUserModal;
 
-    // Confirmación antes de eliminar
-    document.querySelectorAll('[data-confirm]').forEach(function (form) {
-        form.addEventListener('submit', function (e) {
-            e.preventDefault();
-            if (window.confirm(form.dataset.confirm)) form.submit();
-        });
+    /* ── Modal: Confirmación de acción ────────────────────────────── */
+
+    var confirmOverlay  = document.getElementById('confirmModal');
+    var confirmIconWrap = document.getElementById('confirmIconWrap');
+    var confirmIconEl   = document.getElementById('confirmIconEl');
+    var confirmTitle    = document.getElementById('confirmModalTitle');
+    var confirmDesc     = document.getElementById('confirmDescEl');
+    var confirmActionBtn = document.getElementById('confirmActionBtn');
+    var confirmCancelBtn = document.getElementById('confirmCancelBtn');
+    var pendingForm     = null;
+
+    var ACTION_CONFIG = {
+        block: {
+            wrapClass : 'adm-confirm-icon-wrap--amber',
+            icon      : 'bi-slash-circle-fill',
+            title     : '¿Bloquear usuario?',
+            desc      : function (name) {
+                return '<strong>' + name + '</strong> no podrá acceder al sistema mientras esté bloqueado.';
+            },
+            btnClass  : 'adm-confirm-btn--amber',
+            btnIcon   : 'bi-slash-circle',
+            btnText   : 'Sí, bloquear',
+        },
+        unblock: {
+            wrapClass : 'adm-confirm-icon-wrap--green',
+            icon      : 'bi-check-circle-fill',
+            title     : '¿Activar usuario?',
+            desc      : function (name) {
+                return '<strong>' + name + '</strong> recuperará acceso completo al sistema.';
+            },
+            btnClass  : 'adm-confirm-btn--green',
+            btnIcon   : 'bi-check-circle',
+            btnText   : 'Sí, activar',
+        },
+        delete: {
+            wrapClass : 'adm-confirm-icon-wrap--red',
+            icon      : 'bi-trash3-fill',
+            title     : '¿Eliminar usuario?',
+            desc      : function (name) {
+                return 'Estás a punto de eliminar a <strong>' + name + '</strong>. Esta acción <strong>no se puede deshacer</strong>.';
+            },
+            btnClass  : 'adm-confirm-btn--red',
+            btnIcon   : 'bi-trash3',
+            btnText   : 'Sí, eliminar',
+        },
+    };
+
+    function openConfirmModal(form) {
+        var type = form.dataset.type;
+        var name = form.dataset.user;
+        var cfg  = ACTION_CONFIG[type];
+        if (!cfg) return;
+
+        pendingForm = form;
+
+        // Ícono
+        confirmIconWrap.className = 'adm-confirm-icon-wrap ' + cfg.wrapClass;
+        confirmIconEl.className   = 'bi ' + cfg.icon;
+
+        // Textos
+        confirmTitle.textContent  = cfg.title;
+        confirmDesc.innerHTML     = cfg.desc(name);
+
+        // Botón de acción
+        confirmActionBtn.className = 'admin-button ' + cfg.btnClass;
+        confirmActionBtn.innerHTML = '<i class="bi ' + cfg.btnIcon + '"></i> ' + cfg.btnText;
+
+        confirmOverlay.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        setTimeout(function () { confirmActionBtn.focus(); }, 50);
+    }
+
+    function closeConfirmModal() {
+        confirmOverlay.style.display = 'none';
+        document.body.style.overflow = '';
+        pendingForm = null;
+    }
+
+    confirmActionBtn.addEventListener('click', function () {
+        if (pendingForm) {
+            closeConfirmModal();
+            pendingForm.submit();
+        }
     });
+    confirmCancelBtn.addEventListener('click', closeConfirmModal);
+    confirmOverlay.addEventListener('click', function (e) {
+        if (e.target === confirmOverlay) closeConfirmModal();
+    });
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+            if (confirmOverlay.style.display === 'flex') { closeConfirmModal(); return; }
+            if (userOverlay.style.display    === 'flex') { closeUserModal();    return; }
+        }
+    });
+
+    window.openConfirmModal  = openConfirmModal;
+    window.closeConfirmModal = closeConfirmModal;
+
 })();
 </script>
 @endpush
