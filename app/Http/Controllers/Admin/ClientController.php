@@ -33,7 +33,7 @@ class ClientController extends Controller
             ->withQueryString();
 
         return view('admin.clients.index', [
-            'adminModules' => AdminNavigation::for('clientes'),
+            'adminModules' => AdminNavigation::for(auth()->user(), 'clientes'),
             'clients' => $clients,
             'estadoOptions' => Cliente::estadoOptions(),
             'filters' => $request->only(['search', 'estado']),
@@ -43,7 +43,7 @@ class ClientController extends Controller
     public function create(): View
     {
         return view('admin.clients.form', [
-            'adminModules' => AdminNavigation::for('clientes'),
+            'adminModules' => AdminNavigation::for(auth()->user(), 'clientes'),
             'client' => new Cliente(['estado' => Cliente::ESTADO_ACTIVO]),
             'estadoOptions' => Cliente::estadoOptions(),
             'action' => route('admin.clients.store'),
@@ -63,7 +63,7 @@ class ClientController extends Controller
     public function edit(Cliente $client): View
     {
         return view('admin.clients.form', [
-            'adminModules' => AdminNavigation::for('clientes'),
+            'adminModules' => AdminNavigation::for(auth()->user(), 'clientes'),
             'client' => $client,
             'estadoOptions' => Cliente::estadoOptions(),
             'action' => route('admin.clients.update', $client),

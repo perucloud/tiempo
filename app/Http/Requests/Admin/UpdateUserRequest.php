@@ -17,11 +17,13 @@ class UpdateUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($this->route('user'))],
-            'password' => ['nullable', 'string', 'min:8'],
-            'role' => ['required', Rule::in(User::ROLES)],
-            'status' => ['required', Rule::in(User::STATUSES)],
+            'name'                   => ['required', 'string', 'max:255'],
+            'email'                  => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($this->route('user'))],
+            'password'               => ['nullable', 'string', 'min:8'],
+            'role'                   => ['required', Rule::in(User::ROLES)],
+            'status'                 => ['required', Rule::in(User::STATUSES)],
+            'module_permissions'     => ['nullable', 'array'],
+            'module_permissions.*'   => ['string', Rule::in(User::ASSIGNABLE_MODULES)],
         ];
     }
 }

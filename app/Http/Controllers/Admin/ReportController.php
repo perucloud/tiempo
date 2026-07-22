@@ -22,7 +22,7 @@ class ReportController extends Controller
         $payments = $this->paymentsBetween($filters['date_from'], $filters['date_to']);
 
         return view('admin.reports.index', [
-            'adminModules' => AdminNavigation::for('reportes'),
+            'adminModules' => AdminNavigation::for(auth()->user(), 'reportes'),
             'filters' => [
                 'date_from' => $filters['date_from']->toDateString(),
                 'date_to' => $filters['date_to']->toDateString(),

@@ -32,7 +32,7 @@ class BusinessController extends Controller
             ->withQueryString();
 
         return view('admin.businesses.index', [
-            'adminModules' => AdminNavigation::for('negocios'),
+            'adminModules' => AdminNavigation::for(auth()->user(), 'negocios'),
             'businesses' => $businesses,
             'estadoOptions' => NegocioAfiliado::estadoOptions(),
             'tipoOptions' => NegocioAfiliado::tipoOptions(),
@@ -43,7 +43,7 @@ class BusinessController extends Controller
     public function create(): View
     {
         return view('admin.businesses.form', [
-            'adminModules' => AdminNavigation::for('negocios'),
+            'adminModules' => AdminNavigation::for(auth()->user(), 'negocios'),
             'business' => new NegocioAfiliado([
                 'tipo_negocio' => NegocioAfiliado::TIPO_RESTAURANTE,
                 'estado' => NegocioAfiliado::ESTADO_ACTIVO,
@@ -71,7 +71,7 @@ class BusinessController extends Controller
     public function edit(NegocioAfiliado $business): View
     {
         return view('admin.businesses.form', [
-            'adminModules' => AdminNavigation::for('negocios'),
+            'adminModules' => AdminNavigation::for(auth()->user(), 'negocios'),
             'business' => $business,
             'estadoOptions' => NegocioAfiliado::estadoOptions(),
             'tipoOptions' => NegocioAfiliado::tipoOptions(),

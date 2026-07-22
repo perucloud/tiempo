@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password', 'role', 'role_id', 'status'])]
+#[Fillable(['name', 'email', 'password', 'role', 'role_id', 'status', 'is_primary', 'module_permissions'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -57,10 +57,62 @@ class User extends Authenticatable
         self::STATUS_INACTIVE,
     ];
 
+    // Módulos exclusivos de SuperAdmin — nunca asignables a otros roles
+    public const SUPERADMIN_ONLY_MODULES = ['usuarios', 'configuracion'];
+
+    // Todos los módulos asignables a admin/operador
+    public const ASSIGNABLE_MODULES = [
+        'dashboard', 'pedidos', 'pagos', 'repartidores',
+        'clientes', 'negocios', 'categorias', 'productos',
+        'reportes', 'notificaciones',
+    ];
+
     public function canAccessAdmin(): bool
     {
         return $this->status === self::STATUS_ACTIVE
             && in_array($this->role, self::ADMIN_ROLES, true);
+    }
+
+    public function isPrimary(): bool
+    {
+        return (bool) $this->is_primary;
+    }
+
+    public function isSuperAdmin(): bool
+    {
+        return $this->role === self::ROLE_SUPERADMIN;
+    }
+
+    /**
+     * Verifica acceso a un módulo específico.
+     * SuperAdmin tiene acceso a todo siempre.
+     * Otros roles verifican su lista JSON de módulos permitidos.
+     */
+    public function hasModuleAccess(string $moduleKey): bool
+    {
+        if ($this->isSuperAdmin()) {
+            return true;
+        }
+
+        $permissions = $this->module_permissions;
+
+        if (empty($permissions)) {
+            return false;
+        }
+
+        return in_array($moduleKey, $permissions, true);
+    }
+
+    /**
+     * Devuelve la lista de módulos asignados (para no-superadmin).
+     */
+    public function assignedModules(): array
+    {
+        if ($this->isSuperAdmin()) {
+            return array_merge(self::ASSIGNABLE_MODULES, self::SUPERADMIN_ONLY_MODULES);
+        }
+
+        return $this->module_permissions ?? [];
     }
 
     public function roleLabel(): string
@@ -129,8 +181,10 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'email_verified_at'  => 'datetime',
+            'password'           => 'hashed',
+            'is_primary'         => 'boolean',
+            'module_permissions' => 'array',
         ];
     }
 }

@@ -34,12 +34,12 @@ Route::prefix('admin')->name('admin.')->group(function (): void {
         Route::get('/', DashboardController::class)->name('dashboard');
         Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
-        Route::middleware('admin.orders')->group(function (): void {
+        Route::middleware(['admin.orders', 'admin.module:pedidos'])->group(function (): void {
             Route::resource('orders', OrderController::class)
                 ->only(['index', 'edit', 'update']);
         });
 
-        Route::middleware('admin.couriers')->group(function (): void {
+        Route::middleware(['admin.couriers', 'admin.module:repartidores'])->group(function (): void {
             Route::resource('couriers', CourierController::class)
                 ->except(['show']);
             Route::get('couriers-tracking', [CourierController::class, 'tracking'])
@@ -60,53 +60,53 @@ Route::prefix('admin')->name('admin.')->group(function (): void {
                 ->name('orders.asignar.store');
         });
 
-        Route::middleware('admin.payments')->group(function (): void {
+        Route::middleware(['admin.payments', 'admin.module:pagos'])->group(function (): void {
             Route::resource('payments', PaymentController::class)
                 ->only(['index', 'edit', 'update']);
         });
 
-        Route::middleware('admin.reports')->group(function (): void {
+        Route::middleware(['admin.reports', 'admin.module:reportes'])->group(function (): void {
             Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
         });
 
-        Route::middleware('admin.notifications')->group(function (): void {
+        Route::middleware(['admin.notifications', 'admin.module:notificaciones'])->group(function (): void {
             Route::get('notifications', [NotificationController::class, 'index'])->name('notifications.index');
         });
 
-        Route::middleware('admin.settings')->group(function (): void {
+        Route::middleware(['admin.settings', 'admin.module:configuracion'])->group(function (): void {
             Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
             Route::put('settings', [SettingController::class, 'update'])->name('settings.update');
             Route::resource('delivery-zones', DeliveryZoneController::class)
                 ->except(['index', 'show']);
         });
 
-        Route::middleware('admin.businesses')->group(function (): void {
+        Route::middleware(['admin.businesses', 'admin.module:negocios'])->group(function (): void {
             Route::resource('businesses', BusinessController::class)
                 ->except(['show']);
         });
 
-        Route::middleware('admin.categories')->group(function (): void {
+        Route::middleware(['admin.categories', 'admin.module:categorias'])->group(function (): void {
             Route::resource('categories', CategoryController::class)
                 ->except(['show']);
         });
 
-        Route::middleware('admin.clients')->group(function (): void {
+        Route::middleware(['admin.clients', 'admin.module:clientes'])->group(function (): void {
             Route::resource('clients', ClientController::class)
                 ->except(['show']);
         });
 
-        Route::middleware('admin.products')->group(function (): void {
+        Route::middleware(['admin.products', 'admin.module:productos'])->group(function (): void {
             Route::resource('products', ProductController::class)
                 ->except(['show']);
         });
 
-        Route::middleware('admin.users')->group(function (): void {
+        Route::middleware(['admin.users', 'admin.module:usuarios'])->group(function (): void {
             Route::resource('users', UserController::class)->except(['show']);
             Route::patch('users/{user}/toggle-status', [UserController::class, 'toggleStatus'])
                 ->name('users.toggle-status');
         });
 
-        Route::middleware('admin.settings')->group(function (): void {
+        Route::middleware(['admin.settings', 'admin.module:configuracion'])->group(function (): void {
             Route::get('diagnostico/rutas', [DiagnosticoRutasController::class, 'show'])
                 ->name('diagnostico.rutas');
             Route::post('diagnostico/rutas', [DiagnosticoRutasController::class, 'calcular'])

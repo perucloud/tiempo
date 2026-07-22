@@ -21,7 +21,7 @@ class NotificationController extends Controller
             ->withQueryString();
 
         return view('admin.notifications.index', [
-            'adminModules' => AdminNavigation::for('notificaciones'),
+            'adminModules' => AdminNavigation::for(auth()->user(), 'notificaciones'),
             'notifications' => $notifications,
             'recipientOptions' => [
                 Notificacion::DESTINATARIO_ADMIN => 'Admin/Operador',

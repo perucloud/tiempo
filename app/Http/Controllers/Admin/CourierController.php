@@ -36,7 +36,7 @@ class CourierController extends Controller
             ->withQueryString();
 
         return view('admin.couriers.index', [
-            'adminModules' => AdminNavigation::for('repartidores'),
+            'adminModules' => AdminNavigation::for(auth()->user(), 'repartidores'),
             'couriers' => $couriers,
             'estadoOptions' => Repartidor::estadoOptions(),
             'filters' => $request->only(['search', 'estado']),
@@ -46,7 +46,7 @@ class CourierController extends Controller
     public function create(): View
     {
         return view('admin.couriers.form', [
-            'adminModules' => AdminNavigation::for('repartidores'),
+            'adminModules' => AdminNavigation::for(auth()->user(), 'repartidores'),
             'courier' => new Repartidor(['estado' => Repartidor::ESTADO_DISPONIBLE]),
             'estadoOptions' => Repartidor::estadoOptions(),
             'action' => route('admin.couriers.store'),
@@ -66,7 +66,7 @@ class CourierController extends Controller
     public function edit(Repartidor $courier): View
     {
         return view('admin.couriers.form', [
-            'adminModules' => AdminNavigation::for('repartidores'),
+            'adminModules' => AdminNavigation::for(auth()->user(), 'repartidores'),
             'courier' => $courier,
             'estadoOptions' => Repartidor::estadoOptions(),
             'action' => route('admin.couriers.update', $courier),
@@ -101,7 +101,7 @@ class CourierController extends Controller
             ->get();
 
         return view('admin.couriers.tracking', [
-            'adminModules' => AdminNavigation::for('repartidores'),
+            'adminModules' => AdminNavigation::for(auth()->user(), 'repartidores'),
             'couriers'     => $couriers,
         ]);
     }

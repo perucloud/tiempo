@@ -47,7 +47,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin.products' => EnsureProductManagementAccess::class,
             'admin.reports' => EnsureReportManagementAccess::class,
             'admin.settings' => EnsureSettingManagementAccess::class,
-            'admin.users' => EnsureUserManagementAccess::class,
+            'admin.users'   => EnsureUserManagementAccess::class,
+            'admin.module'  => \App\Http\Middleware\AdminModuleAccess::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

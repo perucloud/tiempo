@@ -17,7 +17,10 @@
     </div>
 
     @if (session('status'))
-        <div class="admin-alert">{{ session('status') }}</div>
+        <div class="admin-alert"><i class="bi bi-check-circle-fill"></i> {{ session('status') }}</div>
+    @endif
+    @if (session('status_error'))
+        <div class="admin-alert admin-alert-error"><i class="bi bi-exclamation-circle-fill"></i> {{ session('status_error') }}</div>
     @endif
 
     <div class="admin-table-wrap">
@@ -46,6 +49,12 @@
                             @endif
                         </td>
                         <td>{{ $user->created_at?->format('d/m/Y') }}</td>
+                        @php
+                            $isPrimary = $user->isPrimary();
+                            $isSelf    = $user->id === auth()->id();
+                            $canBlock  = ! $isPrimary && ! $isSelf;
+                            $canDelete = ! $isPrimary && ! $isSelf;
+                        @endphp
                         <td>
                             <div class="adm-actions">
                                 {{-- Editar --}}
@@ -56,34 +65,48 @@
                                 </a>
 
                                 {{-- Bloquear / Activar --}}
-                                <form method="POST"
-                                      action="{{ route('admin.users.toggle-status', $user) }}"
-                                      style="margin:0;"
-                                      data-type="{{ $user->status === 'activo' ? 'block' : 'unblock' }}"
-                                      data-user="{{ $user->name }}">
-                                    @csrf @method('PATCH')
-                                    <button type="button"
-                                            class="adm-action-btn {{ $user->status === 'activo' ? 'adm-action-block' : 'adm-action-unblock' }}"
-                                            title="{{ $user->status === 'activo' ? 'Bloquear usuario' : 'Activar usuario' }}"
-                                            onclick="openConfirmModal(this.closest('form'))">
-                                        <i class="bi {{ $user->status === 'activo' ? 'bi-slash-circle-fill' : 'bi-check-circle-fill' }}"></i>
-                                    </button>
-                                </form>
+                                @if ($canBlock)
+                                    <form method="POST"
+                                          action="{{ route('admin.users.toggle-status', $user) }}"
+                                          style="margin:0;"
+                                          data-type="{{ $user->status === 'activo' ? 'block' : 'unblock' }}"
+                                          data-user="{{ $user->name }}">
+                                        @csrf @method('PATCH')
+                                        <button type="button"
+                                                class="adm-action-btn {{ $user->status === 'activo' ? 'adm-action-block' : 'adm-action-unblock' }}"
+                                                title="{{ $user->status === 'activo' ? 'Bloquear usuario' : 'Activar usuario' }}"
+                                                onclick="openConfirmModal(this.closest('form'))">
+                                            <i class="bi {{ $user->status === 'activo' ? 'bi-slash-circle-fill' : 'bi-check-circle-fill' }}"></i>
+                                        </button>
+                                    </form>
+                                @else
+                                    <span class="adm-action-btn adm-action-disabled"
+                                          title="{{ $isPrimary ? 'SuperAdmin principal protegido' : 'No puedes bloquearte a ti mismo' }}">
+                                        <i class="bi bi-slash-circle"></i>
+                                    </span>
+                                @endif
 
                                 {{-- Eliminar --}}
-                                <form method="POST"
-                                      action="{{ route('admin.users.destroy', $user) }}"
-                                      style="margin:0;"
-                                      data-type="delete"
-                                      data-user="{{ $user->name }}">
-                                    @csrf @method('DELETE')
-                                    <button type="button"
-                                            class="adm-action-btn adm-action-delete"
-                                            title="Eliminar usuario"
-                                            onclick="openConfirmModal(this.closest('form'))">
-                                        <i class="bi bi-trash3-fill"></i>
-                                    </button>
-                                </form>
+                                @if ($canDelete)
+                                    <form method="POST"
+                                          action="{{ route('admin.users.destroy', $user) }}"
+                                          style="margin:0;"
+                                          data-type="delete"
+                                          data-user="{{ $user->name }}">
+                                        @csrf @method('DELETE')
+                                        <button type="button"
+                                                class="adm-action-btn adm-action-delete"
+                                                title="Eliminar usuario"
+                                                onclick="openConfirmModal(this.closest('form'))">
+                                            <i class="bi bi-trash3-fill"></i>
+                                        </button>
+                                    </form>
+                                @else
+                                    <span class="adm-action-btn adm-action-disabled"
+                                          title="{{ $isPrimary ? 'SuperAdmin principal protegido' : 'No puedes eliminarte a ti mismo' }}">
+                                        <i class="bi bi-trash3"></i>
+                                    </span>
+                                @endif
                             </div>
                         </td>
                     </tr>
@@ -276,6 +299,47 @@
                     </div>
 
                 </div>{{-- /.adm-modal-grid --}}
+
+                {{-- Módulos permitidos ─────────────────────────────── --}}
+                <div class="adm-modules-section" id="u-modules-section" style="display:none;">
+                    <div class="adm-modules-header">
+                        <span class="adm-modules-label">
+                            <i class="bi bi-grid-3x3-gap-fill"></i>
+                            Módulos de acceso
+                        </span>
+                        <div class="adm-modules-actions">
+                            <button type="button" class="adm-modules-toggle-all" onclick="toggleAllModules(true)">
+                                Seleccionar todos
+                            </button>
+                            <button type="button" class="adm-modules-toggle-all" onclick="toggleAllModules(false)">
+                                Limpiar
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="u-superadmin-badge" style="display:none;">
+                        <div class="adm-modules-full-access">
+                            <i class="bi bi-shield-fill-check"></i>
+                            SuperAdmin tiene acceso completo a todos los módulos del sistema.
+                        </div>
+                    </div>
+
+                    <div class="adm-modules-grid" id="u-modules-grid">
+                        @foreach ($assignableModules as $module)
+                            <label class="adm-module-check">
+                                <input type="checkbox"
+                                       name="module_permissions[]"
+                                       value="{{ $module['key'] }}"
+                                       {{ in_array($module['key'], old('module_permissions', [])) ? 'checked' : '' }}>
+                                <div class="adm-module-check-icon">
+                                    <i class="bi {{ $module['icon'] }}"></i>
+                                </div>
+                                <span class="adm-module-check-name">{{ $module['label'] }}</span>
+                            </label>
+                        @endforeach
+                    </div>
+                </div>
+
             </form>
         </div>{{-- /.adm-modal-body --}}
 
@@ -372,6 +436,43 @@
             eyeBtn.setAttribute('aria-label', show ? 'Ocultar contraseña' : 'Mostrar contraseña');
         });
     }
+
+    // ── Sección de módulos según el rol seleccionado ────────────────
+    var roleSelect      = document.getElementById('u-role');
+    var modulesSection  = document.getElementById('u-modules-section');
+    var superBadge      = document.getElementById('u-superadmin-badge');
+    var modulesGrid     = document.getElementById('u-modules-grid');
+    var moduleActions   = modulesSection ? modulesSection.querySelector('.adm-modules-actions') : null;
+
+    function onRoleChange() {
+        var role = roleSelect.value;
+        var needsModules = role === 'admin' || role === 'operador';
+        var isSuperAdmin = role === 'superadmin';
+
+        modulesSection.style.display = (needsModules || isSuperAdmin) ? 'block' : 'none';
+
+        if (isSuperAdmin) {
+            superBadge.style.display    = 'block';
+            modulesGrid.style.display   = 'none';
+            if (moduleActions) moduleActions.style.display = 'none';
+        } else {
+            superBadge.style.display    = 'none';
+            modulesGrid.style.display   = 'grid';
+            if (moduleActions) moduleActions.style.display = 'flex';
+        }
+    }
+
+    if (roleSelect) {
+        roleSelect.addEventListener('change', onRoleChange);
+        onRoleChange();
+    }
+
+    window.toggleAllModules = function (state) {
+        if (!modulesGrid) return;
+        modulesGrid.querySelectorAll('input[type="checkbox"]').forEach(function (cb) {
+            cb.checked = state;
+        });
+    };
 
     window.openUserModal  = openUserModal;
     window.closeUserModal = closeUserModal;

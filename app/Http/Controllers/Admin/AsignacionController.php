@@ -29,7 +29,7 @@ class AsignacionController extends Controller
         $order->load(['cliente', 'negocioAfiliado', 'repartidor', 'asignacionActiva']);
 
         return view('admin.asignacion.show', [
-            'adminModules' => AdminNavigation::for('pedidos'),
+            'adminModules' => AdminNavigation::for(auth()->user(), 'pedidos'),
             'order'        => $order,
         ]);
     }

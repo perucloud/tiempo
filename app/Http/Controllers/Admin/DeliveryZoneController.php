@@ -16,7 +16,7 @@ class DeliveryZoneController extends Controller
     public function create(): View
     {
         return view('admin.settings.zone-form', [
-            'adminModules' => AdminNavigation::for('configuracion'),
+            'adminModules' => AdminNavigation::for(auth()->user(), 'configuracion'),
             'zone'   => new ZonaDelivery(['activo' => true, 'prioridad' => 10]),
             'action' => route('admin.delivery-zones.store'),
             'method' => 'POST',
@@ -42,7 +42,7 @@ class DeliveryZoneController extends Controller
     public function edit(ZonaDelivery $deliveryZone): View
     {
         return view('admin.settings.zone-form', [
-            'adminModules' => AdminNavigation::for('configuracion'),
+            'adminModules' => AdminNavigation::for(auth()->user(), 'configuracion'),
             'zone'   => $deliveryZone,
             'action' => route('admin.delivery-zones.update', $deliveryZone),
             'method' => 'PUT',

@@ -29,7 +29,7 @@ class ProductController extends Controller
             ->withQueryString();
 
         return view('admin.products.index', [
-            'adminModules' => AdminNavigation::for('productos'),
+            'adminModules' => AdminNavigation::for(auth()->user(), 'productos'),
             'products' => $products,
             'businesses' => $this->businessOptions(),
             'categories' => $this->categoryOptions(),
@@ -41,7 +41,7 @@ class ProductController extends Controller
     public function create(): View
     {
         return view('admin.products.form', [
-            'adminModules' => AdminNavigation::for('productos'),
+            'adminModules' => AdminNavigation::for(auth()->user(), 'productos'),
             'product' => new Producto([
                 'estado' => Producto::ESTADO_ACTIVO,
                 'disponible' => true,
@@ -69,7 +69,7 @@ class ProductController extends Controller
     public function edit(Producto $product): View
     {
         return view('admin.products.form', [
-            'adminModules' => AdminNavigation::for('productos'),
+            'adminModules' => AdminNavigation::for(auth()->user(), 'productos'),
             'product' => $product,
             'businesses' => $this->businessOptions(),
             'categories' => $this->categoryOptions(),

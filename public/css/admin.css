@@ -2266,6 +2266,142 @@ select.adm-modal-input {
 .adm-confirm-btn--green:hover { background: #15803d; opacity: 1; box-shadow: 0 4px 14px rgba(22,163,74,.35); }
 
 /* ============================================================
+   SELECTOR DE MÓDULOS (checkboxes en crear/editar usuario)
+   ============================================================ */
+
+.adm-modules-section {
+    margin-top: 20px;
+    border-top: 1.5px dashed #e2e8f0;
+    padding-top: 20px;
+}
+
+.adm-modules-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.adm-modules-label {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #374151;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.adm-modules-label i { color: var(--admin-blue); font-size: 15px; }
+
+.adm-modules-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.adm-modules-toggle-all {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--admin-blue);
+    background: none;
+    border: 1px solid #bfdbfe;
+    border-radius: 6px;
+    padding: 4px 10px;
+    cursor: pointer;
+    transition: background .15s, color .15s;
+}
+
+.adm-modules-toggle-all:hover {
+    background: #eff6ff;
+}
+
+/* Badge "acceso total" para superadmin */
+.adm-modules-full-access {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #f0fdf4;
+    border: 1.5px solid #bbf7d0;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: #166534;
+    font-weight: 600;
+}
+
+.adm-modules-full-access i { font-size: 18px; color: #16a34a; }
+
+/* Grid de checkboxes */
+.adm-modules-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+}
+
+.adm-module-check {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: border-color .15s, background .15s;
+    user-select: none;
+}
+
+.adm-module-check:hover {
+    border-color: #bfdbfe;
+    background: #f8fafc;
+}
+
+.adm-module-check input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--admin-blue);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.adm-module-check input[type="checkbox"]:checked ~ .adm-module-check-body {
+    color: #0f172a;
+}
+
+.adm-module-check:has(input:checked) {
+    border-color: #2563eb;
+    background: #eff6ff;
+}
+
+.adm-module-check-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: #f1f5f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    color: #64748b;
+    flex-shrink: 0;
+    transition: background .15s, color .15s;
+}
+
+.adm-module-check:has(input:checked) .adm-module-check-icon {
+    background: #dbeafe;
+    color: var(--admin-blue);
+}
+
+.adm-module-check-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: #475569;
+    line-height: 1;
+}
+
+/* ============================================================
    BOTONES DE ACCIÓN — icono sólido con color lleno
    ============================================================ */
 
@@ -2302,7 +2438,8 @@ select.adm-modal-input {
 }
 
 /* Colores por acción */
-.adm-action-edit    { background: #2563eb; }
-.adm-action-block   { background: #d97706; }
-.adm-action-unblock { background: #16a34a; }
-.adm-action-delete  { background: #dc2626; }
+.adm-action-edit     { background: #2563eb; }
+.adm-action-block    { background: #d97706; }
+.adm-action-unblock  { background: #16a34a; }
+.adm-action-delete   { background: #dc2626; }
+.adm-action-disabled { background: #cbd5e1; color: #94a3b8; cursor: not-allowed; pointer-events: none; }

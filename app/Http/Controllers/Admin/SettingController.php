@@ -29,7 +29,7 @@ class SettingController extends Controller
         $this->ensureDefaults();
 
         return view('admin.settings.index', [
-            'adminModules' => AdminNavigation::for('configuracion'),
+            'adminModules' => AdminNavigation::for(auth()->user(), 'configuracion'),
             'settings' => SistemaConfiguracion::query()->orderBy('grupo')->orderBy('id')->get()->keyBy('clave'),
             'zones' => ZonaDelivery::query()->latest()->paginate(10),
             'audits' => ConfiguracionAuditoria::query()->with('user')->latest()->limit(10)->get(),

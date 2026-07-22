@@ -28,7 +28,7 @@ class CategoryController extends Controller
             ->withQueryString();
 
         return view('admin.categories.index', [
-            'adminModules' => AdminNavigation::for('categorias'),
+            'adminModules' => AdminNavigation::for(auth()->user(), 'categorias'),
             'categories' => $categories,
             'estadoOptions' => Categoria::estadoOptions(),
             'tipoOptions' => Categoria::tipoOptions(),
@@ -39,7 +39,7 @@ class CategoryController extends Controller
     public function create(): View
     {
         return view('admin.categories.form', [
-            'adminModules' => AdminNavigation::for('categorias'),
+            'adminModules' => AdminNavigation::for(auth()->user(), 'categorias'),
             'category' => new Categoria([
                 'tipo' => Categoria::TIPO_PRODUCTO,
                 'estado' => Categoria::ESTADO_ACTIVO,
@@ -67,7 +67,7 @@ class CategoryController extends Controller
     public function edit(Categoria $category): View
     {
         return view('admin.categories.form', [
-            'adminModules' => AdminNavigation::for('categorias'),
+            'adminModules' => AdminNavigation::for(auth()->user(), 'categorias'),
             'category' => $category,
             'estadoOptions' => Categoria::estadoOptions(),
             'tipoOptions' => Categoria::tipoOptions(),

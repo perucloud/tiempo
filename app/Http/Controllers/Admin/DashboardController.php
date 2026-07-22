@@ -74,6 +74,6 @@ class DashboardController extends Controller
 
     private function adminModules(): array
     {
-        return AdminNavigation::for('dashboard');
+        return AdminNavigation::for(auth()->user(), 'dashboard');
     }
 }

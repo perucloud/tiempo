@@ -25,7 +25,7 @@ class PaymentController extends Controller
             ->withQueryString();
 
         return view('admin.payments.index', [
-            'adminModules' => AdminNavigation::for('pagos'),
+            'adminModules' => AdminNavigation::for(auth()->user(), 'pagos'),
             'payments' => $payments,
             'estadoOptions' => Pago::estadoOptions(),
             'metodoOptions' => Pago::metodoOptions(),
@@ -36,7 +36,7 @@ class PaymentController extends Controller
     public function edit(Pago $payment): View
     {
         return view('admin.payments.edit', [
-            'adminModules' => AdminNavigation::for('pagos'),
+            'adminModules' => AdminNavigation::for(auth()->user(), 'pagos'),
             'payment' => $payment->load(['pedido.cliente', 'pedido.negocioAfiliado', 'verificador']),
             'estadoOptions' => Pago::estadoOptions(),
             'metodoOptions' => Pago::metodoOptions(),

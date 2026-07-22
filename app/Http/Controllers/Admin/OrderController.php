@@ -29,7 +29,7 @@ class OrderController extends Controller
             ->withQueryString();
 
         return view('admin.orders.index', [
-            'adminModules' => AdminNavigation::for('pedidos'),
+            'adminModules' => AdminNavigation::for(auth()->user(), 'pedidos'),
             'orders' => $orders,
             'estadoOptions' => Pedido::estadoOptions(),
             'filters' => $request->only(['search', 'estado']),
@@ -48,7 +48,7 @@ class OrderController extends Controller
             ->get();
 
         return view('admin.orders.edit', [
-            'adminModules' => AdminNavigation::for('pedidos'),
+            'adminModules' => AdminNavigation::for(auth()->user(), 'pedidos'),
             'order' => $order->load(['cliente', 'negocioAfiliado', 'repartidor', 'detalles', 'estados.user']),
             'estadoOptions' => Pedido::estadoOptions(),
             'availableCouriers' => $availableCouriers,
