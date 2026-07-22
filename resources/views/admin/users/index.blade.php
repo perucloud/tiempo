@@ -47,7 +47,39 @@
                         </td>
                         <td>{{ $user->created_at?->format('d/m/Y') }}</td>
                         <td>
-                            <a class="admin-link" href="{{ route('admin.users.edit', $user) }}">Editar</a>
+                            <div class="adm-actions">
+                                {{-- Editar --}}
+                                <a class="adm-action-btn adm-action-edit"
+                                   href="{{ route('admin.users.edit', $user) }}"
+                                   title="Editar usuario">
+                                    <i class="bi bi-pencil-fill"></i>
+                                </a>
+
+                                {{-- Bloquear / Activar --}}
+                                <form method="POST"
+                                      action="{{ route('admin.users.toggle-status', $user) }}"
+                                      style="margin:0;">
+                                    @csrf @method('PATCH')
+                                    <button type="submit"
+                                            class="adm-action-btn {{ $user->status === 'activo' ? 'adm-action-block' : 'adm-action-unblock' }}"
+                                            title="{{ $user->status === 'activo' ? 'Bloquear usuario' : 'Activar usuario' }}">
+                                        <i class="bi {{ $user->status === 'activo' ? 'bi-slash-circle-fill' : 'bi-check-circle-fill' }}"></i>
+                                    </button>
+                                </form>
+
+                                {{-- Eliminar --}}
+                                <form method="POST"
+                                      action="{{ route('admin.users.destroy', $user) }}"
+                                      style="margin:0;"
+                                      data-confirm="¿Eliminar a {{ addslashes($user->name) }}? Esta acción no se puede deshacer.">
+                                    @csrf @method('DELETE')
+                                    <button type="submit"
+                                            class="adm-action-btn adm-action-delete"
+                                            title="Eliminar usuario">
+                                        <i class="bi bi-trash3-fill"></i>
+                                    </button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 @empty
@@ -314,6 +346,14 @@
     // Exponer al scope global para los atributos onclick del HTML
     window.openUserModal  = openUserModal;
     window.closeUserModal = closeUserModal;
+
+    // Confirmación antes de eliminar
+    document.querySelectorAll('[data-confirm]').forEach(function (form) {
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            if (window.confirm(form.dataset.confirm)) form.submit();
+        });
+    });
 })();
 </script>
 @endpush

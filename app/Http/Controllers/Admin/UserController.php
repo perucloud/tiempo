@@ -75,6 +75,30 @@ class UserController extends Controller
             ->with('status', 'Usuario actualizado correctamente.');
     }
 
+    public function toggleStatus(User $user): RedirectResponse
+    {
+        $user->update([
+            'status' => $user->status === User::STATUS_ACTIVE
+                ? User::STATUS_INACTIVE
+                : User::STATUS_ACTIVE,
+        ]);
+
+        $label = $user->fresh()->status === User::STATUS_ACTIVE ? 'activado' : 'bloqueado';
+
+        return redirect()
+            ->route('admin.users.index')
+            ->with('status', "Usuario {$label} correctamente.");
+    }
+
+    public function destroy(User $user): RedirectResponse
+    {
+        $user->delete();
+
+        return redirect()
+            ->route('admin.users.index')
+            ->with('status', 'Usuario eliminado correctamente.');
+    }
+
     private function roleIdFor(string $roleCode): ?int
     {
         return Role::query()

@@ -101,8 +101,9 @@ Route::prefix('admin')->name('admin.')->group(function (): void {
         });
 
         Route::middleware('admin.users')->group(function (): void {
-            Route::resource('users', UserController::class)
-                ->except(['show', 'destroy']);
+            Route::resource('users', UserController::class)->except(['show']);
+            Route::patch('users/{user}/toggle-status', [UserController::class, 'toggleStatus'])
+                ->name('users.toggle-status');
         });
 
         Route::middleware('admin.settings')->group(function (): void {

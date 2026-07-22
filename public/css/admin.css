@@ -2204,3 +2204,45 @@ select.adm-modal-input {
     .adm-modal-grid { grid-template-columns: 1fr; }
     .adm-modal-field--full { grid-column: 1; }
 }
+
+/* ============================================================
+   BOTONES DE ACCIÓN — icono sólido con color lleno
+   ============================================================ */
+
+.adm-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.adm-action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+    color: #fff;
+    text-decoration: none;
+    transition: transform .12s, box-shadow .15s, filter .15s;
+    flex-shrink: 0;
+    line-height: 1;
+}
+.adm-action-btn:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.1);
+    box-shadow: 0 4px 12px rgba(0,0,0,.18);
+}
+.adm-action-btn:active {
+    transform: scale(.93);
+    filter: brightness(.95);
+}
+
+/* Colores por acción */
+.adm-action-edit    { background: #2563eb; }
+.adm-action-block   { background: #d97706; }
+.adm-action-unblock { background: #16a34a; }
+.adm-action-delete  { background: #dc2626; }
